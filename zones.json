@@ -1,0 +1,41 @@
+[
+{
+"name":"Staré Město",
+"day":1,
+"lat":50.087,
+"lng":14.420,
+"radius":1200
+},
+
+{
+"name":"Malá Strana",
+"day":2,
+"lat":50.086,
+"lng":14.404,
+"radius":1200
+},
+
+{
+"name":"Hradčany",
+"day":3,
+"lat":50.090,
+"lng":14.398,
+"radius":1200
+},
+
+{
+"name":"Vyšehrad",
+"day":4,
+"lat":50.064,
+"lng":14.417,
+"radius":1200
+},
+
+{
+"name":"Praha širší",
+"day":5,
+"lat":50.08,
+"lng":14.43,
+"radius":4000
+}
+]

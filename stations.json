@@ -1,0 +1,48 @@
+[
+{
+"name":"Karlův most",
+"lat":50.0865,
+"lng":14.4114,
+"type":"real",
+"question":"Kolik soch stojí na Karlově mostě?",
+"answers":["28","30","32"],
+"correct":1
+},
+
+{
+"name":"Orloj",
+"lat":50.087,
+"lng":14.421,
+"type":"real",
+"question":"Kolik apoštolů se objeví na orloji?",
+"answers":["10","12","14"],
+"correct":1
+},
+
+{
+"name":"Petřín",
+"lat":50.0836,
+"lng":14.3959,
+"type":"real",
+"question":"Kolik zrcadel je v zrcadlovém bludišti?",
+"answers":["28","31","34"],
+"correct":2
+},
+
+{
+"name":"Letenské sady",
+"lat":50.093,
+"lng":14.417,
+"type":"fake"
+},
+
+{
+"name":"Národní divadlo",
+"lat":50.081,
+"lng":14.414,
+"type":"real",
+"question":"Jaké heslo je na budově Národního divadla?",
+"answers":["Národ sobě","Praha vítězí","Sláva Praze"],
+"correct":0
+}
+]

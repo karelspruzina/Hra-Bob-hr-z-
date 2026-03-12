@@ -1,0 +1,44 @@
+ <!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<title>Lovci pokladu staré Prahy</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<h2>Lovci pokladu staré Prahy</h2>
+
+<div id="topBar">
+
+<button onclick="toggleTest()">TEST</button>
+<button onclick="nextDay()">DALŠÍ DEN</button>
+
+</div>
+
+<div id="map"></div>
+
+<div id="taskBox" class="hidden">
+
+<h3 id="taskTitle"></h3>
+
+<p id="taskQuestion"></p>
+
+<div id="answers"></div>
+
+<button onclick="closeTask()">Zavřít</button>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+body{
+margin:0;
+font-family:Arial;
+text-align:center;
+background:#222;
+color:white;
+}
+
+#topBar{
+padding:10px;
+background:#333;
+}
+
+#map{
+height:75vh;
+}
+
+#taskBox{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:white;
+color:black;
+padding:20px;
+box-shadow:0 -5px 15px rgba(0,0,0,0.3);
+}
+
+.hidden{
+display:none;
+}
+
+button{
+padding:10px;
+margin:5px;
+font-size:16px;
+}
+
+#answers button{
+display:block;
+width:100%;
+margin:10px 0;
+}
