@@ -1,48 +1,97 @@
 [
-{
-"name":"Karlův most",
-"lat":50.0865,
-"lng":14.4114,
-"type":"real",
-"question":"Kolik soch stojí na Karlově mostě?",
-"answers":["28","30","32"],
-"correct":1
-},
+  {
+    "name":"Karlův most",
+    "lat":50.0865,
+    "lng":14.4114,
+    "day":1,
+    "type":"real",
+    "question":"Kolik soch stojí na Karlově mostě?",
+    "answers":["28","30","32"],
+    "correct":1
+  },
+  {
+    "name":"Orloj",
+    "lat":50.0870,
+    "lng":14.4210,
+    "day":1,
+    "type":"real",
+    "question":"Kolik apoštolů se objeví na orloji?",
+    "answers":["10","12","14"],
+    "correct":1
+  },
+  {
+    "name":"Národní divadlo",
+    "lat":50.0810,
+    "lng":14.4140,
+    "day":1,
+    "type":"real",
+    "question":"Jaké heslo je na budově Národního divadla?",
+    "answers":["Národ sobě","Praha vítězí","Sláva Praze"],
+    "correct":0
+  },
+  {
+    "name":"Kampa",
+    "lat":50.0860,
+    "lng":14.4072,
+    "day":1,
+    "type":"real",
+    "question":"Jak se jmenuje slavný žlutý symbol miminek na Kampě?",
+    "answers":["Tučňák","Kačenka","Miminka"],
+    "correct":2
+  },
+  {
+    "name":"Letenské sady",
+    "lat":50.0930,
+    "lng":14.4170,
+    "day":1,
+    "type":"fake"
+  },
 
-{
-"name":"Orloj",
-"lat":50.087,
-"lng":14.421,
-"type":"real",
-"question":"Kolik apoštolů se objeví na orloji?",
-"answers":["10","12","14"],
-"correct":1
-},
-
-{
-"name":"Petřín",
-"lat":50.0836,
-"lng":14.3959,
-"type":"real",
-"question":"Kolik zrcadel je v zrcadlovém bludišti?",
-"answers":["28","31","34"],
-"correct":2
-},
-
-{
-"name":"Letenské sady",
-"lat":50.093,
-"lng":14.417,
-"type":"fake"
-},
-
-{
-"name":"Národní divadlo",
-"lat":50.081,
-"lng":14.414,
-"type":"real",
-"question":"Jaké heslo je na budově Národního divadla?",
-"answers":["Národ sobě","Praha vítězí","Sláva Praze"],
-"correct":0
-}
+  {
+    "name":"Petřín",
+    "lat":50.0836,
+    "lng":14.3959,
+    "day":2,
+    "type":"real",
+    "question":"Kolik zrcadel je v zrcadlovém bludišti?",
+    "answers":["28","31","34"],
+    "correct":2
+  },
+  {
+    "name":"Prašná brána",
+    "lat":50.0875,
+    "lng":14.4270,
+    "day":2,
+    "type":"real",
+    "question":"Jakou barvu má většinou nasvícená Prašná brána večer?",
+    "answers":["Modrou","Teplou žlutou","Zelenou"],
+    "correct":1
+  },
+  {
+    "name":"Vyšehrad",
+    "lat":50.0648,
+    "lng":14.4177,
+    "day":2,
+    "type":"real",
+    "question":"Jak se jmenuje slavný hřbitov na Vyšehradě?",
+    "answers":["Olšany","Slavín","Malvazinky"],
+    "correct":1
+  },
+  {
+    "name":"Stromovka",
+    "lat":50.1060,
+    "lng":14.4240,
+    "day":2,
+    "type":"real",
+    "question":"Co je Stromovka především?",
+    "answers":["Zoo","Park","Muzeum"],
+    "correct":1
+  },
+  {
+    "name":"Smíchovská náplavka",
+    "lat":50.0758,
+    "lng":14.4087,
+    "day":2,
+    "type":"fake"
+  }
 ]

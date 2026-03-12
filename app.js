@@ -1,147 +1,229 @@
-let map = L.map('map').setView([50.087,14.42],13);
+let map = L.map('map').setView([50.087, 14.42], 13);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-maxZoom:19
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19
 }).addTo(map);
 
-let stations=[];
-let zones=[];
-let currentDay=1;
-let testMode=false;
+let stations = [];
+let zones = [];
+let markers = [];
+let zoneLayers = [];
+let currentDay = 1;
+let testMode = false;
+let openedStationName = null;
+let solved = JSON.parse(localStorage.getItem("prahaSolved") || "[]");
 
-fetch("stations.json")
-.then(r=>r.json())
-.then(data=>{
-stations=data;
-createMarkers();
+const dayBadge = document.getElementById("dayBadge");
+const progressBadge = document.getElementById("progressBadge");
+const nextDayBtn = document.getElementById("nextDayBtn");
+const toast = document.getElementById("toast");
+
+Promise.all([
+  fetch("stations.json").then(r => r.json()),
+  fetch("zones.json").then(r => r.json())
+]).then(([stationsData, zonesData]) => {
+  stations = stationsData;
+  zones = zonesData;
+  renderAll();
+  startGPS();
 });
 
-fetch("zones.json")
-.then(r=>r.json())
-.then(data=>{
-zones=data;
-drawZones();
-});
-
-function createMarkers(){
-
-stations.forEach((s,i)=>{
-
-let marker=L.marker([s.lat,s.lng]).addTo(map);
-
-marker.on("click",()=>{
-if(testMode) openStation(i);
-});
-
-});
+function renderAll() {
+  clearMarkers();
+  clearZones();
+  drawZones();
+  createMarkers();
+  updateHeader();
+  updateNextDayButton();
 }
 
-function drawZones(){
-
-zones.forEach(z=>{
-
-let color = z.day<=currentDay ? "green":"gray";
-
-L.circle([z.lat,z.lng],{
-radius:z.radius,
-color:color,
-fillOpacity:0.1
-}).addTo(map);
-
-});
-
+function clearMarkers() {
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
 }
 
-function toggleTest(){
-
-testMode=!testMode;
-
-alert("TEST MODE: "+testMode);
-
+function clearZones() {
+  zoneLayers.forEach(z => map.removeLayer(z));
+  zoneLayers = [];
 }
 
-function nextDay(){
+function drawZones() {
+  zones.forEach(z => {
+    const unlocked = z.day <= currentDay;
 
-currentDay++;
+    const layer = L.circle([z.lat, z.lng], {
+      radius: z.radius,
+      color: unlocked ? "#2f9e44" : "#7a7a7a",
+      weight: unlocked ? 4 : 3,
+      fillColor: unlocked ? "#2f9e44" : "#808080",
+      fillOpacity: unlocked ? 0.08 : 0.22
+    }).addTo(map);
 
-alert("Den "+currentDay);
-
+    zoneLayers.push(layer);
+  });
 }
 
-function checkGPS(){
+function createMarkers() {
+  const todayStations = stations.filter(s => s.day === currentDay);
 
-navigator.geolocation.getCurrentPosition(pos=>{
+  todayStations.forEach((s, i) => {
+    const isSolved = solved.includes(s.name);
 
-let lat=pos.coords.latitude;
-let lng=pos.coords.longitude;
+    const marker = L.circleMarker([s.lat, s.lng], {
+      radius: 11,
+      color: isSolved ? "#2f9e44" : "#ffffff",
+      weight: 3,
+      fillColor: s.type === "fake" ? "#8f8f8f" : (isSolved ? "#2f9e44" : "#2b8aef"),
+      fillOpacity: 1
+    }).addTo(map);
 
-stations.forEach((s,i)=>{
+    marker.bindPopup(
+      `<div>${s.name}<br><small>${s.type === "fake" ? "Neznámá stopa" : "Možné stanoviště"}</small></div>`
+    );
 
-let d = map.distance([lat,lng],[s.lat,s.lng]);
+    marker.on("click", () => {
+      if (testMode) {
+        openStationByName(s.name);
+      } else {
+        showToast("Pro klikání zapni TEST, jinak se úkol otevře až na místě.", "bad");
+      }
+    });
 
-if(d<40){
-openStation(i);
+    markers.push(marker);
+  });
 }
 
-});
-
-});
-
+function toggleTest() {
+  testMode = !testMode;
+  showToast("TEST MODE: " + (testMode ? "zapnut" : "vypnut"), "ok");
 }
 
-setInterval(checkGPS,5000);
-
-function openStation(i){
-
-let s=stations[i];
-
-if(s.type==="fake"){
-
-alert("Falešná stopa! Zkuste jiné místo.");
-
-return;
-
+function startGPS() {
+  setInterval(checkGPS, 5000);
 }
 
-document.getElementById("taskTitle").innerText=s.name;
-document.getElementById("taskQuestion").innerText=s.question;
+function checkGPS() {
+  if (!navigator.geolocation) return;
 
-let answersDiv=document.getElementById("answers");
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
 
-answersDiv.innerHTML="";
+    const todayStations = stations.filter(s => s.day === currentDay);
 
-s.answers.forEach((a,index)=>{
+    todayStations.forEach(s => {
+      const d = map.distance([lat, lng], [s.lat, s.lng]);
 
-let b=document.createElement("button");
-
-b.innerText=a;
-
-b.onclick=function(){
-
-if(index===s.correct){
-
-alert("Správně! Získali jste indicii.");
-
-}else{
-
-alert("Špatně.");
-
+      if (d < 40 && openedStationName !== s.name) {
+        openStationByName(s.name);
+      }
+    });
+  });
 }
 
-closeTask();
+function openStationByName(name) {
+  const s = stations.find(x => x.name === name && x.day === currentDay);
+  if (!s) return;
 
+  openedStationName = s.name;
+
+  if (s.type === "fake") {
+    showToast("Bohužel, falešná stopa. Tady indicie není. Hledejte jinde.", "bad");
+    return;
+  }
+
+  if (solved.includes(s.name)) {
+    showToast("Tento úkol už máte splněný.", "ok");
+    return;
+  }
+
+  document.getElementById("taskTitle").innerText = s.name;
+  document.getElementById("taskQuestion").innerText = s.question;
+
+  const answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+
+  s.answers.forEach((a, index) => {
+    const b = document.createElement("button");
+    b.innerText = `${String.fromCharCode(65 + index)}) ${a}`;
+    b.onclick = function() {
+      answerStation(s, index);
+    };
+    answersDiv.appendChild(b);
+  });
+
+  document.getElementById("taskBox").classList.remove("hidden");
 }
 
-answersDiv.appendChild(b);
+function answerStation(station, selectedIndex) {
+  if (selectedIndex === station.correct) {
+    solved.push(station.name);
+    solved = [...new Set(solved)];
+    localStorage.setItem("prahaSolved", JSON.stringify(solved));
 
-});
-
-document.getElementById("taskBox").classList.remove("hidden");
-
+    closeTask();
+    showToast("Správně! Získali jste indicii.", "ok");
+    renderAll();
+  } else {
+    showToast("Špatně. Zkuste to znovu.", "bad");
+  }
 }
 
-function closeTask(){
+function closeTask() {
+  document.getElementById("taskBox").classList.add("hidden");
+  openedStationName = null;
+}
 
-document.getElementById("taskBox").classList.add("hidden");
+function getTodayRealStations() {
+  return stations.filter(s => s.day === currentDay && s.type === "real");
+}
 
+function getTodaySolvedCount() {
+  return getTodayRealStations().filter(s => solved.includes(s.name)).length;
+}
+
+function updateHeader() {
+  const total = getTodayRealStations().length;
+  const done = getTodaySolvedCount();
+
+  dayBadge.innerText = `Den ${currentDay}`;
+  progressBadge.innerText = `Splněno ${done} / ${total}`;
+}
+
+function updateNextDayButton() {
+  const total = getTodayRealStations().length;
+  const done = getTodaySolvedCount();
+
+  if (done >= total && total > 0 && currentDay < 5) {
+    nextDayBtn.classList.remove("hidden");
+  } else {
+    nextDayBtn.classList.add("hidden");
+  }
+}
+
+function nextDay() {
+  const total = getTodayRealStations().length;
+  const done = getTodaySolvedCount();
+
+  if (done < total) {
+    showToast("Nejdřív musíte splnit všechny pravé úkoly dne.", "bad");
+    return;
+  }
+
+  currentDay++;
+  if (currentDay > 5) currentDay = 5;
+
+  renderAll();
+  showToast(`Odemčen den ${currentDay}!`, "ok");
+}
+
+function showToast(text, type = "ok") {
+  toast.innerText = text;
+  toast.className = "";
+  toast.classList.add(type === "ok" ? "toast-ok" : "toast-bad");
+  toast.style.display = "block";
+
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 2600);
 }

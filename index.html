@@ -1,44 +1,52 @@
- <!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="cs">
 <head>
+  <meta charset="utf-8">
+  <title>Lovci pokladu staré Prahy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta charset="utf-8">
-<title>Lovci pokladu staré Prahy</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-<link rel="stylesheet" href="style.css">
-
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h2>Lovci pokladu staré Prahy</h2>
+  <div id="app">
+    <div id="header">
+      <div class="titleWrap">
+        <h1>Lovci pokladu staré Prahy</h1>
+        <div id="statusLine">
+          <span id="dayBadge">Den 1</span>
+          <span id="progressBadge">Splněno 0 / 0</span>
+        </div>
+      </div>
 
-<div id="topBar">
+      <div class="topButtons">
+        <button class="topBtn" onclick="toggleTest()">TEST</button>
+        <button class="topBtn hidden" id="nextDayBtn" onclick="nextDay()">Další den</button>
+      </div>
+    </div>
 
-<button onclick="toggleTest()">TEST</button>
-<button onclick="nextDay()">DALŠÍ DEN</button>
+    <div id="map"></div>
 
-</div>
+    <div id="toast" class="hidden"></div>
 
-<div id="map"></div>
+    <div id="taskBox" class="hidden">
+      <div class="taskCard">
+        <div class="taskHeader">
+          <div>
+            <div class="taskLabel">Stanoviště</div>
+            <h2 id="taskTitle"></h2>
+          </div>
+          <button class="closeBtn" onclick="closeTask()">✕</button>
+        </div>
 
-<div id="taskBox" class="hidden">
+        <p id="taskQuestion"></p>
+        <div id="answers"></div>
+      </div>
+    </div>
+  </div>
 
-<h3 id="taskTitle"></h3>
-
-<p id="taskQuestion"></p>
-
-<div id="answers"></div>
-
-<button onclick="closeTask()">Zavřít</button>
-
-</div>
-
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="app.js"></script>
-
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
