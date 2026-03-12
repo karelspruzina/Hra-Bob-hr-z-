@@ -7,6 +7,90 @@
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .legend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .legendItem{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:13px;
+    }
+    .legendLine{
+      width:18px;
+      height:4px;
+      border-radius:999px;
+      display:inline-block;
+    }
+    #taskInput{
+      width:100%;
+      padding:14px;
+      font-size:18px;
+      border-radius:14px;
+      border:2px solid rgba(96,76,41,.25);
+      margin:8px 0 12px;
+    }
+    .taskActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .taskActions button{
+      flex:1;
+      min-width:120px;
+      padding:14px;
+      font-size:17px;
+      font-weight:bold;
+      border:none;
+      border-radius:14px;
+    }
+    #submitAnswerBtn{
+      background:#2f9e44;
+      color:white;
+    }
+    #cluePanel{
+      position:fixed;
+      top:0;
+      right:0;
+      width:min(92vw,420px);
+      height:100vh;
+      z-index:2600;
+      background:#1f1a14;
+      color:#f5ead7;
+      box-shadow:-8px 0 30px rgba(0,0,0,.45);
+      padding:16px;
+      overflow:auto;
+    }
+    #cluePanel h3{
+      margin-top:0;
+    }
+    .clueItem{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:12px;
+      margin:10px 0;
+      line-height:1.4;
+    }
+    .smallBtn{
+      border:none;
+      border-radius:12px;
+      padding:10px 14px;
+      font-size:15px;
+      font-weight:bold;
+      background:linear-gradient(180deg, #ecd39d, #c79e50);
+      color:#2d2418;
+    }
+  </style>
 </head>
 <body>
 
@@ -14,20 +98,30 @@
     <div id="header">
       <div class="titleWrap">
         <h1>Lovci pokladu staré Prahy</h1>
+
         <div id="statusLine">
           <span id="dayBadge">Den 1</span>
           <span id="progressBadge">Splněno 0 / 0</span>
+          <span id="clueBadge">Indicie 0</span>
+        </div>
+
+        <div class="legend">
+          <div class="legendItem"><span class="legendLine" style="background:#2f9e44"></span>Pěšky</div>
+          <div class="legendItem"><span class="legendLine" style="background:#d9480f"></span>Tramvaj</div>
+          <div class="legendItem"><span class="legendLine" style="background:#1c7ed6"></span>Metro</div>
+          <div class="legendItem"><span class="legendLine" style="background:#74c0fc"></span>Loď</div>
+          <div class="legendItem"><span class="legendLine" style="background:#111111"></span>Bolt</div>
         </div>
       </div>
 
       <div class="topButtons">
         <button class="topBtn" onclick="toggleTest()">TEST</button>
+        <button class="topBtn" onclick="toggleClues()">Indicie</button>
         <button class="topBtn hidden" id="nextDayBtn" onclick="nextDay()">Další den</button>
       </div>
     </div>
 
     <div id="map"></div>
-
     <div id="toast" class="hidden"></div>
 
     <div id="taskBox" class="hidden">
@@ -41,8 +135,22 @@
         </div>
 
         <p id="taskQuestion"></p>
-        <div id="answers"></div>
+
+        <input id="taskInput" type="text" placeholder="Napiš odpověď sem...">
+
+        <div class="taskActions">
+          <button id="submitAnswerBtn" onclick="submitAnswer()">Potvrdit odpověď</button>
+          <button onclick="closeTask()">Zavřít</button>
+        </div>
       </div>
+    </div>
+
+    <div id="cluePanel" class="hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+        <h3>Moje indicie</h3>
+        <button class="smallBtn" onclick="toggleClues()">Zavřít</button>
+      </div>
+      <div id="clueList"></div>
     </div>
   </div>
 
