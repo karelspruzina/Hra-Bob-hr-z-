@@ -30,14 +30,17 @@ const taskBox = document.getElementById("taskBox");
 const taskTitle = document.getElementById("taskTitle");
 const taskQuestion = document.getElementById("taskQuestion");
 const taskInput = document.getElementById("taskInput");
-const dayTasksList = document.getElementById("dayTasksList");
 
-fetch("gameData.json")
+fetch("gamedata.json")
   .then(r => r.json())
   .then(data => {
     gameData = data;
     renderAll();
     startGPS();
+  })
+  .catch(err => {
+    console.error("Chyba při načtení gamedata.json:", err);
+    showToast("Nepodařilo se načíst herní data.", "bad");
   });
 
 function saveState() {
@@ -62,11 +65,6 @@ function isSolved(nodeId) {
   return state.solvedIds.includes(nodeId);
 }
 
-function isUnlockedByDay(node) {
-  if (node.day == null) return true;
-  return node.day <= state.currentDay;
-}
-
 function isNodeVisible(node) {
   return node.day == null || node.day === state.currentDay;
 }
@@ -88,7 +86,7 @@ function canAdvanceDay() {
 function transportColor(type) {
   if (type === "walk") return "#2f9e44";
   if (type === "tram") return "#d9480f";
-  if (type === "metro") return "#1c7ed6";
+  if (type === "metro") return "#f1c40f";
   if (type === "boat") return "#74c0fc";
   if (type === "bolt") return "#111111";
   return "#999999";
@@ -118,7 +116,6 @@ function renderAll() {
   updateHeader();
   updateNextDayButton();
   renderClues();
-  renderDayTasks();
 }
 
 function drawRoutes() {
@@ -127,7 +124,6 @@ function drawRoutes() {
     const toNode = findNodeById(route.to);
     if (!fromNode || !toNode) return;
 
-    // Zobrazuj trasy jen pokud se týkají dnešních bodů nebo přestupních bodů
     const fromVisible = isNodeVisible(fromNode);
     const toVisible = isNodeVisible(toNode);
 
@@ -189,7 +185,7 @@ function drawNodes() {
 
     let popupText = `<strong>${node.name}</strong>`;
     if (node.kind === "transfer") popupText += `<br><small>Přestupní bod</small>`;
-    if (node.kind === "station") popupText += `<br><small>Dnešní stanoviště</small>`;
+    if (node.kind === "station") popupText += `<br><small>Stanoviště</small>`;
     if (node.kind === "fake") popupText += `<br><small>Neznámá stopa</small>`;
 
     marker.bindPopup(popupText);
@@ -252,45 +248,6 @@ function renderClues() {
   });
 }
 
-function renderDayTasks() {
-  if (!dayTasksList) return;
-
-  const todayStations = gameData.nodes.filter(
-    n => (n.kind === "station" || n.kind === "fake") && n.day === state.currentDay
-  );
-
-  dayTasksList.innerHTML = "";
-
-  todayStations.forEach(node => {
-    const row = document.createElement("div");
-    row.className = "taskRow";
-
-    const dot = document.createElement("div");
-    dot.className = "taskDot";
-
-    if (node.kind === "station") {
-      dot.style.background = isSolved(node.id) ? "#2f9e44" : "#d8b36a";
-    } else {
-      dot.style.background = state.unlockedFakeIds.includes(node.id) ? "#c92a2a" : "#8c8c8c";
-    }
-
-    const text = document.createElement("div");
-    let label = node.name;
-
-    if (node.kind === "station") {
-      label += isSolved(node.id) ? " — splněno" : " — čeká";
-    } else {
-      label += state.unlockedFakeIds.includes(node.id) ? " — falešná stopa nalezena" : " — neznámá stopa";
-    }
-
-    text.innerText = label;
-
-    row.appendChild(dot);
-    row.appendChild(text);
-    dayTasksList.appendChild(row);
-  });
-}
-
 function startGPS() {
   if (!navigator.geolocation) {
     showToast("Tento telefon nepodporuje GPS.", "bad");
@@ -337,7 +294,6 @@ function handleNodeClick(node) {
     if (!state.unlockedFakeIds.includes(node.id)) {
       state.unlockedFakeIds.push(node.id);
       saveState();
-      renderAll();
     }
     showToast(node.fakeMessage || "Bohužel, falešná stopa.", "bad");
     return;
