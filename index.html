@@ -100,34 +100,6 @@
       background:linear-gradient(180deg, #ecd39d, #c79e50);
       color:#2d2418;
     }
-
-    #dayTasksBox{
-      margin-top:14px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1);
-      border-radius:18px;
-      padding:12px;
-    }
-
-    .taskRow{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:8px 0;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      font-size:15px;
-    }
-
-    .taskRow:last-child{
-      border-bottom:none;
-    }
-
-    .taskDot{
-      width:12px;
-      height:12px;
-      border-radius:999px;
-      flex:0 0 12px;
-    }
   </style>
 </head>
 <body>
@@ -146,7 +118,7 @@
         <div class="legend">
           <div class="legendItem"><span class="legendLine" style="background:#2f9e44"></span>Pěšky</div>
           <div class="legendItem"><span class="legendLine" style="background:#d9480f"></span>Tramvaj</div>
-          <div class="legendItem"><span class="legendLine" style="background:#1c7ed6"></span>Metro</div>
+          <div class="legendItem"><span class="legendLine" style="background:#f1c40f"></span>Metro</div>
           <div class="legendItem"><span class="legendLine" style="background:#74c0fc"></span>Loď</div>
           <div class="legendItem"><span class="legendLine" style="background:#111111"></span>Bolt</div>
         </div>
@@ -156,11 +128,6 @@
         <button class="topBtn" onclick="toggleTest()">TEST</button>
         <button class="topBtn" onclick="toggleClues()">Indicie</button>
         <button class="topBtn hidden" id="nextDayBtn" onclick="nextDay()">Další den</button>
-      </div>
-
-      <div id="dayTasksBox">
-        <div style="font-size:14px;font-weight:bold;opacity:.9;margin-bottom:8px;">Denní úkoly</div>
-        <div id="dayTasksList"></div>
       </div>
     </div>
 
