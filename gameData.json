@@ -9,13 +9,21 @@
     {
       "id": 101,
       "name": "Můstek",
-      "lat": 50.0849,
+      "lat": 50.0848,
       "lng": 14.4232,
       "kind": "transfer",
       "day": null
     },
     {
       "id": 102,
+      "name": "Staroměstská",
+      "lat": 50.0881,
+      "lng": 14.4179,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 103,
       "name": "Malostranská",
       "lat": 50.0913,
       "lng": 14.4095,
@@ -23,55 +31,31 @@
       "day": null
     },
     {
-      "id": 103,
-      "name": "Národní třída",
-      "lat": 50.0819,
-      "lng": 14.4205,
-      "kind": "transfer",
-      "day": null
-    },
-    {
       "id": 104,
-      "name": "Florenc",
-      "lat": 50.0904,
-      "lng": 14.4393,
+      "name": "Náměstí Republiky",
+      "lat": 50.0895,
+      "lng": 14.4321,
       "kind": "transfer",
       "day": null
     },
     {
       "id": 105,
-      "name": "Anděl",
-      "lat": 50.0768,
-      "lng": 14.4047,
+      "name": "Florenc",
+      "lat": 50.0918,
+      "lng": 14.4382,
       "kind": "transfer",
       "day": null
     },
     {
       "id": 106,
-      "name": "Hradčanská",
-      "lat": 50.0972,
-      "lng": 14.4042,
+      "name": "Hlavní nádraží",
+      "lat": 50.0830,
+      "lng": 14.4359,
       "kind": "transfer",
       "day": null
     },
     {
       "id": 107,
-      "name": "Vltavská",
-      "lat": 50.0988,
-      "lng": 14.4394,
-      "kind": "transfer",
-      "day": null
-    },
-    {
-      "id": 108,
-      "name": "Nádraží Holešovice",
-      "lat": 50.1105,
-      "lng": 14.4402,
-      "kind": "transfer",
-      "day": null
-    },
-    {
-      "id": 109,
       "name": "Muzeum",
       "lat": 50.0799,
       "lng": 14.4307,
@@ -79,18 +63,34 @@
       "day": null
     },
     {
-      "id": 110,
-      "name": "Vyšehrad",
-      "lat": 50.0647,
+      "id": 108,
+      "name": "I. P. Pavlova",
+      "lat": 50.0754,
       "lng": 14.4308,
       "kind": "transfer",
       "day": null
     },
     {
+      "id": 109,
+      "name": "Karlovo náměstí",
+      "lat": 50.0757,
+      "lng": 14.4186,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 110,
+      "name": "Národní třída",
+      "lat": 50.0818,
+      "lng": 14.4205,
+      "kind": "transfer",
+      "day": null
+    },
+    {
       "id": 111,
-      "name": "Dejvická",
-      "lat": 50.1006,
-      "lng": 14.3937,
+      "name": "Anděl",
+      "lat": 50.0755,
+      "lng": 14.4043,
       "kind": "transfer",
       "day": null
     },
@@ -104,6 +104,38 @@
     },
     {
       "id": 113,
+      "name": "Vyšehrad",
+      "lat": 50.0649,
+      "lng": 14.4174,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 114,
+      "name": "Budějovická",
+      "lat": 50.0447,
+      "lng": 14.4486,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 115,
+      "name": "Kačerov",
+      "lat": 50.0418,
+      "lng": 14.4594,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 116,
+      "name": "Háje",
+      "lat": 50.0306,
+      "lng": 14.5260,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 117,
       "name": "Jiřího z Poděbrad",
       "lat": 50.0788,
       "lng": 14.4514,
@@ -111,18 +143,154 @@
       "day": null
     },
     {
-      "id": 114,
-      "name": "Palackého náměstí",
-      "lat": 50.0745,
-      "lng": 14.4147,
+      "id": 118,
+      "name": "Flora",
+      "lat": 50.0770,
+      "lng": 14.4610,
       "kind": "transfer",
       "day": null
     },
     {
-      "id": 115,
-      "name": "Újezd",
-      "lat": 50.0823,
-      "lng": 14.4045,
+      "id": 119,
+      "name": "Želivského",
+      "lat": 50.0788,
+      "lng": 14.4747,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 120,
+      "name": "Skalka",
+      "lat": 50.0685,
+      "lng": 14.5077,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 121,
+      "name": "Depo Hostivař",
+      "lat": 50.0759,
+      "lng": 14.5158,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 122,
+      "name": "Palmovka",
+      "lat": 50.1036,
+      "lng": 14.4752,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 123,
+      "name": "Českomoravská",
+      "lat": 50.1046,
+      "lng": 14.4920,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 124,
+      "name": "Vysočanská",
+      "lat": 50.1109,
+      "lng": 14.5012,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 125,
+      "name": "Černý Most",
+      "lat": 50.1099,
+      "lng": 14.5777,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 126,
+      "name": "Vltavská",
+      "lat": 50.0988,
+      "lng": 14.4394,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 127,
+      "name": "Nádraží Holešovice",
+      "lat": 50.1105,
+      "lng": 14.4402,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 128,
+      "name": "Kobylisy",
+      "lat": 50.1242,
+      "lng": 14.4538,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 129,
+      "name": "Ládví",
+      "lat": 50.1266,
+      "lng": 14.4690,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 130,
+      "name": "Hradčanská",
+      "lat": 50.0969,
+      "lng": 14.4046,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 131,
+      "name": "Dejvická",
+      "lat": 50.1006,
+      "lng": 14.3937,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 132,
+      "name": "Bořislavka",
+      "lat": 50.0988,
+      "lng": 14.3648,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 133,
+      "name": "Petřiny",
+      "lat": 50.0869,
+      "lng": 14.3439,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 134,
+      "name": "Zličín",
+      "lat": 50.0516,
+      "lng": 14.2910,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 135,
+      "name": "Nové Butovice",
+      "lat": 50.0502,
+      "lng": 14.3526,
+      "kind": "transfer",
+      "day": null
+    },
+    {
+      "id": 136,
+      "name": "Radlická",
+      "lat": 50.0582,
+      "lng": 14.3895,
       "kind": "transfer",
       "day": null
     },
@@ -131,12 +299,12 @@
       "id": 201,
       "name": "Orloj",
       "lat": 50.0870,
-      "lng": 14.4208,
+      "lng": 14.4207,
       "kind": "station",
       "day": 1,
-      "question": "Jak se jmenuje slavný hodinový stroj na Staroměstské radnici?",
-      "acceptedAnswers": ["orloj", "staromestsky orloj", "prazsky orloj"],
-      "clueReward": "Poklad neleží na mostě."
+      "question": "Kolik apoštolů se objeví při odbíjení Orloje?",
+      "acceptedAnswers": ["12", "dvanact"],
+      "clueReward": "Indicie: Finální místo není uprostřed Starého Města."
     },
     {
       "id": 202,
@@ -145,9 +313,9 @@
       "lng": 14.4114,
       "kind": "station",
       "day": 1,
-      "question": "Jak se jmenuje nejslavnější pražský kamenný most se sochami?",
-      "acceptedAnswers": ["karluv most", "karlův most"],
-      "clueReward": "Finální místo neleží přímo uprostřed Starého Města."
+      "question": "Kolik mosteckých věží souvisí s Karlovým mostem?",
+      "acceptedAnswers": ["3", "tri"],
+      "clueReward": "Indicie: Poklad neleží na mostě."
     },
     {
       "id": 203,
@@ -158,7 +326,7 @@
       "day": 1,
       "question": "Jaké heslo je napsané na budově Národního divadla?",
       "acceptedAnswers": ["narod sobe", "národ sobě", "narodsobe"],
-      "clueReward": "Hledejte místo s velmi starou českou historií."
+      "clueReward": "Indicie: Hledejte místo s velmi starou českou historií."
     },
     {
       "id": 204,
@@ -167,29 +335,29 @@
       "lng": 14.4270,
       "kind": "station",
       "day": 1,
-      "question": "Jak se jmenuje slavná tmavá historická brána u Obecního domu?",
-      "acceptedAnswers": ["prasna brana", "prašná brána", "prasna"],
-      "clueReward": "Poklad není u moderní skleněné budovy."
+      "question": "Jak se jmenuje historická cesta, která zde začínala?",
+      "acceptedAnswers": ["kralovska cesta", "královská cesta"],
+      "clueReward": "Indicie: Finální místo souvisí s obranou a hradbami."
     },
     {
       "id": 205,
       "name": "Václavské náměstí",
-      "lat": 50.0811,
-      "lng": 14.4276,
+      "lat": 50.0810,
+      "lng": 14.4253,
       "kind": "station",
       "day": 1,
-      "question": "Jak se jmenuje dlouhé pražské náměstí se sochou svatého Václava?",
-      "acceptedAnswers": ["vaclavske namesti", "václavské náměstí", "vaclavak", "václavák"],
-      "clueReward": "Finální místo souvisí s knížaty a dávnými českými dějinami."
+      "question": "Kdo sedí na koni na horním konci náměstí?",
+      "acceptedAnswers": ["svaty vaclav", "svatý václav", "vaclav", "václav"],
+      "clueReward": "Indicie: Finální místo není moderní obchodní centrum."
     },
     {
       "id": 206,
       "name": "Střelecký ostrov",
-      "lat": 50.0815,
-      "lng": 14.4116,
+      "lat": 50.0825,
+      "lng": 14.4112,
       "kind": "fake",
       "day": 1,
-      "fakeMessage": "Bohužel, tady indicie není. Mapa vás tentokrát svedla na falešnou stopu."
+      "fakeMessage": "Tady poklad není. Hledejte jinde."
     },
 
     {
@@ -199,9 +367,9 @@
       "lng": 14.3959,
       "kind": "station",
       "day": 2,
-      "question": "Jak se jmenuje kopec s rozhlednou a zrcadlovým bludištěm?",
+      "question": "Jak se jmenuje kopec s rozhlednou a bludištěm?",
       "acceptedAnswers": ["petrin", "petřín"],
-      "clueReward": "Poklad leží nad řekou."
+      "clueReward": "Indicie: Poklad leží nad řekou, ne dole u vody."
     },
     {
       "id": 302,
@@ -210,9 +378,9 @@
       "lng": 14.4072,
       "kind": "station",
       "day": 2,
-      "question": "Jak se jmenuje ostrovní park u Karlova mostu a Čertovky?",
+      "question": "Jak se jmenuje ostrovní park u Čertovky?",
       "acceptedAnswers": ["kampa"],
-      "clueReward": "Hledejte místo na vyvýšeném místě, ne v rovině."
+      "clueReward": "Indicie: Finální místo není malý ostrov."
     },
     {
       "id": 303,
@@ -221,9 +389,9 @@
       "lng": 14.4005,
       "kind": "station",
       "day": 2,
-      "question": "Jak se jmenuje nejznámější hradní areál v Praze?",
-      "acceptedAnswers": ["prazsky hrad", "pražský hrad", "hrad"],
-      "clueReward": "Poklad není uvnitř hradu ani zámku."
+      "question": "Jak se jmenuje hlavní katedrála na Pražském hradě?",
+      "acceptedAnswers": ["svaty vit", "svatý vít", "katedrala svateho vita", "katedrála svatého víta"],
+      "clueReward": "Indicie: Poklad není uvnitř hradu."
     },
     {
       "id": 304,
@@ -232,9 +400,9 @@
       "lng": 14.3899,
       "kind": "station",
       "day": 2,
-      "question": "Jak se jmenuje klášter nad Malou Stranou poblíž Strahova?",
-      "acceptedAnswers": ["strahovsky klaster", "strahovský klášter", "strahov"],
-      "clueReward": "Finální místo je spojeno s obrannými hradbami."
+      "question": "Jak se jmenuje slavný klášter nad Malou Stranou?",
+      "acceptedAnswers": ["strahov", "strahovsky klaster", "strahovský klášter"],
+      "clueReward": "Indicie: Hledejte místo spojené s pevností, ne s klášterem."
     },
     {
       "id": 305,
@@ -243,9 +411,9 @@
       "lng": 14.4045,
       "kind": "station",
       "day": 2,
-      "question": "Jak se jmenuje hlavní náměstí Malé Strany?",
-      "acceptedAnswers": ["malostranske namesti", "malostranské náměstí"],
-      "clueReward": "Poklad neleží v nové moderní čtvrti."
+      "question": "Ve které pražské čtvrti leží Malostranské náměstí?",
+      "acceptedAnswers": ["mala strana", "malá strana"],
+      "clueReward": "Indicie: Finální místo není na Malé Straně."
     },
     {
       "id": 306,
@@ -254,7 +422,7 @@
       "lng": 14.4080,
       "kind": "fake",
       "day": 2,
-      "fakeMessage": "Hezké místo, ale indicie tady tentokrát není. Zkuste jiné stanoviště."
+      "fakeMessage": "Hezké místo, ale indicie tu dnes není."
     },
 
     {
@@ -264,62 +432,62 @@
       "lng": 14.4170,
       "kind": "station",
       "day": 3,
-      "question": "Jak se jmenuje velký park nad Vltavou s výhledy na centrum?",
-      "acceptedAnswers": ["letenske sady", "letenské sady", "letna", "letná"],
-      "clueReward": "Z finálního místa je možné vnímat řeku pod sebou."
+      "question": "Jak se jmenuje slavný objekt na Letné, který nahradil Stalinův pomník?",
+      "acceptedAnswers": ["metronom", "prazsky metronom", "pražský metronom"],
+      "clueReward": "Indicie: Z finálního místa je vidět řeka pod vámi."
     },
     {
       "id": 402,
-      "name": "Metronom",
-      "lat": 50.0962,
-      "lng": 14.4176,
-      "kind": "station",
-      "day": 3,
-      "question": "Jak se jmenuje velký kývající se objekt na Letné?",
-      "acceptedAnswers": ["metronom", "prazsky metronom", "pražský metronom"],
-      "clueReward": "Poklad není na místě spojeném s moderním uměním."
-    },
-    {
-      "id": 403,
       "name": "Stromovka",
       "lat": 50.1060,
       "lng": 14.4240,
       "kind": "station",
       "day": 3,
-      "question": "Jak se jmenuje velký pražský park v Holešovicích?",
-      "acceptedAnswers": ["stromovka"],
-      "clueReward": "Finální místo není jen obyčejný městský park."
+      "question": "Co je Stromovka především?",
+      "acceptedAnswers": ["park"],
+      "clueReward": "Indicie: Finální místo není obyčejný park."
     },
     {
-      "id": 404,
+      "id": 403,
       "name": "Trojský zámek",
       "lat": 50.1163,
       "lng": 14.4119,
       "kind": "station",
       "day": 3,
       "question": "Jak se jmenuje zámek poblíž zoo v Troji?",
-      "acceptedAnswers": ["trojsky zamek", "trojský zámek", "trojsky"],
-      "clueReward": "Poklad neleží v severní části Prahy."
+      "acceptedAnswers": ["trojsky zamek", "trojský zámek", "trojsky", "trojský"],
+      "clueReward": "Indicie: Poklad neleží na severu Prahy."
     },
     {
-      "id": 405,
+      "id": 404,
       "name": "Holešovická tržnice",
       "lat": 50.1030,
       "lng": 14.4453,
       "kind": "station",
       "day": 3,
-      "question": "Jak se jmenuje známý tržní areál v Holešovicích?",
+      "question": "Jak se jmenuje velký tržní areál v Holešovicích?",
       "acceptedAnswers": ["holesovicka trznice", "holešovická tržnice", "trznice", "tržnice"],
-      "clueReward": "Hledejte místo, kde je cítit velmi staré české osídlení."
+      "clueReward": "Indicie: Hledejte místo se starými českými dějinami."
     },
     {
-      "id": 406,
+      "id": 405,
       "name": "Výstaviště",
       "lat": 50.1047,
       "lng": 14.4309,
+      "kind": "station",
+      "day": 3,
+      "question": "Jak se jmenuje areál v Holešovicích, kde bývají veletrhy a akce?",
+      "acceptedAnswers": ["vystaviste", "výstaviště"],
+      "clueReward": "Indicie: Poklad není v místě moderních výstav."
+    },
+    {
+      "id": 406,
+      "name": "Císařský ostrov",
+      "lat": 50.1137,
+      "lng": 14.4302,
       "kind": "fake",
       "day": 3,
-      "fakeMessage": "Tady dnes žádná indicie není. Mapa vás zavedla jinam, než bylo potřeba."
+      "fakeMessage": "Tato stopa vás nikam neposune. Zkuste jiné místo."
     },
 
     {
@@ -329,9 +497,9 @@
       "lng": 14.4378,
       "kind": "station",
       "day": 4,
-      "question": "Jak se jmenuje náměstí s kostelem svaté Ludmily?",
-      "acceptedAnswers": ["namesti miru", "náměstí míru"],
-      "clueReward": "Finální místo není na Vinohradech."
+      "question": "Jak se jmenuje kostel na Náměstí Míru?",
+      "acceptedAnswers": ["svata ludmila", "svatá ludmila", "kostel svate ludmily", "kostel svaté ludmily"],
+      "clueReward": "Indicie: Finální místo není na Vinohradech."
     },
     {
       "id": 502,
@@ -340,9 +508,9 @@
       "lng": 14.4505,
       "kind": "station",
       "day": 4,
-      "question": "Jak se jmenuje náměstí a stanice metra zkracovaná jako JZP?",
-      "acceptedAnswers": ["jiriho z podebrad", "jiřího z poděbrad", "jzp"],
-      "clueReward": "Poklad není v místě známém moderním tržištěm."
+      "question": "Jak se zkráceně říká náměstí Jiřího z Poděbrad?",
+      "acceptedAnswers": ["jzp"],
+      "clueReward": "Indicie: Poklad nesouvisí s farmářskými trhy."
     },
     {
       "id": 503,
@@ -351,9 +519,9 @@
       "lng": 14.4509,
       "kind": "station",
       "day": 4,
-      "question": "Jak se jmenuje vysoká televizní věž s miminy na povrchu?",
+      "question": "Jak se jmenuje vysoká věž s miminy na povrchu?",
       "acceptedAnswers": ["zizkovska vez", "žižkovská věž", "zizkovska televizni vez", "žižkovská televizní věž"],
-      "clueReward": "Poklad neleží u televizní věže ani vysílače."
+      "clueReward": "Indicie: Finální místo není televizní věž."
     },
     {
       "id": 504,
@@ -362,9 +530,9 @@
       "lng": 14.4502,
       "kind": "station",
       "day": 4,
-      "question": "Jak se jmenuje hlavní náměstí v Karlíně?",
-      "acceptedAnswers": ["karlinske namesti", "karlínské náměstí"],
-      "clueReward": "Hledejte místo spojené s velmi starou pevností."
+      "question": "Ve které čtvrti leží Karlínské náměstí?",
+      "acceptedAnswers": ["karlin", "karlín"],
+      "clueReward": "Indicie: Hledejte místo spojené s pevností a knížaty."
     },
     {
       "id": 505,
@@ -375,16 +543,16 @@
       "day": 4,
       "question": "Jak se jmenuje park s výhledem na Pražský hrad nad hlavním nádražím?",
       "acceptedAnswers": ["riegrovy sady"],
-      "clueReward": "Finální místo může souviset s rotundou."
+      "clueReward": "Indicie: Finální místo může souviset s rotundou."
     },
     {
       "id": 506,
-      "name": "Florenc autobusové nádraží",
-      "lat": 50.0917,
-      "lng": 14.4409,
+      "name": "Olšanské hřbitovy",
+      "lat": 50.0818,
+      "lng": 14.4628,
       "kind": "fake",
       "day": 4,
-      "fakeMessage": "Tentokrát ne. Tohle nebyla správná stopa."
+      "fakeMessage": "Tohle není správná stopa. Pokračujte dál."
     },
 
     {
@@ -396,7 +564,7 @@
       "day": 5,
       "question": "Jak se jmenuje pražská pevnost a historické sídlo knížat nad Vltavou?",
       "acceptedAnswers": ["vysehrad", "vyšehrad"],
-      "clueReward": "Finální místo souvisí s Vyšehradem."
+      "clueReward": "Indicie: Finální řešení silně ukazuje na Vyšehrad."
     },
     {
       "id": 602,
@@ -407,40 +575,40 @@
       "day": 5,
       "question": "Jak se jmenuje starobylá rotunda na Vyšehradě?",
       "acceptedAnswers": ["rotunda sv martina", "rotunda sv. martina", "svaty martin", "svatý martin"],
-      "clueReward": "Hledejte místo, kde staré české dějiny zanechaly stopu."
+      "clueReward": "Indicie: Hledejte místo se starobylou sakrální stavbou."
     },
     {
       "id": 603,
-      "name": "Smíchovská náplavka",
-      "lat": 50.0758,
-      "lng": 14.4087,
+      "name": "Slavín",
+      "lat": 50.0642,
+      "lng": 14.4188,
       "kind": "station",
       "day": 5,
-      "question": "Jak se jmenuje náplavka na levém břehu Vltavy u Smíchova?",
-      "acceptedAnswers": ["smichovska naplavka", "smíchovská náplavka", "naplavka", "náplavka"],
-      "clueReward": "Poklad není přímo na náplavce."
+      "question": "Jak se jmenuje známý vyšehradský hřbitovní panteon?",
+      "acceptedAnswers": ["slavin", "slavín"],
+      "clueReward": "Indicie: Poklad není na běžném městském náměstí."
     },
     {
       "id": 604,
-      "name": "Anděl",
-      "lat": 50.0768,
-      "lng": 14.4047,
-      "kind": "station",
-      "day": 5,
-      "question": "Jak se jmenuje známá smíchovská křižovatka a stanice metra?",
-      "acceptedAnswers": ["andel", "anděl"],
-      "clueReward": "Finální místo není obchodní centrum ani přestup."
-    },
-    {
-      "id": 605,
       "name": "Podolská vodárna",
       "lat": 50.0562,
       "lng": 14.4200,
       "kind": "station",
       "day": 5,
-      "question": "Jak se jmenuje známá historická vodárna u Vltavy v Podolí?",
+      "question": "Jak se jmenuje historická vodárna u Vltavy v Podolí?",
       "acceptedAnswers": ["podolska vodarna", "podolská vodárna", "vodarna", "vodárna"],
-      "clueReward": "Možný finální směr: staré hradby, výška nad řekou, česká knížata."
+      "clueReward": "Indicie: Finální místo je vysoko nad řekou, ne dole u vody."
+    },
+    {
+      "id": 605,
+      "name": "Nuselský most",
+      "lat": 50.0688,
+      "lng": 14.4304,
+      "kind": "station",
+      "day": 5,
+      "question": "Jak se jmenuje velký most vedoucí nad Nuselským údolím?",
+      "acceptedAnswers": ["nuselsky most", "nuselský most"],
+      "clueReward": "Indicie: Finální místo není na moderním mostě."
     },
     {
       "id": 606,
@@ -453,71 +621,89 @@
     }
   ],
   "routes": [
-    { "from": 101, "to": 201, "transport": "walk" },
-    { "from": 101, "to": 204, "transport": "walk" },
-    { "from": 101, "to": 103, "transport": "metro" },
-    { "from": 101, "to": 109, "transport": "metro" },
     { "from": 101, "to": 104, "transport": "metro" },
-    { "from": 201, "to": 202, "transport": "walk" },
-    { "from": 202, "to": 115, "transport": "walk" },
-    { "from": 115, "to": 302, "transport": "walk" },
-    { "from": 103, "to": 203, "transport": "walk" },
-    { "from": 103, "to": 114, "transport": "tram" },
-    { "from": 114, "to": 203, "transport": "walk" },
-    { "from": 114, "to": 105, "transport": "tram" },
-    { "from": 104, "to": 204, "transport": "walk" },
-    { "from": 109, "to": 205, "transport": "walk" },
-    { "from": 109, "to": 113, "transport": "metro" },
-
-    { "from": 102, "to": 106, "transport": "metro" },
-    { "from": 102, "to": 115, "transport": "tram" },
-    { "from": 102, "to": 303, "transport": "walk" },
-    { "from": 102, "to": 305, "transport": "walk" },
-    { "from": 115, "to": 301, "transport": "tram" },
-    { "from": 115, "to": 302, "transport": "walk" },
-    { "from": 106, "to": 303, "transport": "tram" },
-    { "from": 106, "to": 304, "transport": "tram" },
-    { "from": 111, "to": 106, "transport": "metro" },
-    { "from": 111, "to": 304, "transport": "tram" },
-    { "from": 105, "to": 115, "transport": "tram" },
-    { "from": 102, "to": 306, "transport": "walk" },
-
-    { "from": 106, "to": 107, "transport": "tram" },
+    { "from": 104, "to": 105, "transport": "metro" },
+    { "from": 101, "to": 102, "transport": "metro" },
+    { "from": 101, "to": 107, "transport": "metro" },
     { "from": 107, "to": 108, "transport": "metro" },
-    { "from": 107, "to": 401, "transport": "walk" },
+    { "from": 108, "to": 113, "transport": "metro" },
+    { "from": 113, "to": 114, "transport": "metro" },
+    { "from": 114, "to": 115, "transport": "metro" },
+    { "from": 115, "to": 116, "transport": "metro" },
+
+    { "from": 107, "to": 106, "transport": "metro" },
+    { "from": 106, "to": 105, "transport": "metro" },
+    { "from": 105, "to": 122, "transport": "metro" },
+    { "from": 122, "to": 123, "transport": "metro" },
+    { "from": 123, "to": 124, "transport": "metro" },
+    { "from": 124, "to": 125, "transport": "metro" },
+
+    { "from": 102, "to": 103, "transport": "metro" },
+    { "from": 103, "to": 130, "transport": "metro" },
+    { "from": 130, "to": 131, "transport": "metro" },
+    { "from": 131, "to": 132, "transport": "metro" },
+    { "from": 132, "to": 133, "transport": "metro" },
+
+    { "from": 111, "to": 136, "transport": "metro" },
+    { "from": 136, "to": 135, "transport": "metro" },
+    { "from": 135, "to": 134, "transport": "metro" },
+
+    { "from": 117, "to": 118, "transport": "metro" },
+    { "from": 118, "to": 119, "transport": "metro" },
+    { "from": 119, "to": 120, "transport": "metro" },
+    { "from": 120, "to": 121, "transport": "metro" },
+
+    { "from": 126, "to": 127, "transport": "metro" },
+    { "from": 127, "to": 128, "transport": "metro" },
+    { "from": 128, "to": 129, "transport": "metro" },
+
+    { "from": 101, "to": 110, "transport": "walk" },
+    { "from": 110, "to": 109, "transport": "walk" },
+    { "from": 109, "to": 108, "transport": "walk" },
+    { "from": 102, "to": 201, "transport": "walk" },
+    { "from": 102, "to": 202, "transport": "walk" },
+    { "from": 110, "to": 203, "transport": "walk" },
+    { "from": 104, "to": 204, "transport": "walk" },
+    { "from": 101, "to": 205, "transport": "walk" },
+    { "from": 110, "to": 206, "transport": "walk" },
+
+    { "from": 103, "to": 302, "transport": "walk" },
+    { "from": 103, "to": 305, "transport": "walk" },
+    { "from": 103, "to": 306, "transport": "walk" },
+    { "from": 130, "to": 303, "transport": "walk" },
+    { "from": 131, "to": 304, "transport": "tram" },
+    { "from": 103, "to": 301, "transport": "tram" },
+
+    { "from": 126, "to": 401, "transport": "walk" },
     { "from": 401, "to": 402, "transport": "walk" },
-    { "from": 107, "to": 403, "transport": "tram" },
-    { "from": 108, "to": 404, "transport": "tram" },
-    { "from": 108, "to": 405, "transport": "tram" },
-    { "from": 107, "to": 406, "transport": "walk" },
-    { "from": 102, "to": 401, "transport": "tram" },
+    { "from": 127, "to": 403, "transport": "tram" },
+    { "from": 126, "to": 404, "transport": "tram" },
+    { "from": 126, "to": 405, "transport": "tram" },
+    { "from": 127, "to": 406, "transport": "walk" },
 
-    { "from": 109, "to": 501, "transport": "metro" },
-    { "from": 113, "to": 501, "transport": "walk" },
-    { "from": 113, "to": 502, "transport": "walk" },
-    { "from": 113, "to": 503, "transport": "tram" },
-    { "from": 104, "to": 504, "transport": "tram" },
-    { "from": 104, "to": 506, "transport": "walk" },
-    { "from": 109, "to": 505, "transport": "walk" },
-    { "from": 104, "to": 113, "transport": "metro" },
+    { "from": 107, "to": 501, "transport": "metro" },
+    { "from": 117, "to": 501, "transport": "walk" },
+    { "from": 117, "to": 502, "transport": "walk" },
+    { "from": 117, "to": 503, "transport": "tram" },
+    { "from": 105, "to": 504, "transport": "tram" },
+    { "from": 106, "to": 505, "transport": "walk" },
+    { "from": 118, "to": 506, "transport": "walk" },
 
-    { "from": 110, "to": 601, "transport": "walk" },
+    { "from": 113, "to": 601, "transport": "walk" },
     { "from": 601, "to": 602, "transport": "walk" },
-    { "from": 110, "to": 114, "transport": "metro" },
-    { "from": 114, "to": 603, "transport": "walk" },
-    { "from": 105, "to": 604, "transport": "walk" },
-    { "from": 112, "to": 603, "transport": "walk" },
-    { "from": 112, "to": 105, "transport": "metro" },
-    { "from": 110, "to": 605, "transport": "tram" },
+    { "from": 601, "to": 603, "transport": "walk" },
+    { "from": 114, "to": 604, "transport": "tram" },
+    { "from": 113, "to": 605, "transport": "tram" },
     { "from": 112, "to": 606, "transport": "walk" },
 
     { "from": 202, "to": 302, "transport": "boat" },
-    { "from": 302, "to": 603, "transport": "boat" },
-    { "from": 603, "to": 605, "transport": "boat" },
+    { "from": 302, "to": 203, "transport": "boat" },
+    { "from": 203, "to": 604, "transport": "boat" },
 
-    { "from": 101, "to": 105, "transport": "bolt" },
-    { "from": 105, "to": 110, "transport": "bolt" },
-    { "from": 104, "to": 108, "transport": "bolt" },
-    { "from": 109, "to": 111, "transport": "bolt" }
+    { "from": 101, "to": 111, "transport": "bolt" },
+    { "from": 111, "to": 113, "transport": "bolt" },
+    { "from": 105, "to": 127, "transport": "bolt" },
+    { "from": 131, "to": 135, "transport": "bolt" },
+    { "from": 122, "to": 116, "transport": "bolt" }
   ]
 }
