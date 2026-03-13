@@ -1,17 +1,14 @@
-// ===== MAPA =====
 let map = L.map('map').setView([50.087, 14.42], 12);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19
 }).addTo(map);
 
-// ===== DATA A STAV =====
 let gameData = null;
 let markers = [];
 let lines = [];
-let currentNode = null;
-let currentGps = null;
 let gpsMarker = null;
+let currentGps = null;
 let testMode = false;
 let activeStation = null;
 
@@ -19,11 +16,9 @@ let state = JSON.parse(localStorage.getItem("prahaGameState") || "null") || {
   currentDay: 1,
   solvedIds: [],
   foundClues: [],
-  unlockedFakeIds: [],
-  currentNodeId: null
+  unlockedFakeIds: []
 };
 
-// ===== DOM =====
 const dayBadge = document.getElementById("dayBadge");
 const progressBadge = document.getElementById("progressBadge");
 const clueBadge = document.getElementById("clueBadge");
@@ -35,23 +30,16 @@ const taskBox = document.getElementById("taskBox");
 const taskTitle = document.getElementById("taskTitle");
 const taskQuestion = document.getElementById("taskQuestion");
 const taskInput = document.getElementById("taskInput");
+const dayTasksList = document.getElementById("dayTasksList");
 
-// ===== NAČTENÍ DAT =====
 fetch("gameData.json")
   .then(r => r.json())
   .then(data => {
     gameData = data;
-
-    if (!state.currentNodeId && gameData.config.startNodeId) {
-      state.currentNodeId = gameData.config.startNodeId;
-      saveState();
-    }
-
     renderAll();
     startGPS();
   });
 
-// ===== POMOCNÉ =====
 function saveState() {
   localStorage.setItem("prahaGameState", JSON.stringify(state));
 }
@@ -79,8 +67,8 @@ function isUnlockedByDay(node) {
   return node.day <= state.currentDay;
 }
 
-function isPlayableToday(node) {
-  return node.day === state.currentDay;
+function isNodeVisible(node) {
+  return node.day == null || node.day === state.currentDay;
 }
 
 function getTodayRealStations() {
@@ -115,21 +103,22 @@ function transportLabel(type) {
   return type;
 }
 
-// ===== RENDER =====
+function clearMapObjects() {
+  markers.forEach(m => map.removeLayer(m));
+  lines.forEach(l => map.removeLayer(l));
+  markers = [];
+  lines = [];
+}
+
 function renderAll() {
+  if (!gameData) return;
   clearMapObjects();
   drawRoutes();
   drawNodes();
   updateHeader();
   updateNextDayButton();
   renderClues();
-}
-
-function clearMapObjects() {
-  markers.forEach(m => map.removeLayer(m));
-  lines.forEach(l => map.removeLayer(l));
-  markers = [];
-  lines = [];
+  renderDayTasks();
 }
 
 function drawRoutes() {
@@ -138,8 +127,11 @@ function drawRoutes() {
     const toNode = findNodeById(route.to);
     if (!fromNode || !toNode) return;
 
-    const visible = isUnlockedByDay(fromNode) || isUnlockedByDay(toNode);
-    if (!visible) return;
+    // Zobrazuj trasy jen pokud se týkají dnešních bodů nebo přestupních bodů
+    const fromVisible = isNodeVisible(fromNode);
+    const toVisible = isNodeVisible(toNode);
+
+    if (!fromVisible && !toVisible) return;
 
     const poly = L.polyline(
       [
@@ -148,9 +140,11 @@ function drawRoutes() {
       ],
       {
         color: transportColor(route.transport),
-        weight: route.transport === "metro" ? 6 : 5,
-        opacity: 0.85,
-        dashArray: route.transport === "bolt" ? "10,10" : null
+        weight: route.transport === "metro" ? 7 : 6,
+        opacity: 0.95,
+        dashArray: route.transport === "bolt" ? "10,8" : null,
+        lineCap: "round",
+        lineJoin: "round"
       }
     ).addTo(map);
 
@@ -161,49 +155,46 @@ function drawRoutes() {
 
 function drawNodes() {
   gameData.nodes.forEach(node => {
-    const unlocked = isUnlockedByDay(node);
+    if (!isNodeVisible(node)) return;
 
-    let color = "#777";
-    let fill = "#999";
+    let color = "#222";
+    let fill = "#555";
+    let radius = 8;
 
     if (node.kind === "transfer") {
-      color = "#222";
-      fill = "#222";
+      color = "#111";
+      fill = "#111";
+      radius = 7;
     }
 
     if (node.kind === "station") {
       color = "#ffffff";
-      fill = isSolved(node.id) ? "#2f9e44" : (unlocked ? "#d8b36a" : "#7a7a7a");
+      fill = isSolved(node.id) ? "#2f9e44" : "#d8b36a";
+      radius = 11;
     }
 
     if (node.kind === "fake") {
       color = "#ffffff";
-      fill = state.unlockedFakeIds.includes(node.id) ? "#c92a2a" : (unlocked ? "#8c8c8c" : "#6f6f6f");
-    }
-
-    if (state.currentNodeId === node.id) {
-      color = "#ffffff";
-      fill = "#7048e8";
+      fill = state.unlockedFakeIds.includes(node.id) ? "#c92a2a" : "#8c8c8c";
+      radius = 10;
     }
 
     const marker = L.circleMarker([node.lat, node.lng], {
-      radius: node.kind === "transfer" ? 8 : 11,
-      color,
+      radius: radius,
+      color: color,
       weight: 3,
       fillColor: fill,
-      fillOpacity: 1,
-      opacity: unlocked ? 1 : 0.6
+      fillOpacity: 1
     }).addTo(map);
 
-    let text = node.name;
+    let popupText = `<strong>${node.name}</strong>`;
+    if (node.kind === "transfer") popupText += `<br><small>Přestupní bod</small>`;
+    if (node.kind === "station") popupText += `<br><small>Dnešní stanoviště</small>`;
+    if (node.kind === "fake") popupText += `<br><small>Neznámá stopa</small>`;
 
-    if (node.kind === "transfer") text += "<br><small>Přestupní bod</small>";
-    if (node.kind === "station") text += `<br><small>${unlocked ? "Možné stanoviště" : "Zamčeno pro další den"}</small>`;
-    if (node.kind === "fake") text += `<br><small>${unlocked ? "Neznámá stopa" : "Zamčeno pro další den"}</small>`;
-
-    marker.bindPopup(text);
-
+    marker.bindPopup(popupText);
     marker.on("click", () => handleNodeClick(node));
+
     markers.push(marker);
   });
 
@@ -219,9 +210,9 @@ function updateGpsMarker() {
 
   gpsMarker = L.circleMarker([currentGps.lat, currentGps.lng], {
     radius: 10,
-    color: "#fff",
+    color: "#ffffff",
     weight: 3,
-    fillColor: "#0ca678",
+    fillColor: "#7048e8",
     fillOpacity: 1
   }).addTo(map);
 
@@ -261,7 +252,45 @@ function renderClues() {
   });
 }
 
-// ===== GPS =====
+function renderDayTasks() {
+  if (!dayTasksList) return;
+
+  const todayStations = gameData.nodes.filter(
+    n => (n.kind === "station" || n.kind === "fake") && n.day === state.currentDay
+  );
+
+  dayTasksList.innerHTML = "";
+
+  todayStations.forEach(node => {
+    const row = document.createElement("div");
+    row.className = "taskRow";
+
+    const dot = document.createElement("div");
+    dot.className = "taskDot";
+
+    if (node.kind === "station") {
+      dot.style.background = isSolved(node.id) ? "#2f9e44" : "#d8b36a";
+    } else {
+      dot.style.background = state.unlockedFakeIds.includes(node.id) ? "#c92a2a" : "#8c8c8c";
+    }
+
+    const text = document.createElement("div");
+    let label = node.name;
+
+    if (node.kind === "station") {
+      label += isSolved(node.id) ? " — splněno" : " — čeká";
+    } else {
+      label += state.unlockedFakeIds.includes(node.id) ? " — falešná stopa nalezena" : " — neznámá stopa";
+    }
+
+    text.innerText = label;
+
+    row.appendChild(dot);
+    row.appendChild(text);
+    dayTasksList.appendChild(row);
+  });
+}
+
 function startGPS() {
   if (!navigator.geolocation) {
     showToast("Tento telefon nepodporuje GPS.", "bad");
@@ -293,36 +322,24 @@ function nearNode(node, meters = 45) {
   return d <= meters;
 }
 
-// ===== KLIK NA UZEL =====
 function handleNodeClick(node) {
-  if (!isUnlockedByDay(node)) {
-    showToast("Toto místo je zatím zamčené pro další den.", "bad");
-    return;
-  }
-
-  if (node.kind === "transfer") {
-    state.currentNodeId = node.id;
-    saveState();
-    renderAll();
-    showToast(`Přesunuto na bod: ${node.name}`, "ok");
-    return;
-  }
-
   if (!testMode && !nearNode(node, gameData.config.unlockRadiusMeters || 45)) {
     showToast("Nejdřív musíte být fyzicky na místě.", "bad");
     return;
   }
 
-  state.currentNodeId = node.id;
-  saveState();
-  renderAll();
+  if (node.kind === "transfer") {
+    showToast("Tohle je jen přestupní bod.", "ok");
+    return;
+  }
 
   if (node.kind === "fake") {
     if (!state.unlockedFakeIds.includes(node.id)) {
       state.unlockedFakeIds.push(node.id);
       saveState();
+      renderAll();
     }
-    showToast(node.fakeMessage || "Bohužel, falešná stopa. Hledejte jinde.", "bad");
+    showToast(node.fakeMessage || "Bohužel, falešná stopa.", "bad");
     return;
   }
 
@@ -331,7 +348,6 @@ function handleNodeClick(node) {
   }
 }
 
-// ===== ÚKOL =====
 function openTask(node) {
   if (isSolved(node.id)) {
     showToast("Toto stanoviště už máte splněné.", "ok");
@@ -386,7 +402,6 @@ function submitAnswer() {
   }
 }
 
-// ===== UI =====
 function toggleTest() {
   testMode = !testMode;
   showToast(`TEST MODE: ${testMode ? "zapnut" : "vypnut"}`, "ok");
@@ -422,6 +437,3 @@ function showToast(text, type = "ok") {
     toast.style.display = "none";
   }, 2600);
 }
-
-// ===== VOLITELNÉ: reset z konzole =====
-// localStorage.removeItem("prahaGameState");
