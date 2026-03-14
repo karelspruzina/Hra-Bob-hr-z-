@@ -34,7 +34,8 @@
       display:inline-block;
     }
 
-    #taskInput{
+    #taskInput,
+    #finalInput{
       width:100%;
       padding:14px;
       font-size:18px;
@@ -59,7 +60,8 @@
       border-radius:14px;
     }
 
-    #submitAnswerBtn{
+    #submitAnswerBtn,
+    #submitFinalBtn{
       background:#2f9e44;
       color:white;
     }
@@ -100,6 +102,48 @@
       background:linear-gradient(180deg, #ecd39d, #c79e50);
       color:#2d2418;
     }
+
+    #finalBox{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      z-index:2500;
+      padding:14px;
+    }
+
+    .finalCard{
+      background:linear-gradient(180deg, #f0dfb8, #e5cb93);
+      color:#2c2419;
+      border-radius:22px 22px 0 0;
+      padding:18px;
+      box-shadow:0 -8px 30px rgba(0,0,0,.35);
+      max-height:70vh;
+      overflow:auto;
+    }
+
+    .modeRow{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .modeBtn{
+      border:none;
+      border-radius:999px;
+      padding:10px 14px;
+      font-size:14px;
+      font-weight:bold;
+      background:rgba(255,255,255,.10);
+      color:#fff4dc;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .modeBtn.active{
+      background:linear-gradient(180deg, #ecd39d, #c79e50);
+      color:#2d2418;
+    }
   </style>
 </head>
 <body>
@@ -115,6 +159,12 @@
           <span id="clueBadge">Indicie 0</span>
         </div>
 
+        <div class="modeRow">
+          <button id="playerModeBtn" class="modeBtn active" onclick="setMode('player')">Hráč</button>
+          <button id="leaderModeBtn" class="modeBtn" onclick="setMode('leader')">Vedoucí</button>
+          <button id="showAllBtn" class="modeBtn hidden" onclick="toggleShowAllDays()">Všechny dny</button>
+        </div>
+
         <div class="legend">
           <div class="legendItem"><span class="legendLine" style="background:#2f9e44"></span>Pěšky</div>
           <div class="legendItem"><span class="legendLine" style="background:#d9480f"></span>Tramvaj</div>
@@ -127,6 +177,7 @@
       <div class="topButtons">
         <button class="topBtn" onclick="toggleTest()">TEST</button>
         <button class="topBtn" onclick="toggleClues()">Indicie</button>
+        <button class="topBtn" onclick="openFinalBox()">Finále</button>
         <button class="topBtn hidden" id="nextDayBtn" onclick="nextDay()">Další den</button>
       </div>
     </div>
@@ -151,6 +202,27 @@
         <div class="taskActions">
           <button id="submitAnswerBtn" onclick="submitAnswer()">Potvrdit odpověď</button>
           <button onclick="closeTask()">Zavřít</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="finalBox" class="hidden">
+      <div class="finalCard">
+        <div class="taskHeader">
+          <div>
+            <div class="taskLabel">Finální místo</div>
+            <h2>Kde je poklad?</h2>
+          </div>
+          <button class="closeBtn" onclick="closeFinalBox()">✕</button>
+        </div>
+
+        <p id="finalHintText">Zadejte finální místo podle všech získaných indicií.</p>
+
+        <input id="finalInput" type="text" placeholder="Např. Vyšehrad">
+
+        <div class="taskActions">
+          <button id="submitFinalBtn" onclick="submitFinalAnswer()">Potvrdit finální odpověď</button>
+          <button onclick="closeFinalBox()">Zavřít</button>
         </div>
       </div>
     </div>
