@@ -1206,6 +1206,20 @@
       "lng": 14.4177,
       "kind": "final",
       "finalMessage": "Gratulujeme! Dorazili jste na finální místo pokladu."
+    },
+    {
+      "id": 30001,
+      "name": "Přístaviště Výtoň",
+      "lat": 50.0677,
+      "lng": 14.4147,
+      "kind": "transfer"
+    },
+    {
+      "id": 30002,
+      "name": "Přístaviště Císařská louka",
+      "lat": 50.0641,
+      "lng": 14.4062,
+      "kind": "transfer"
     }
   ],
   "routes": [
@@ -1521,11 +1535,6 @@
     },
     {
       "from": 1139,
-      "to": 1104,
-      "transport": "walk"
-    },
-    {
-      "from": 1139,
       "to": 1140,
       "transport": "walk"
     },
@@ -1547,11 +1556,6 @@
     {
       "from": 1142,
       "to": 1011,
-      "transport": "walk"
-    },
-    {
-      "from": 1141,
-      "to": 1146,
       "transport": "walk"
     },
     {
@@ -1590,11 +1594,6 @@
       "transport": "walk"
     },
     {
-      "from": 1146,
-      "to": 2055,
-      "transport": "walk"
-    },
-    {
       "from": 1155,
       "to": 1154,
       "transport": "walk"
@@ -1602,11 +1601,6 @@
     {
       "from": 1154,
       "to": 2014,
-      "transport": "walk"
-    },
-    {
-      "from": 1154,
-      "to": 1110,
       "transport": "walk"
     },
     {
@@ -1760,11 +1754,6 @@
       "transport": "walk"
     },
     {
-      "from": 1026,
-      "to": 1120,
-      "transport": "walk"
-    },
-    {
       "from": 1120,
       "to": 2030,
       "transport": "walk"
@@ -1795,11 +1784,6 @@
       "transport": "walk"
     },
     {
-      "from": 1124,
-      "to": 1125,
-      "transport": "walk"
-    },
-    {
       "from": 1125,
       "to": 1126,
       "transport": "walk"
@@ -1812,11 +1796,6 @@
     {
       "from": 1127,
       "to": 2032,
-      "transport": "walk"
-    },
-    {
-      "from": 1125,
-      "to": 2035,
       "transport": "walk"
     },
     {
@@ -1882,11 +1861,6 @@
     {
       "from": 1167,
       "to": 1003,
-      "transport": "walk"
-    },
-    {
-      "from": 1167,
-      "to": 1002,
       "transport": "walk"
     },
     {
@@ -2035,11 +2009,6 @@
       "transport": "tram"
     },
     {
-      "from": 1141,
-      "to": 1146,
-      "transport": "tram"
-    },
-    {
       "from": 1146,
       "to": 1152,
       "transport": "tram"
@@ -2125,36 +2094,6 @@
       "transport": "boat"
     },
     {
-      "from": 2021,
-      "to": 1139,
-      "transport": "boat"
-    },
-    {
-      "from": 1139,
-      "to": 2012,
-      "transport": "boat"
-    },
-    {
-      "from": 1141,
-      "to": 1143,
-      "transport": "boat"
-    },
-    {
-      "from": 1143,
-      "to": 2053,
-      "transport": "boat"
-    },
-    {
-      "from": 1001,
-      "to": 1011,
-      "transport": "bolt"
-    },
-    {
-      "from": 1011,
-      "to": 1013,
-      "transport": "bolt"
-    },
-    {
       "from": 1005,
       "to": 1027,
       "transport": "bolt"
@@ -2170,23 +2109,73 @@
       "transport": "bolt"
     },
     {
-      "from": 1004,
-      "to": 1030,
-      "transport": "bolt"
-    },
-    {
       "from": 1017,
       "to": 1011,
       "transport": "bolt"
     },
     {
-      "from": 1026,
-      "to": 1001,
-      "transport": "bolt"
-    },
-    {
       "from": 1145,
       "to": 9999,
+      "transport": "walk"
+    },
+    {
+      "from": 1141,
+      "to": 30001,
+      "transport": "walk"
+    },
+    {
+      "from": 30001,
+      "to": 30002,
+      "transport": "boat"
+    },
+    {
+      "from": 30002,
+      "to": 2055,
+      "transport": "walk"
+    },
+    {
+      "from": 30001,
+      "to": 2054,
+      "transport": "walk"
+    },
+    {
+      "from": 1154,
+      "to": 1139,
+      "transport": "walk"
+    },
+    {
+      "from": 1120,
+      "to": 1121,
+      "transport": "tram"
+    },
+    {
+      "from": 1121,
+      "to": 1026,
+      "transport": "tram"
+    },
+    {
+      "from": 1124,
+      "to": 1126,
+      "transport": "walk"
+    },
+    {
+      "from": 1167,
+      "to": 1030,
+      "transport": "walk"
+    },
+    {
+      "from": 2054,
+      "to": 1144,
+      "transport": "walk"
+    },
+    {
+      "from": 2053,
+      "to": 1148,
+      "transport": "walk"
+    },
+    {
+      "from": 2053,
+      "to": 1147,
       "transport": "walk"
     }
   ]
