@@ -16,7 +16,10 @@ let state = JSON.parse(localStorage.getItem("prahaGameState") || "null") || {
   currentDay: 1,
   solvedIds: [],
   foundClues: [],
-  unlockedFakeIds: []
+  unlockedFakeIds: [],
+  mode: "player",
+  showAllDays: false,
+  finalSolved: false
 };
 
 const dayBadge = document.getElementById("dayBadge");
@@ -30,11 +33,17 @@ const taskBox = document.getElementById("taskBox");
 const taskTitle = document.getElementById("taskTitle");
 const taskQuestion = document.getElementById("taskQuestion");
 const taskInput = document.getElementById("taskInput");
+const finalBox = document.getElementById("finalBox");
+const finalInput = document.getElementById("finalInput");
+const playerModeBtn = document.getElementById("playerModeBtn");
+const leaderModeBtn = document.getElementById("leaderModeBtn");
+const showAllBtn = document.getElementById("showAllBtn");
 
 fetch("gamedata.json")
   .then(r => r.json())
   .then(data => {
     gameData = data;
+    applyModeUi();
     renderAll();
     startGPS();
   })
@@ -65,7 +74,12 @@ function isSolved(nodeId) {
   return state.solvedIds.includes(nodeId);
 }
 
+function isLeaderMode() {
+  return state.mode === "leader";
+}
+
 function isNodeVisible(node) {
+  if (isLeaderMode() && state.showAllDays) return true;
   return node.day == null || node.day === state.currentDay;
 }
 
@@ -116,6 +130,7 @@ function renderAll() {
   updateHeader();
   updateNextDayButton();
   renderClues();
+  applyModeUi();
 }
 
 function drawRoutes() {
@@ -175,6 +190,12 @@ function drawNodes() {
       radius = 10;
     }
 
+    if (node.kind === "final") {
+      color = "#ffffff";
+      fill = state.finalSolved ? "#7048e8" : "#b08900";
+      radius = 13;
+    }
+
     const marker = L.circleMarker([node.lat, node.lng], {
       radius: radius,
       color: color,
@@ -187,6 +208,11 @@ function drawNodes() {
     if (node.kind === "transfer") popupText += `<br><small>Přestupní bod</small>`;
     if (node.kind === "station") popupText += `<br><small>Stanoviště</small>`;
     if (node.kind === "fake") popupText += `<br><small>Neznámá stopa</small>`;
+    if (node.kind === "final") popupText += `<br><small>Finální místo</small>`;
+
+    if (isLeaderMode() && node.day) {
+      popupText += `<br><small>Den ${node.day}</small>`;
+    }
 
     marker.bindPopup(popupText);
     marker.on("click", () => handleNodeClick(node));
@@ -219,7 +245,12 @@ function updateHeader() {
   const total = getTodayRealStations().length;
   const done = getTodaySolvedCount();
 
-  dayBadge.innerText = `Den ${state.currentDay}`;
+  if (isLeaderMode() && state.showAllDays) {
+    dayBadge.innerText = "Všechny dny";
+  } else {
+    dayBadge.innerText = `Den ${state.currentDay}`;
+  }
+
   progressBadge.innerText = `Splněno ${done} / ${total}`;
   clueBadge.innerText = `Indicie ${state.foundClues.length}`;
 }
@@ -229,6 +260,10 @@ function updateNextDayButton() {
     nextDayBtn.classList.remove("hidden");
   } else {
     nextDayBtn.classList.add("hidden");
+  }
+
+  if (isLeaderMode()) {
+    nextDayBtn.classList.remove("hidden");
   }
 }
 
@@ -246,6 +281,13 @@ function renderClues() {
     div.innerHTML = `<strong>Indicie ${index + 1}</strong><br>${item.text}<br><small>${item.source}</small>`;
     clueList.appendChild(div);
   });
+
+  if (gameData.finalTreasure) {
+    const div = document.createElement("div");
+    div.className = "clueItem";
+    div.innerHTML = `<strong>Finále</strong><br>${gameData.finalTreasure.hint}`;
+    clueList.appendChild(div);
+  }
 }
 
 function startGPS() {
@@ -263,7 +305,9 @@ function startGPS() {
       updateGpsMarker();
     },
     () => {
-      showToast("Nepodařilo se načíst GPS polohu.", "bad");
+      if (!isLeaderMode()) {
+        showToast("Nepodařilo se načíst GPS polohu.", "bad");
+      }
     },
     {
       enableHighAccuracy: true,
@@ -274,6 +318,7 @@ function startGPS() {
 }
 
 function nearNode(node, meters = 45) {
+  if (isLeaderMode()) return true;
   if (!currentGps) return false;
   const d = map.distance([currentGps.lat, currentGps.lng], [node.lat, node.lng]);
   return d <= meters;
@@ -301,6 +346,15 @@ function handleNodeClick(node) {
 
   if (node.kind === "station") {
     openTask(node);
+    return;
+  }
+
+  if (node.kind === "final") {
+    if (!state.finalSolved) {
+      showToast("Nejdřív uhodněte finální místo v panelu Finále.", "bad");
+    } else {
+      showToast(node.finalMessage || "Poklad nalezen!", "ok");
+    }
   }
 }
 
@@ -358,25 +412,100 @@ function submitAnswer() {
   }
 }
 
+function openFinalBox() {
+  finalBox.classList.remove("hidden");
+  finalInput.value = "";
+}
+
+function closeFinalBox() {
+  finalBox.classList.add("hidden");
+}
+
+function submitFinalAnswer() {
+  if (!gameData.finalTreasure) {
+    showToast("Finální místo není nastavené.", "bad");
+    return;
+  }
+
+  const typed = normalizeText(finalInput.value);
+  const answers = (gameData.finalTreasure.acceptedAnswers || []).map(normalizeText);
+
+  if (!typed) {
+    showToast("Napiš finální místo.", "bad");
+    return;
+  }
+
+  if (answers.includes(typed)) {
+    state.finalSolved = true;
+    saveState();
+    closeFinalBox();
+    renderAll();
+    showToast("Správně! Finální místo odhaleno.", "ok");
+  } else {
+    showToast("Tohle finální místo nesedí.", "bad");
+  }
+}
+
+function setMode(mode) {
+  state.mode = mode;
+  if (mode === "player") {
+    state.showAllDays = false;
+  }
+  saveState();
+  applyModeUi();
+  renderAll();
+}
+
+function applyModeUi() {
+  if (!playerModeBtn || !leaderModeBtn || !showAllBtn) return;
+
+  if (state.mode === "player") {
+    playerModeBtn.classList.add("active");
+    leaderModeBtn.classList.remove("active");
+    showAllBtn.classList.add("hidden");
+  } else {
+    leaderModeBtn.classList.add("active");
+    playerModeBtn.classList.remove("active");
+    showAllBtn.classList.remove("hidden");
+    if (state.showAllDays) {
+      showAllBtn.classList.add("active");
+      showAllBtn.innerText = "Jen aktuální den";
+    } else {
+      showAllBtn.classList.remove("active");
+      showAllBtn.innerText = "Všechny dny";
+    }
+  }
+}
+
+function toggleShowAllDays() {
+  if (!isLeaderMode()) return;
+  state.showAllDays = !state.showAllDays;
+  saveState();
+  applyModeUi();
+  renderAll();
+}
+
 function toggleTest() {
   testMode = !testMode;
   showToast(`TEST MODE: ${testMode ? "zapnut" : "vypnut"}`, "ok");
 }
 
 function nextDay() {
-  if (!canAdvanceDay()) {
-    showToast("Nejdřív musíte splnit všechna pravá stanoviště dne.", "bad");
-    return;
+  if (!isLeaderMode()) {
+    if (!canAdvanceDay()) {
+      showToast("Nejdřív musíte splnit všechna pravá stanoviště dne.", "bad");
+      return;
+    }
   }
 
   state.currentDay++;
   if (state.currentDay > gameData.config.totalDays) {
-    state.currentDay = gameData.config.totalDays;
+    state.currentDay = 1;
   }
 
   saveState();
   renderAll();
-  showToast(`Odemčen den ${state.currentDay}!`, "ok");
+  showToast(`Přepnuto na den ${state.currentDay}.`, "ok");
 }
 
 function toggleClues() {
