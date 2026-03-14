@@ -1,0 +1,2148 @@
+{
+  "config": {
+    "gameTitle": "Lovci pokladu staré Prahy",
+    "totalDays": 5,
+    "unlockRadiusMeters": 45,
+    "startNodeId": 1001
+  },
+  "finalTreasure": {
+    "name": "Vyšehrad",
+    "lat": 50.0648,
+    "lng": 14.4177,
+    "acceptedAnswers": [
+      "vysehrad",
+      "vyšehrad"
+    ],
+    "hint": "Indicie ukazují na místo spojené s českými knížaty nad řekou.",
+    "finalMessage": "Gratulujeme! Našli jste finální místo pokladu."
+  },
+  "nodes": [
+    {
+      "id": 1001,
+      "name": "Můstek",
+      "lat": 50.0848,
+      "lng": 14.4232,
+      "kind": "transfer"
+    },
+    {
+      "id": 1002,
+      "name": "Staroměstská",
+      "lat": 50.0881,
+      "lng": 14.4179,
+      "kind": "transfer"
+    },
+    {
+      "id": 1003,
+      "name": "Malostranská",
+      "lat": 50.0913,
+      "lng": 14.4095,
+      "kind": "transfer"
+    },
+    {
+      "id": 1004,
+      "name": "Náměstí Republiky",
+      "lat": 50.0895,
+      "lng": 14.4321,
+      "kind": "transfer"
+    },
+    {
+      "id": 1005,
+      "name": "Florenc",
+      "lat": 50.0918,
+      "lng": 14.4382,
+      "kind": "transfer"
+    },
+    {
+      "id": 1006,
+      "name": "Hlavní nádraží",
+      "lat": 50.083,
+      "lng": 14.4359,
+      "kind": "transfer"
+    },
+    {
+      "id": 1007,
+      "name": "Muzeum",
+      "lat": 50.0799,
+      "lng": 14.4307,
+      "kind": "transfer"
+    },
+    {
+      "id": 1008,
+      "name": "I. P. Pavlova",
+      "lat": 50.0754,
+      "lng": 14.4308,
+      "kind": "transfer"
+    },
+    {
+      "id": 1009,
+      "name": "Karlovo náměstí",
+      "lat": 50.0757,
+      "lng": 14.4186,
+      "kind": "transfer"
+    },
+    {
+      "id": 1010,
+      "name": "Národní třída",
+      "lat": 50.0818,
+      "lng": 14.4205,
+      "kind": "transfer"
+    },
+    {
+      "id": 1011,
+      "name": "Anděl",
+      "lat": 50.0755,
+      "lng": 14.4043,
+      "kind": "transfer"
+    },
+    {
+      "id": 1012,
+      "name": "Smíchovské nádraží",
+      "lat": 50.0727,
+      "lng": 14.4035,
+      "kind": "transfer"
+    },
+    {
+      "id": 1013,
+      "name": "Vyšehrad stanice",
+      "lat": 50.0649,
+      "lng": 14.4174,
+      "kind": "transfer"
+    },
+    {
+      "id": 1014,
+      "name": "Budějovická",
+      "lat": 50.0447,
+      "lng": 14.4486,
+      "kind": "transfer"
+    },
+    {
+      "id": 1015,
+      "name": "Kačerov",
+      "lat": 50.0418,
+      "lng": 14.4594,
+      "kind": "transfer"
+    },
+    {
+      "id": 1016,
+      "name": "Háje",
+      "lat": 50.0306,
+      "lng": 14.526,
+      "kind": "transfer"
+    },
+    {
+      "id": 1017,
+      "name": "Jiřího z Poděbrad",
+      "lat": 50.0788,
+      "lng": 14.4514,
+      "kind": "transfer"
+    },
+    {
+      "id": 1018,
+      "name": "Flora",
+      "lat": 50.077,
+      "lng": 14.461,
+      "kind": "transfer"
+    },
+    {
+      "id": 1019,
+      "name": "Želivského",
+      "lat": 50.0788,
+      "lng": 14.4747,
+      "kind": "transfer"
+    },
+    {
+      "id": 1020,
+      "name": "Skalka",
+      "lat": 50.0685,
+      "lng": 14.5077,
+      "kind": "transfer"
+    },
+    {
+      "id": 1021,
+      "name": "Depo Hostivař",
+      "lat": 50.0759,
+      "lng": 14.5158,
+      "kind": "transfer"
+    },
+    {
+      "id": 1022,
+      "name": "Palmovka",
+      "lat": 50.1036,
+      "lng": 14.4752,
+      "kind": "transfer"
+    },
+    {
+      "id": 1023,
+      "name": "Českomoravská",
+      "lat": 50.1046,
+      "lng": 14.492,
+      "kind": "transfer"
+    },
+    {
+      "id": 1024,
+      "name": "Vysočanská",
+      "lat": 50.1109,
+      "lng": 14.5012,
+      "kind": "transfer"
+    },
+    {
+      "id": 1025,
+      "name": "Černý Most",
+      "lat": 50.1099,
+      "lng": 14.5777,
+      "kind": "transfer"
+    },
+    {
+      "id": 1026,
+      "name": "Vltavská",
+      "lat": 50.0988,
+      "lng": 14.4394,
+      "kind": "transfer"
+    },
+    {
+      "id": 1027,
+      "name": "Nádraží Holešovice",
+      "lat": 50.1105,
+      "lng": 14.4402,
+      "kind": "transfer"
+    },
+    {
+      "id": 1028,
+      "name": "Kobylisy",
+      "lat": 50.1242,
+      "lng": 14.4538,
+      "kind": "transfer"
+    },
+    {
+      "id": 1029,
+      "name": "Ládví",
+      "lat": 50.1266,
+      "lng": 14.469,
+      "kind": "transfer"
+    },
+    {
+      "id": 1030,
+      "name": "Hradčanská",
+      "lat": 50.0969,
+      "lng": 14.4046,
+      "kind": "transfer"
+    },
+    {
+      "id": 1031,
+      "name": "Dejvická",
+      "lat": 50.1006,
+      "lng": 14.3937,
+      "kind": "transfer"
+    },
+    {
+      "id": 1032,
+      "name": "Bořislavka",
+      "lat": 50.0988,
+      "lng": 14.3648,
+      "kind": "transfer"
+    },
+    {
+      "id": 1033,
+      "name": "Petřiny",
+      "lat": 50.0869,
+      "lng": 14.3439,
+      "kind": "transfer"
+    },
+    {
+      "id": 1034,
+      "name": "Zličín",
+      "lat": 50.0516,
+      "lng": 14.291,
+      "kind": "transfer"
+    },
+    {
+      "id": 1035,
+      "name": "Nové Butovice",
+      "lat": 50.0502,
+      "lng": 14.3526,
+      "kind": "transfer"
+    },
+    {
+      "id": 1036,
+      "name": "Radlická",
+      "lat": 50.0582,
+      "lng": 14.3895,
+      "kind": "transfer"
+    },
+    {
+      "id": 1101,
+      "name": "Staré Město západ",
+      "lat": 50.0868,
+      "lng": 14.4147,
+      "kind": "transfer"
+    },
+    {
+      "id": 1102,
+      "name": "Staré Město střed",
+      "lat": 50.0867,
+      "lng": 14.4197,
+      "kind": "transfer"
+    },
+    {
+      "id": 1103,
+      "name": "Staré Město východ",
+      "lat": 50.0866,
+      "lng": 14.4246,
+      "kind": "transfer"
+    },
+    {
+      "id": 1104,
+      "name": "Karlův most východ",
+      "lat": 50.0862,
+      "lng": 14.4129,
+      "kind": "transfer"
+    },
+    {
+      "id": 1105,
+      "name": "Karlův most západ",
+      "lat": 50.0864,
+      "lng": 14.4087,
+      "kind": "transfer"
+    },
+    {
+      "id": 1106,
+      "name": "Kampa sever",
+      "lat": 50.0862,
+      "lng": 14.4065,
+      "kind": "transfer"
+    },
+    {
+      "id": 1107,
+      "name": "Kampa jih",
+      "lat": 50.0841,
+      "lng": 14.4064,
+      "kind": "transfer"
+    },
+    {
+      "id": 1108,
+      "name": "Malá Strana sever",
+      "lat": 50.089,
+      "lng": 14.4062,
+      "kind": "transfer"
+    },
+    {
+      "id": 1109,
+      "name": "Malá Strana střed",
+      "lat": 50.0873,
+      "lng": 14.4047,
+      "kind": "transfer"
+    },
+    {
+      "id": 1110,
+      "name": "Malá Strana jih",
+      "lat": 50.0842,
+      "lng": 14.4048,
+      "kind": "transfer"
+    },
+    {
+      "id": 1111,
+      "name": "Újezd",
+      "lat": 50.0823,
+      "lng": 14.4045,
+      "kind": "transfer"
+    },
+    {
+      "id": 1112,
+      "name": "Petřín základna",
+      "lat": 50.0828,
+      "lng": 14.4016,
+      "kind": "transfer"
+    },
+    {
+      "id": 1113,
+      "name": "Petřín střed",
+      "lat": 50.0838,
+      "lng": 14.3987,
+      "kind": "transfer"
+    },
+    {
+      "id": 1114,
+      "name": "Petřín vrchol",
+      "lat": 50.0842,
+      "lng": 14.3958,
+      "kind": "transfer"
+    },
+    {
+      "id": 1115,
+      "name": "Hrad západ",
+      "lat": 50.0907,
+      "lng": 14.3976,
+      "kind": "transfer"
+    },
+    {
+      "id": 1116,
+      "name": "Hrad střed",
+      "lat": 50.0908,
+      "lng": 14.4003,
+      "kind": "transfer"
+    },
+    {
+      "id": 1117,
+      "name": "Hrad východ",
+      "lat": 50.091,
+      "lng": 14.4032,
+      "kind": "transfer"
+    },
+    {
+      "id": 1118,
+      "name": "Pohořelec",
+      "lat": 50.0877,
+      "lng": 14.3917,
+      "kind": "transfer"
+    },
+    {
+      "id": 1119,
+      "name": "Strahov předpolí",
+      "lat": 50.0868,
+      "lng": 14.3878,
+      "kind": "transfer"
+    },
+    {
+      "id": 1120,
+      "name": "Letná jih",
+      "lat": 50.0944,
+      "lng": 14.4179,
+      "kind": "transfer"
+    },
+    {
+      "id": 1121,
+      "name": "Letná střed",
+      "lat": 50.096,
+      "lng": 14.4177,
+      "kind": "transfer"
+    },
+    {
+      "id": 1122,
+      "name": "Letná sever",
+      "lat": 50.098,
+      "lng": 14.4192,
+      "kind": "transfer"
+    },
+    {
+      "id": 1123,
+      "name": "Stromovka jih",
+      "lat": 50.104,
+      "lng": 14.4286,
+      "kind": "transfer"
+    },
+    {
+      "id": 1124,
+      "name": "Stromovka střed",
+      "lat": 50.1064,
+      "lng": 14.4252,
+      "kind": "transfer"
+    },
+    {
+      "id": 1125,
+      "name": "Troja most",
+      "lat": 50.1117,
+      "lng": 14.4219,
+      "kind": "transfer"
+    },
+    {
+      "id": 1126,
+      "name": "Troja jih",
+      "lat": 50.114,
+      "lng": 14.4175,
+      "kind": "transfer"
+    },
+    {
+      "id": 1127,
+      "name": "Troja sever",
+      "lat": 50.1161,
+      "lng": 14.4138,
+      "kind": "transfer"
+    },
+    {
+      "id": 1128,
+      "name": "Holešovice jih",
+      "lat": 50.1018,
+      "lng": 14.4429,
+      "kind": "transfer"
+    },
+    {
+      "id": 1129,
+      "name": "Holešovice střed",
+      "lat": 50.1048,
+      "lng": 14.4428,
+      "kind": "transfer"
+    },
+    {
+      "id": 1130,
+      "name": "Karlín západ",
+      "lat": 50.0925,
+      "lng": 14.4454,
+      "kind": "transfer"
+    },
+    {
+      "id": 1131,
+      "name": "Karlín střed",
+      "lat": 50.0931,
+      "lng": 14.4497,
+      "kind": "transfer"
+    },
+    {
+      "id": 1132,
+      "name": "Karlín východ",
+      "lat": 50.0937,
+      "lng": 14.4542,
+      "kind": "transfer"
+    },
+    {
+      "id": 1133,
+      "name": "Vinohrady západ",
+      "lat": 50.0783,
+      "lng": 14.4425,
+      "kind": "transfer"
+    },
+    {
+      "id": 1134,
+      "name": "Vinohrady střed",
+      "lat": 50.0781,
+      "lng": 14.4482,
+      "kind": "transfer"
+    },
+    {
+      "id": 1135,
+      "name": "Vinohrady východ",
+      "lat": 50.078,
+      "lng": 14.4548,
+      "kind": "transfer"
+    },
+    {
+      "id": 1136,
+      "name": "Žižkov západ",
+      "lat": 50.0802,
+      "lng": 14.4477,
+      "kind": "transfer"
+    },
+    {
+      "id": 1137,
+      "name": "Žižkov střed",
+      "lat": 50.0809,
+      "lng": 14.4512,
+      "kind": "transfer"
+    },
+    {
+      "id": 1138,
+      "name": "Žižkov východ",
+      "lat": 50.0816,
+      "lng": 14.456,
+      "kind": "transfer"
+    },
+    {
+      "id": 1139,
+      "name": "Náplavka sever",
+      "lat": 50.0798,
+      "lng": 14.4147,
+      "kind": "transfer"
+    },
+    {
+      "id": 1140,
+      "name": "Náplavka střed",
+      "lat": 50.0768,
+      "lng": 14.4142,
+      "kind": "transfer"
+    },
+    {
+      "id": 1141,
+      "name": "Náplavka jih",
+      "lat": 50.0737,
+      "lng": 14.4144,
+      "kind": "transfer"
+    },
+    {
+      "id": 1142,
+      "name": "Smíchov centrum",
+      "lat": 50.0739,
+      "lng": 14.4089,
+      "kind": "transfer"
+    },
+    {
+      "id": 1143,
+      "name": "Smíchov řeka",
+      "lat": 50.0746,
+      "lng": 14.4112,
+      "kind": "transfer"
+    },
+    {
+      "id": 1144,
+      "name": "Vyšehrad horní",
+      "lat": 50.066,
+      "lng": 14.4184,
+      "kind": "transfer"
+    },
+    {
+      "id": 1145,
+      "name": "Vyšehrad střed",
+      "lat": 50.0648,
+      "lng": 14.418,
+      "kind": "transfer"
+    },
+    {
+      "id": 1146,
+      "name": "Vyšehrad dolní",
+      "lat": 50.0628,
+      "lng": 14.417,
+      "kind": "transfer"
+    },
+    {
+      "id": 1147,
+      "name": "Podolí sever",
+      "lat": 50.0593,
+      "lng": 14.4192,
+      "kind": "transfer"
+    },
+    {
+      "id": 1148,
+      "name": "Podolí střed",
+      "lat": 50.0568,
+      "lng": 14.4198,
+      "kind": "transfer"
+    },
+    {
+      "id": 1149,
+      "name": "Podolí jih",
+      "lat": 50.0538,
+      "lng": 14.4204,
+      "kind": "transfer"
+    },
+    {
+      "id": 1150,
+      "name": "Pankrác",
+      "lat": 50.051,
+      "lng": 14.4399,
+      "kind": "transfer"
+    },
+    {
+      "id": 1151,
+      "name": "Nusle sever",
+      "lat": 50.0709,
+      "lng": 14.4297,
+      "kind": "transfer"
+    },
+    {
+      "id": 1152,
+      "name": "Nusle most",
+      "lat": 50.0688,
+      "lng": 14.4304,
+      "kind": "transfer"
+    },
+    {
+      "id": 1153,
+      "name": "Nusle jih",
+      "lat": 50.0659,
+      "lng": 14.431,
+      "kind": "transfer"
+    },
+    {
+      "id": 1154,
+      "name": "Nové Město sever",
+      "lat": 50.0826,
+      "lng": 14.4251,
+      "kind": "transfer"
+    },
+    {
+      "id": 1155,
+      "name": "Nové Město střed",
+      "lat": 50.0793,
+      "lng": 14.4234,
+      "kind": "transfer"
+    },
+    {
+      "id": 1156,
+      "name": "Nové Město jih",
+      "lat": 50.0768,
+      "lng": 14.4216,
+      "kind": "transfer"
+    },
+    {
+      "id": 1157,
+      "name": "Republika západ",
+      "lat": 50.0892,
+      "lng": 14.4295,
+      "kind": "transfer"
+    },
+    {
+      "id": 1158,
+      "name": "Republika východ",
+      "lat": 50.0898,
+      "lng": 14.4344,
+      "kind": "transfer"
+    },
+    {
+      "id": 1159,
+      "name": "Florenc západ",
+      "lat": 50.0918,
+      "lng": 14.4354,
+      "kind": "transfer"
+    },
+    {
+      "id": 1160,
+      "name": "Florenc východ",
+      "lat": 50.0919,
+      "lng": 14.4416,
+      "kind": "transfer"
+    },
+    {
+      "id": 1161,
+      "name": "Muzeum západ",
+      "lat": 50.08,
+      "lng": 14.4279,
+      "kind": "transfer"
+    },
+    {
+      "id": 1162,
+      "name": "Muzeum východ",
+      "lat": 50.0799,
+      "lng": 14.4337,
+      "kind": "transfer"
+    },
+    {
+      "id": 1163,
+      "name": "Hlavní západ",
+      "lat": 50.0832,
+      "lng": 14.4336,
+      "kind": "transfer"
+    },
+    {
+      "id": 1164,
+      "name": "Hlavní východ",
+      "lat": 50.0828,
+      "lng": 14.4385,
+      "kind": "transfer"
+    },
+    {
+      "id": 1165,
+      "name": "Most Legií sever",
+      "lat": 50.0827,
+      "lng": 14.4119,
+      "kind": "transfer"
+    },
+    {
+      "id": 1166,
+      "name": "Most Legií jih",
+      "lat": 50.081,
+      "lng": 14.4124,
+      "kind": "transfer"
+    },
+    {
+      "id": 1167,
+      "name": "Klárov",
+      "lat": 50.0907,
+      "lng": 14.4108,
+      "kind": "transfer"
+    },
+    {
+      "id": 1168,
+      "name": "Rudolfinum",
+      "lat": 50.0895,
+      "lng": 14.4156,
+      "kind": "transfer"
+    },
+    {
+      "id": 1169,
+      "name": "Josefov sever",
+      "lat": 50.09,
+      "lng": 14.4204,
+      "kind": "transfer"
+    },
+    {
+      "id": 1170,
+      "name": "Josefov východ",
+      "lat": 50.0892,
+      "lng": 14.4244,
+      "kind": "transfer"
+    },
+    {
+      "id": 1171,
+      "name": "Celetná",
+      "lat": 50.0878,
+      "lng": 14.4266,
+      "kind": "transfer"
+    },
+    {
+      "id": 1172,
+      "name": "Ovocný trh",
+      "lat": 50.0858,
+      "lng": 14.4234,
+      "kind": "transfer"
+    },
+    {
+      "id": 1173,
+      "name": "Na Příkopě",
+      "lat": 50.087,
+      "lng": 14.4295,
+      "kind": "transfer"
+    },
+    {
+      "id": 1174,
+      "name": "Jindřišská",
+      "lat": 50.084,
+      "lng": 14.4295,
+      "kind": "transfer"
+    },
+    {
+      "id": 1175,
+      "name": "Senovážné",
+      "lat": 50.0854,
+      "lng": 14.4352,
+      "kind": "transfer"
+    },
+    {
+      "id": 1176,
+      "name": "Masaryčka",
+      "lat": 50.0876,
+      "lng": 14.4356,
+      "kind": "transfer"
+    },
+    {
+      "id": 2010,
+      "name": "Orloj",
+      "lat": 50.087,
+      "lng": 14.4207,
+      "kind": "station",
+      "day": 1,
+      "question": "Kolik apoštolů se objeví při odbíjení orloje?",
+      "acceptedAnswers": [
+        "12",
+        "dvanact"
+      ],
+      "clueReward": "Poklad není uprostřed Starého města."
+    },
+    {
+      "id": 2011,
+      "name": "Karlův most",
+      "lat": 50.0865,
+      "lng": 14.4114,
+      "kind": "station",
+      "day": 1,
+      "question": "Kolik mosteckých věží souvisí s Karlovým mostem?",
+      "acceptedAnswers": [
+        "3",
+        "tri"
+      ],
+      "clueReward": "Poklad neleží na mostě."
+    },
+    {
+      "id": 2012,
+      "name": "Národní divadlo",
+      "lat": 50.081,
+      "lng": 14.4144,
+      "kind": "station",
+      "day": 1,
+      "question": "Jaké heslo je napsané na budově Národního divadla?",
+      "acceptedAnswers": [
+        "narod sobe",
+        "národ sobě"
+      ],
+      "clueReward": "Hledejte místo s českou historií."
+    },
+    {
+      "id": 2013,
+      "name": "Prašná brána",
+      "lat": 50.0875,
+      "lng": 14.427,
+      "kind": "station",
+      "day": 1,
+      "question": "Jak se jmenuje historická cesta začínající u Prašné brány?",
+      "acceptedAnswers": [
+        "kralovska cesta",
+        "královská cesta"
+      ],
+      "clueReward": "Finální místo souvisí s hradbami."
+    },
+    {
+      "id": 2014,
+      "name": "Václavské náměstí",
+      "lat": 50.081,
+      "lng": 14.4253,
+      "kind": "station",
+      "day": 1,
+      "question": "Kdo sedí na koni na horním konci náměstí?",
+      "acceptedAnswers": [
+        "svaty vaclav",
+        "svatý václav",
+        "vaclav",
+        "václav"
+      ],
+      "clueReward": "Finální místo není moderní centrum."
+    },
+    {
+      "id": 2015,
+      "name": "Střelecký ostrov",
+      "lat": 50.0825,
+      "lng": 14.4112,
+      "kind": "fake",
+      "day": 1,
+      "fakeMessage": "Tady poklad není. Hledejte jinde."
+    },
+    {
+      "id": 2020,
+      "name": "Petřín",
+      "lat": 50.0836,
+      "lng": 14.3959,
+      "kind": "station",
+      "day": 2,
+      "question": "Jak se jmenuje kopec s rozhlednou?",
+      "acceptedAnswers": [
+        "petrin",
+        "petřín"
+      ],
+      "clueReward": "Poklad je nad řekou."
+    },
+    {
+      "id": 2021,
+      "name": "Kampa",
+      "lat": 50.086,
+      "lng": 14.4072,
+      "kind": "station",
+      "day": 2,
+      "question": "Jak se jmenuje ostrovní park u Čertovky?",
+      "acceptedAnswers": [
+        "kampa"
+      ],
+      "clueReward": "Finální místo není ostrov."
+    },
+    {
+      "id": 2022,
+      "name": "Pražský hrad",
+      "lat": 50.0909,
+      "lng": 14.4005,
+      "kind": "station",
+      "day": 2,
+      "question": "Jak se jmenuje hlavní katedrála na Pražském hradě?",
+      "acceptedAnswers": [
+        "svaty vit",
+        "svatý vít"
+      ],
+      "clueReward": "Poklad není uvnitř hradu."
+    },
+    {
+      "id": 2023,
+      "name": "Strahovský klášter",
+      "lat": 50.0864,
+      "lng": 14.3899,
+      "kind": "station",
+      "day": 2,
+      "question": "Jak se jmenuje klášter nad Malou Stranou?",
+      "acceptedAnswers": [
+        "strahov",
+        "strahovsky klaster",
+        "strahovský klášter"
+      ],
+      "clueReward": "Finální místo souvisí s pevností."
+    },
+    {
+      "id": 2024,
+      "name": "Malostranské náměstí",
+      "lat": 50.0878,
+      "lng": 14.4045,
+      "kind": "station",
+      "day": 2,
+      "question": "Ve které části Prahy leží Malostranské náměstí?",
+      "acceptedAnswers": [
+        "mala strana",
+        "malá strana"
+      ],
+      "clueReward": "Finální místo není na Malé Straně."
+    },
+    {
+      "id": 2025,
+      "name": "Valdštejnská zahrada",
+      "lat": 50.091,
+      "lng": 14.408,
+      "kind": "fake",
+      "day": 2,
+      "fakeMessage": "Tady poklad není. Hledejte jinde."
+    },
+    {
+      "id": 2030,
+      "name": "Letenské sady",
+      "lat": 50.093,
+      "lng": 14.417,
+      "kind": "station",
+      "day": 3,
+      "question": "Jak se jmenuje velký kyvadlový objekt na Letné?",
+      "acceptedAnswers": [
+        "metronom"
+      ],
+      "clueReward": "Z finálního místa je vidět řeka."
+    },
+    {
+      "id": 2031,
+      "name": "Stromovka",
+      "lat": 50.106,
+      "lng": 14.424,
+      "kind": "station",
+      "day": 3,
+      "question": "Co je Stromovka především?",
+      "acceptedAnswers": [
+        "park"
+      ],
+      "clueReward": "Finální místo není obyčejný park."
+    },
+    {
+      "id": 2032,
+      "name": "Trojský zámek",
+      "lat": 50.1163,
+      "lng": 14.4119,
+      "kind": "station",
+      "day": 3,
+      "question": "Jak se jmenuje zámek vedle pražské zoo?",
+      "acceptedAnswers": [
+        "trojsky zamek",
+        "trojský zámek"
+      ],
+      "clueReward": "Poklad neleží na severu Prahy."
+    },
+    {
+      "id": 2033,
+      "name": "Holešovická tržnice",
+      "lat": 50.103,
+      "lng": 14.4453,
+      "kind": "station",
+      "day": 3,
+      "question": "Jak se jmenuje velký tržní areál v Holešovicích?",
+      "acceptedAnswers": [
+        "trznice",
+        "tržnice",
+        "holesovicka trznice",
+        "holešovická tržnice"
+      ],
+      "clueReward": "Hledejte místo starých dějin."
+    },
+    {
+      "id": 2034,
+      "name": "Výstaviště",
+      "lat": 50.1047,
+      "lng": 14.4309,
+      "kind": "station",
+      "day": 3,
+      "question": "Jak se jmenuje areál veletrhů v Holešovicích?",
+      "acceptedAnswers": [
+        "vystaviste",
+        "výstaviště"
+      ],
+      "clueReward": "Poklad není moderní výstava."
+    },
+    {
+      "id": 2035,
+      "name": "Císařský ostrov",
+      "lat": 50.1137,
+      "lng": 14.4302,
+      "kind": "fake",
+      "day": 3,
+      "fakeMessage": "Tady poklad není. Hledejte jinde."
+    },
+    {
+      "id": 2040,
+      "name": "Náměstí Míru",
+      "lat": 50.0756,
+      "lng": 14.4378,
+      "kind": "station",
+      "day": 4,
+      "question": "Jak se jmenuje kostel na náměstí?",
+      "acceptedAnswers": [
+        "svata ludmila",
+        "svatá ludmila"
+      ],
+      "clueReward": "Finální místo není Vinohrady."
+    },
+    {
+      "id": 2041,
+      "name": "Jiřího z Poděbrad",
+      "lat": 50.0781,
+      "lng": 14.4505,
+      "kind": "station",
+      "day": 4,
+      "question": "Jak se zkráceně říká tomuto náměstí?",
+      "acceptedAnswers": [
+        "jzp"
+      ],
+      "clueReward": "Poklad není u trhů."
+    },
+    {
+      "id": 2042,
+      "name": "Žižkovská věž",
+      "lat": 50.081,
+      "lng": 14.4509,
+      "kind": "station",
+      "day": 4,
+      "question": "Jak se jmenuje televizní věž v Praze?",
+      "acceptedAnswers": [
+        "zizkovska vez",
+        "žižkovská věž"
+      ],
+      "clueReward": "Poklad není věž."
+    },
+    {
+      "id": 2043,
+      "name": "Karlínské náměstí",
+      "lat": 50.0924,
+      "lng": 14.4502,
+      "kind": "station",
+      "day": 4,
+      "question": "Ve které čtvrti je Karlínské náměstí?",
+      "acceptedAnswers": [
+        "karlin",
+        "karlín"
+      ],
+      "clueReward": "Hledejte pevnost."
+    },
+    {
+      "id": 2044,
+      "name": "Riegrovy sady",
+      "lat": 50.079,
+      "lng": 14.4428,
+      "kind": "station",
+      "day": 4,
+      "question": "Jak se jmenuje park nad hlavním nádražím?",
+      "acceptedAnswers": [
+        "riegrovy sady"
+      ],
+      "clueReward": "Finální místo souvisí s rotundou."
+    },
+    {
+      "id": 2045,
+      "name": "Olšanské hřbitovy",
+      "lat": 50.0818,
+      "lng": 14.4628,
+      "kind": "fake",
+      "day": 4,
+      "fakeMessage": "Tady poklad není. Hledejte jinde."
+    },
+    {
+      "id": 2050,
+      "name": "Vyšehrad pevnost",
+      "lat": 50.0648,
+      "lng": 14.4177,
+      "kind": "station",
+      "day": 5,
+      "question": "Jak se jmenuje stará pražská pevnost nad Vltavou?",
+      "acceptedAnswers": [
+        "vysehrad",
+        "vyšehrad"
+      ],
+      "clueReward": "Finální místo je Vyšehrad."
+    },
+    {
+      "id": 2051,
+      "name": "Rotunda sv Martina",
+      "lat": 50.0656,
+      "lng": 14.4193,
+      "kind": "station",
+      "day": 5,
+      "question": "Jak se jmenuje rotunda na Vyšehradě?",
+      "acceptedAnswers": [
+        "svaty martin",
+        "svatý martin",
+        "rotunda sv martina"
+      ],
+      "clueReward": "Poklad je velmi blízko."
+    },
+    {
+      "id": 2052,
+      "name": "Slavín",
+      "lat": 50.0642,
+      "lng": 14.4188,
+      "kind": "station",
+      "day": 5,
+      "question": "Jak se jmenuje vyšehradský panteon?",
+      "acceptedAnswers": [
+        "slavin",
+        "slavín"
+      ],
+      "clueReward": "Finální místo je zde."
+    },
+    {
+      "id": 2053,
+      "name": "Podolská vodárna",
+      "lat": 50.0562,
+      "lng": 14.42,
+      "kind": "station",
+      "day": 5,
+      "question": "Jak se jmenuje historická vodárna v Podolí?",
+      "acceptedAnswers": [
+        "podolska vodarna",
+        "podolská vodárna",
+        "vodarna",
+        "vodárna"
+      ],
+      "clueReward": "Finální místo je nad řekou, ne u vody."
+    },
+    {
+      "id": 2054,
+      "name": "Nuselský most",
+      "lat": 50.0688,
+      "lng": 14.4304,
+      "kind": "station",
+      "day": 5,
+      "question": "Jak se jmenuje velký most nad Nuselským údolím?",
+      "acceptedAnswers": [
+        "nuselsky most",
+        "nuselský most"
+      ],
+      "clueReward": "Finální místo není moderní most."
+    },
+    {
+      "id": 2055,
+      "name": "Císařská louka",
+      "lat": 50.0628,
+      "lng": 14.4065,
+      "kind": "fake",
+      "day": 5,
+      "fakeMessage": "Tady poklad není. Hledejte jinde."
+    },
+    {
+      "id": 9999,
+      "name": "Finální poklad",
+      "lat": 50.0648,
+      "lng": 14.4177,
+      "kind": "final",
+      "finalMessage": "Gratulujeme! Dorazili jste na finální místo pokladu."
+    }
+  ],
+  "routes": [
+    {
+      "from": 1001,
+      "to": 1002,
+      "transport": "metro"
+    },
+    {
+      "from": 1002,
+      "to": 1003,
+      "transport": "metro"
+    },
+    {
+      "from": 1001,
+      "to": 1007,
+      "transport": "metro"
+    },
+    {
+      "from": 1007,
+      "to": 1008,
+      "transport": "metro"
+    },
+    {
+      "from": 1008,
+      "to": 1013,
+      "transport": "metro"
+    },
+    {
+      "from": 1013,
+      "to": 1014,
+      "transport": "metro"
+    },
+    {
+      "from": 1014,
+      "to": 1015,
+      "transport": "metro"
+    },
+    {
+      "from": 1015,
+      "to": 1016,
+      "transport": "metro"
+    },
+    {
+      "from": 1001,
+      "to": 1004,
+      "transport": "metro"
+    },
+    {
+      "from": 1004,
+      "to": 1005,
+      "transport": "metro"
+    },
+    {
+      "from": 1007,
+      "to": 1006,
+      "transport": "metro"
+    },
+    {
+      "from": 1006,
+      "to": 1005,
+      "transport": "metro"
+    },
+    {
+      "from": 1011,
+      "to": 1022,
+      "transport": "metro"
+    },
+    {
+      "from": 1022,
+      "to": 1023,
+      "transport": "metro"
+    },
+    {
+      "from": 1023,
+      "to": 1024,
+      "transport": "metro"
+    },
+    {
+      "from": 1024,
+      "to": 1025,
+      "transport": "metro"
+    },
+    {
+      "from": 1003,
+      "to": 1030,
+      "transport": "metro"
+    },
+    {
+      "from": 1030,
+      "to": 1031,
+      "transport": "metro"
+    },
+    {
+      "from": 1031,
+      "to": 1032,
+      "transport": "metro"
+    },
+    {
+      "from": 1032,
+      "to": 1033,
+      "transport": "metro"
+    },
+    {
+      "from": 1017,
+      "to": 1018,
+      "transport": "metro"
+    },
+    {
+      "from": 1018,
+      "to": 1019,
+      "transport": "metro"
+    },
+    {
+      "from": 1019,
+      "to": 1020,
+      "transport": "metro"
+    },
+    {
+      "from": 1020,
+      "to": 1021,
+      "transport": "metro"
+    },
+    {
+      "from": 1026,
+      "to": 1027,
+      "transport": "metro"
+    },
+    {
+      "from": 1027,
+      "to": 1028,
+      "transport": "metro"
+    },
+    {
+      "from": 1028,
+      "to": 1029,
+      "transport": "metro"
+    },
+    {
+      "from": 1011,
+      "to": 1036,
+      "transport": "metro"
+    },
+    {
+      "from": 1036,
+      "to": 1035,
+      "transport": "metro"
+    },
+    {
+      "from": 1035,
+      "to": 1034,
+      "transport": "metro"
+    },
+    {
+      "from": 1001,
+      "to": 1102,
+      "transport": "walk"
+    },
+    {
+      "from": 1102,
+      "to": 1002,
+      "transport": "walk"
+    },
+    {
+      "from": 1102,
+      "to": 2010,
+      "transport": "walk"
+    },
+    {
+      "from": 1102,
+      "to": 1103,
+      "transport": "walk"
+    },
+    {
+      "from": 1103,
+      "to": 1004,
+      "transport": "walk"
+    },
+    {
+      "from": 1103,
+      "to": 2013,
+      "transport": "walk"
+    },
+    {
+      "from": 1102,
+      "to": 1101,
+      "transport": "walk"
+    },
+    {
+      "from": 1101,
+      "to": 1104,
+      "transport": "walk"
+    },
+    {
+      "from": 1104,
+      "to": 2011,
+      "transport": "walk"
+    },
+    {
+      "from": 1104,
+      "to": 1105,
+      "transport": "walk"
+    },
+    {
+      "from": 1105,
+      "to": 1106,
+      "transport": "walk"
+    },
+    {
+      "from": 1106,
+      "to": 2021,
+      "transport": "walk"
+    },
+    {
+      "from": 1106,
+      "to": 1109,
+      "transport": "walk"
+    },
+    {
+      "from": 1109,
+      "to": 2024,
+      "transport": "walk"
+    },
+    {
+      "from": 1109,
+      "to": 1108,
+      "transport": "walk"
+    },
+    {
+      "from": 1108,
+      "to": 1003,
+      "transport": "walk"
+    },
+    {
+      "from": 1109,
+      "to": 1110,
+      "transport": "walk"
+    },
+    {
+      "from": 1110,
+      "to": 1111,
+      "transport": "walk"
+    },
+    {
+      "from": 1111,
+      "to": 1112,
+      "transport": "walk"
+    },
+    {
+      "from": 1112,
+      "to": 1113,
+      "transport": "walk"
+    },
+    {
+      "from": 1113,
+      "to": 1114,
+      "transport": "walk"
+    },
+    {
+      "from": 1114,
+      "to": 2020,
+      "transport": "walk"
+    },
+    {
+      "from": 1113,
+      "to": 2023,
+      "transport": "walk"
+    },
+    {
+      "from": 1108,
+      "to": 1117,
+      "transport": "walk"
+    },
+    {
+      "from": 1117,
+      "to": 1116,
+      "transport": "walk"
+    },
+    {
+      "from": 1116,
+      "to": 2022,
+      "transport": "walk"
+    },
+    {
+      "from": 1116,
+      "to": 1115,
+      "transport": "walk"
+    },
+    {
+      "from": 1115,
+      "to": 1118,
+      "transport": "walk"
+    },
+    {
+      "from": 1118,
+      "to": 1119,
+      "transport": "walk"
+    },
+    {
+      "from": 1010,
+      "to": 1155,
+      "transport": "walk"
+    },
+    {
+      "from": 1155,
+      "to": 1139,
+      "transport": "walk"
+    },
+    {
+      "from": 1139,
+      "to": 2012,
+      "transport": "walk"
+    },
+    {
+      "from": 1139,
+      "to": 1140,
+      "transport": "walk"
+    },
+    {
+      "from": 1140,
+      "to": 1141,
+      "transport": "walk"
+    },
+    {
+      "from": 1141,
+      "to": 1143,
+      "transport": "walk"
+    },
+    {
+      "from": 1143,
+      "to": 1142,
+      "transport": "walk"
+    },
+    {
+      "from": 1142,
+      "to": 1011,
+      "transport": "walk"
+    },
+    {
+      "from": 1146,
+      "to": 1145,
+      "transport": "walk"
+    },
+    {
+      "from": 1145,
+      "to": 2050,
+      "transport": "walk"
+    },
+    {
+      "from": 1145,
+      "to": 2051,
+      "transport": "walk"
+    },
+    {
+      "from": 1145,
+      "to": 2052,
+      "transport": "walk"
+    },
+    {
+      "from": 1146,
+      "to": 1147,
+      "transport": "walk"
+    },
+    {
+      "from": 1147,
+      "to": 1148,
+      "transport": "walk"
+    },
+    {
+      "from": 1148,
+      "to": 2053,
+      "transport": "walk"
+    },
+    {
+      "from": 1155,
+      "to": 1154,
+      "transport": "walk"
+    },
+    {
+      "from": 1154,
+      "to": 2014,
+      "transport": "walk"
+    },
+    {
+      "from": 1155,
+      "to": 1156,
+      "transport": "walk"
+    },
+    {
+      "from": 1156,
+      "to": 1009,
+      "transport": "walk"
+    },
+    {
+      "from": 1155,
+      "to": 1161,
+      "transport": "walk"
+    },
+    {
+      "from": 1161,
+      "to": 1007,
+      "transport": "walk"
+    },
+    {
+      "from": 1161,
+      "to": 1162,
+      "transport": "walk"
+    },
+    {
+      "from": 1162,
+      "to": 1006,
+      "transport": "walk"
+    },
+    {
+      "from": 1006,
+      "to": 1163,
+      "transport": "walk"
+    },
+    {
+      "from": 1163,
+      "to": 1164,
+      "transport": "walk"
+    },
+    {
+      "from": 1164,
+      "to": 1005,
+      "transport": "walk"
+    },
+    {
+      "from": 1004,
+      "to": 1157,
+      "transport": "walk"
+    },
+    {
+      "from": 1157,
+      "to": 1158,
+      "transport": "walk"
+    },
+    {
+      "from": 1158,
+      "to": 1005,
+      "transport": "walk"
+    },
+    {
+      "from": 1005,
+      "to": 1159,
+      "transport": "walk"
+    },
+    {
+      "from": 1159,
+      "to": 1160,
+      "transport": "walk"
+    },
+    {
+      "from": 1159,
+      "to": 1130,
+      "transport": "walk"
+    },
+    {
+      "from": 1130,
+      "to": 2043,
+      "transport": "walk"
+    },
+    {
+      "from": 1130,
+      "to": 1131,
+      "transport": "walk"
+    },
+    {
+      "from": 1131,
+      "to": 1132,
+      "transport": "walk"
+    },
+    {
+      "from": 1132,
+      "to": 1022,
+      "transport": "walk"
+    },
+    {
+      "from": 1006,
+      "to": 1133,
+      "transport": "walk"
+    },
+    {
+      "from": 1133,
+      "to": 2044,
+      "transport": "walk"
+    },
+    {
+      "from": 1133,
+      "to": 1134,
+      "transport": "walk"
+    },
+    {
+      "from": 1134,
+      "to": 2040,
+      "transport": "walk"
+    },
+    {
+      "from": 1134,
+      "to": 1135,
+      "transport": "walk"
+    },
+    {
+      "from": 1135,
+      "to": 2041,
+      "transport": "walk"
+    },
+    {
+      "from": 1135,
+      "to": 1136,
+      "transport": "walk"
+    },
+    {
+      "from": 1136,
+      "to": 1137,
+      "transport": "walk"
+    },
+    {
+      "from": 1137,
+      "to": 2042,
+      "transport": "walk"
+    },
+    {
+      "from": 1137,
+      "to": 1138,
+      "transport": "walk"
+    },
+    {
+      "from": 1138,
+      "to": 2045,
+      "transport": "walk"
+    },
+    {
+      "from": 1120,
+      "to": 2030,
+      "transport": "walk"
+    },
+    {
+      "from": 1120,
+      "to": 1121,
+      "transport": "walk"
+    },
+    {
+      "from": 1121,
+      "to": 1122,
+      "transport": "walk"
+    },
+    {
+      "from": 1122,
+      "to": 1123,
+      "transport": "walk"
+    },
+    {
+      "from": 1123,
+      "to": 2031,
+      "transport": "walk"
+    },
+    {
+      "from": 1123,
+      "to": 1124,
+      "transport": "walk"
+    },
+    {
+      "from": 1125,
+      "to": 1126,
+      "transport": "walk"
+    },
+    {
+      "from": 1126,
+      "to": 1127,
+      "transport": "walk"
+    },
+    {
+      "from": 1127,
+      "to": 2032,
+      "transport": "walk"
+    },
+    {
+      "from": 1026,
+      "to": 1128,
+      "transport": "walk"
+    },
+    {
+      "from": 1128,
+      "to": 2033,
+      "transport": "walk"
+    },
+    {
+      "from": 1128,
+      "to": 1129,
+      "transport": "walk"
+    },
+    {
+      "from": 1129,
+      "to": 2034,
+      "transport": "walk"
+    },
+    {
+      "from": 1013,
+      "to": 1144,
+      "transport": "walk"
+    },
+    {
+      "from": 1144,
+      "to": 2050,
+      "transport": "walk"
+    },
+    {
+      "from": 1144,
+      "to": 1145,
+      "transport": "walk"
+    },
+    {
+      "from": 1144,
+      "to": 1152,
+      "transport": "walk"
+    },
+    {
+      "from": 1152,
+      "to": 2054,
+      "transport": "walk"
+    },
+    {
+      "from": 1152,
+      "to": 1151,
+      "transport": "walk"
+    },
+    {
+      "from": 1152,
+      "to": 1153,
+      "transport": "walk"
+    },
+    {
+      "from": 1153,
+      "to": 1150,
+      "transport": "walk"
+    },
+    {
+      "from": 1167,
+      "to": 1003,
+      "transport": "walk"
+    },
+    {
+      "from": 1167,
+      "to": 1168,
+      "transport": "walk"
+    },
+    {
+      "from": 1168,
+      "to": 1169,
+      "transport": "walk"
+    },
+    {
+      "from": 1169,
+      "to": 1170,
+      "transport": "walk"
+    },
+    {
+      "from": 1170,
+      "to": 1171,
+      "transport": "walk"
+    },
+    {
+      "from": 1171,
+      "to": 2013,
+      "transport": "walk"
+    },
+    {
+      "from": 1171,
+      "to": 1173,
+      "transport": "walk"
+    },
+    {
+      "from": 1173,
+      "to": 1004,
+      "transport": "walk"
+    },
+    {
+      "from": 1173,
+      "to": 1174,
+      "transport": "walk"
+    },
+    {
+      "from": 1174,
+      "to": 1001,
+      "transport": "walk"
+    },
+    {
+      "from": 1174,
+      "to": 1175,
+      "transport": "walk"
+    },
+    {
+      "from": 1175,
+      "to": 1006,
+      "transport": "walk"
+    },
+    {
+      "from": 1175,
+      "to": 1176,
+      "transport": "walk"
+    },
+    {
+      "from": 1176,
+      "to": 1004,
+      "transport": "walk"
+    },
+    {
+      "from": 1168,
+      "to": 2010,
+      "transport": "walk"
+    },
+    {
+      "from": 1172,
+      "to": 1001,
+      "transport": "walk"
+    },
+    {
+      "from": 1172,
+      "to": 2010,
+      "transport": "walk"
+    },
+    {
+      "from": 1172,
+      "to": 1171,
+      "transport": "walk"
+    },
+    {
+      "from": 1104,
+      "to": 1165,
+      "transport": "walk"
+    },
+    {
+      "from": 1165,
+      "to": 1166,
+      "transport": "walk"
+    },
+    {
+      "from": 1166,
+      "to": 2012,
+      "transport": "walk"
+    },
+    {
+      "from": 1166,
+      "to": 1110,
+      "transport": "walk"
+    },
+    {
+      "from": 1003,
+      "to": 1108,
+      "transport": "tram"
+    },
+    {
+      "from": 1108,
+      "to": 1109,
+      "transport": "tram"
+    },
+    {
+      "from": 1109,
+      "to": 1110,
+      "transport": "tram"
+    },
+    {
+      "from": 1110,
+      "to": 1111,
+      "transport": "tram"
+    },
+    {
+      "from": 1111,
+      "to": 1011,
+      "transport": "tram"
+    },
+    {
+      "from": 1011,
+      "to": 1142,
+      "transport": "tram"
+    },
+    {
+      "from": 1142,
+      "to": 1143,
+      "transport": "tram"
+    },
+    {
+      "from": 1143,
+      "to": 1141,
+      "transport": "tram"
+    },
+    {
+      "from": 1146,
+      "to": 1152,
+      "transport": "tram"
+    },
+    {
+      "from": 1152,
+      "to": 1153,
+      "transport": "tram"
+    },
+    {
+      "from": 1153,
+      "to": 1150,
+      "transport": "tram"
+    },
+    {
+      "from": 1026,
+      "to": 1128,
+      "transport": "tram"
+    },
+    {
+      "from": 1128,
+      "to": 1129,
+      "transport": "tram"
+    },
+    {
+      "from": 1129,
+      "to": 1027,
+      "transport": "tram"
+    },
+    {
+      "from": 1130,
+      "to": 1131,
+      "transport": "tram"
+    },
+    {
+      "from": 1131,
+      "to": 1132,
+      "transport": "tram"
+    },
+    {
+      "from": 1132,
+      "to": 1022,
+      "transport": "tram"
+    },
+    {
+      "from": 1133,
+      "to": 1134,
+      "transport": "tram"
+    },
+    {
+      "from": 1134,
+      "to": 1135,
+      "transport": "tram"
+    },
+    {
+      "from": 1135,
+      "to": 1137,
+      "transport": "tram"
+    },
+    {
+      "from": 1137,
+      "to": 1138,
+      "transport": "tram"
+    },
+    {
+      "from": 1138,
+      "to": 1019,
+      "transport": "tram"
+    },
+    {
+      "from": 1031,
+      "to": 1118,
+      "transport": "tram"
+    },
+    {
+      "from": 1118,
+      "to": 1119,
+      "transport": "tram"
+    },
+    {
+      "from": 2011,
+      "to": 2021,
+      "transport": "boat"
+    },
+    {
+      "from": 1139,
+      "to": 2012,
+      "transport": "boat"
+    },
+    {
+      "from": 1141,
+      "to": 1143,
+      "transport": "boat"
+    },
+    {
+      "from": 1005,
+      "to": 1027,
+      "transport": "bolt"
+    },
+    {
+      "from": 1031,
+      "to": 1035,
+      "transport": "bolt"
+    },
+    {
+      "from": 1022,
+      "to": 1016,
+      "transport": "bolt"
+    },
+    {
+      "from": 1017,
+      "to": 1011,
+      "transport": "bolt"
+    },
+    {
+      "from": 1145,
+      "to": 9999,
+      "transport": "walk"
+    },
+    {
+      "from": 2021,
+      "to": 1143,
+      "transport": "boat"
+    },
+    {
+      "from": 1026,
+      "to": 1121,
+      "transport": "tram"
+    },
+    {
+      "from": 1154,
+      "to": 1139,
+      "transport": "walk"
+    },
+    {
+      "from": 1141,
+      "to": 1145,
+      "transport": "tram"
+    },
+    {
+      "from": 1124,
+      "to": 1126,
+      "transport": "walk"
+    },
+    {
+      "from": 1167,
+      "to": 1030,
+      "transport": "walk"
+    }
+  ]
+}
