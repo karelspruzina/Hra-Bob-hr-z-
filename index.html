@@ -1,242 +1,46 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lovci pokladu staré Prahy</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-  <link rel="stylesheet" href="style.css">
-
-  <style>
-    .legend{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:10px;
-    }
-
-    .legendItem{
-      display:flex;
-      align-items:center;
-      gap:6px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:999px;
-      padding:6px 10px;
-      font-size:13px;
-    }
-
-    .legendLine{
-      width:18px;
-      height:4px;
-      border-radius:999px;
-      display:inline-block;
-    }
-
-    #taskInput,
-    #finalInput{
-      width:100%;
-      padding:14px;
-      font-size:18px;
-      border-radius:14px;
-      border:2px solid rgba(96,76,41,.25);
-      margin:8px 0 12px;
-    }
-
-    .taskActions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .taskActions button{
-      flex:1;
-      min-width:120px;
-      padding:14px;
-      font-size:17px;
-      font-weight:bold;
-      border:none;
-      border-radius:14px;
-    }
-
-    #submitAnswerBtn,
-    #submitFinalBtn{
-      background:#2f9e44;
-      color:white;
-    }
-
-    #cluePanel{
-      position:fixed;
-      top:0;
-      right:0;
-      width:min(92vw,420px);
-      height:100vh;
-      z-index:2600;
-      background:#1f1a14;
-      color:#f5ead7;
-      box-shadow:-8px 0 30px rgba(0,0,0,.45);
-      padding:16px;
-      overflow:auto;
-    }
-
-    #cluePanel h3{
-      margin-top:0;
-    }
-
-    .clueItem{
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
-      padding:12px;
-      margin:10px 0;
-      line-height:1.4;
-    }
-
-    .smallBtn{
-      border:none;
-      border-radius:12px;
-      padding:10px 14px;
-      font-size:15px;
-      font-weight:bold;
-      background:linear-gradient(180deg, #ecd39d, #c79e50);
-      color:#2d2418;
-    }
-
-    #finalBox{
-      position:fixed;
-      left:0;
-      right:0;
-      bottom:0;
-      z-index:2500;
-      padding:14px;
-    }
-
-    .finalCard{
-      background:linear-gradient(180deg, #f0dfb8, #e5cb93);
-      color:#2c2419;
-      border-radius:22px 22px 0 0;
-      padding:18px;
-      box-shadow:0 -8px 30px rgba(0,0,0,.35);
-      max-height:70vh;
-      overflow:auto;
-    }
-
-    .modeRow{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-
-    .modeBtn{
-      border:none;
-      border-radius:999px;
-      padding:10px 14px;
-      font-size:14px;
-      font-weight:bold;
-      background:rgba(255,255,255,.10);
-      color:#fff4dc;
-      border:1px solid rgba(255,255,255,.12);
-    }
-
-    .modeBtn.active{
-      background:linear-gradient(180deg, #ecd39d, #c79e50);
-      color:#2d2418;
-    }
-  </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="top">
+    <h1 id="gameTitle">Lovci pokladu staré Prahy</h1>
 
-  <div id="app">
-    <div id="header">
-      <div class="titleWrap">
-        <h1>Lovci pokladu staré Prahy</h1>
-
-        <div id="statusLine">
-          <span id="dayBadge">Den 1</span>
-          <span id="progressBadge">Splněno 0 / 0</span>
-          <span id="clueBadge">Indicie 0</span>
-        </div>
-
-        <div class="modeRow">
-          <button id="playerModeBtn" class="modeBtn active" onclick="setMode('player')">Hráč</button>
-          <button id="leaderModeBtn" class="modeBtn" onclick="setMode('leader')">Vedoucí</button>
-          <button id="showAllBtn" class="modeBtn hidden" onclick="toggleShowAllDays()">Všechny dny</button>
-        </div>
-
-        <div class="legend">
-          <div class="legendItem"><span class="legendLine" style="background:#2f9e44"></span>Pěšky</div>
-          <div class="legendItem"><span class="legendLine" style="background:#d9480f"></span>Tramvaj</div>
-          <div class="legendItem"><span class="legendLine" style="background:#f1c40f"></span>Metro</div>
-          <div class="legendItem"><span class="legendLine" style="background:#74c0fc"></span>Loď</div>
-          <div class="legendItem"><span class="legendLine" style="background:#111111"></span>Bolt</div>
-        </div>
-      </div>
-
-      <div class="topButtons">
-        <button class="topBtn" onclick="toggleTest()">TEST</button>
-        <button class="topBtn" onclick="toggleClues()">Indicie</button>
-        <button class="topBtn" onclick="openFinalBox()">Finále</button>
-        <button class="topBtn hidden" id="nextDayBtn" onclick="nextDay()">Další den</button>
-      </div>
+    <div class="badges">
+      <div class="badge" id="dayBadge">Den 1</div>
+      <div class="badge" id="progressBadge">Splněno 0 / 0</div>
+      <div class="badge" id="cluesBadge">Indicie 0</div>
     </div>
 
-    <div id="map"></div>
-    <div id="toast" class="hidden"></div>
-
-    <div id="taskBox" class="hidden">
-      <div class="taskCard">
-        <div class="taskHeader">
-          <div>
-            <div class="taskLabel">Stanoviště</div>
-            <h2 id="taskTitle"></h2>
-          </div>
-          <button class="closeBtn" onclick="closeTask()">✕</button>
-        </div>
-
-        <p id="taskQuestion"></p>
-
-        <input id="taskInput" type="text" placeholder="Napiš odpověď sem...">
-
-        <div class="taskActions">
-          <button id="submitAnswerBtn" onclick="submitAnswer()">Potvrdit odpověď</button>
-          <button onclick="closeTask()">Zavřít</button>
-        </div>
-      </div>
+    <div class="modes">
+      <button id="btnPlayer" class="topBtn active">Hráč</button>
+      <button id="btnLeader" class="topBtn">Vedoucí</button>
+      <button id="btnAllDays" class="topBtn">Všechny dny</button>
     </div>
 
-    <div id="finalBox" class="hidden">
-      <div class="finalCard">
-        <div class="taskHeader">
-          <div>
-            <div class="taskLabel">Finální místo</div>
-            <h2>Kde je poklad?</h2>
-          </div>
-          <button class="closeBtn" onclick="closeFinalBox()">✕</button>
-        </div>
-
-        <p id="finalHintText">Zadejte finální místo podle všech získaných indicií.</p>
-
-        <input id="finalInput" type="text" placeholder="Např. Vyšehrad">
-
-        <div class="taskActions">
-          <button id="submitFinalBtn" onclick="submitFinalAnswer()">Potvrdit finální odpověď</button>
-          <button onclick="closeFinalBox()">Zavřít</button>
-        </div>
-      </div>
+    <div class="legend">
+      <span class="pill"><i class="line walk"></i>Pěšky</span>
+      <span class="pill"><i class="line tram"></i>Tramvaj</span>
+      <span class="pill"><i class="line metro"></i>Metro</span>
+      <span class="pill"><i class="line boat"></i>Loď</span>
+      <span class="pill"><i class="line bolt"></i>Bolt</span>
     </div>
 
-    <div id="cluePanel" class="hidden">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
-        <h3>Moje indicie</h3>
-        <button class="smallBtn" onclick="toggleClues()">Zavřít</button>
-      </div>
-      <div id="clueList"></div>
+    <div class="actions">
+      <button id="btnNextDay" class="mainBtn">Další den</button>
+      <button id="btnHints" class="mainBtn">Indicie</button>
+      <button id="btnFinale" class="mainBtn">Finále</button>
     </div>
   </div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
