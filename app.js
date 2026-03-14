@@ -1,524 +1,358 @@
-let map = L.map('map').setView([50.087, 14.42], 12);
+// Náhradní app.js pro hru "Lovci pokladu staré Prahy"
+// Verze podporuje route.path, gameData.json a základní herní logiku.
+// Pokud máš v index.html jiné ID prvků, uprav selectors v části DOM.
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19
-}).addTo(map);
+const DATA_URL = "gameData.json?v=" + Date.now();
 
-let gameData = null;
-let markers = [];
-let lines = [];
-let gpsMarker = null;
-let currentGps = null;
-let testMode = false;
-let activeStation = null;
-
-let state = JSON.parse(localStorage.getItem("prahaGameState") || "null") || {
-  currentDay: 1,
-  solvedIds: [],
-  foundClues: [],
-  unlockedFakeIds: [],
-  mode: "player",
-  showAllDays: false,
-  finalSolved: false
+const TRANSPORT_STYLE = {
+  walk:  { color: "#32a852", weight: 6, opacity: 0.9 },
+  tram:  { color: "#e85d0c", weight: 6, opacity: 0.9 },
+  metro: { color: "#e3c21b", weight: 6, opacity: 0.9 },
+  boat:  { color: "#66b7ff", weight: 6, opacity: 0.9 },
+  bolt:  { color: "#111111", weight: 6, opacity: 0.9, dashArray: "12 10" }
 };
 
-const dayBadge = document.getElementById("dayBadge");
-const progressBadge = document.getElementById("progressBadge");
-const clueBadge = document.getElementById("clueBadge");
-const nextDayBtn = document.getElementById("nextDayBtn");
-const toast = document.getElementById("toast");
-const cluePanel = document.getElementById("cluePanel");
-const clueList = document.getElementById("clueList");
-const taskBox = document.getElementById("taskBox");
-const taskTitle = document.getElementById("taskTitle");
-const taskQuestion = document.getElementById("taskQuestion");
-const taskInput = document.getElementById("taskInput");
-const finalBox = document.getElementById("finalBox");
-const finalInput = document.getElementById("finalInput");
-const playerModeBtn = document.getElementById("playerModeBtn");
-const leaderModeBtn = document.getElementById("leaderModeBtn");
-const showAllBtn = document.getElementById("showAllBtn");
+const state = {
+  data: null,
+  map: null,
+  routeLayer: null,
+  nodeLayer: null,
+  playerMarker: null,
+  currentDay: 1,
+  mode: "player",
+  showAllDays: false,
+  discoveredNodeIds: [],
+  solvedStationIds: [],
+  clues: [],
+  currentPosition: null,
+  currentNodeId: null
+};
 
-fetch("gamedata.json")
-  .then(r => r.json())
-  .then(data => {
-    gameData = data;
-    applyModeUi();
-    renderAll();
-    startGPS();
-  })
-  .catch(err => {
-    console.error("Chyba při načtení gamedata.json:", err);
-    showToast("Nepodařilo se načíst herní data.", "bad");
-  });
+const dom = {
+  title: null,
+  day: null,
+  progress: null,
+  clues: null,
+  map: null,
+  btnPlayer: null,
+  btnLeader: null,
+  btnAllDays: null,
+  btnNextDay: null,
+  btnHints: null,
+  btnFinale: null
+};
 
-function saveState() {
-  localStorage.setItem("prahaGameState", JSON.stringify(state));
+function loadState() {
+  try {
+    const raw = localStorage.getItem("praha_game_state");
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    Object.assign(state, {
+      currentDay: saved.currentDay ?? state.currentDay,
+      mode: saved.mode ?? state.mode,
+      showAllDays: saved.showAllDays ?? state.showAllDays,
+      discoveredNodeIds: Array.isArray(saved.discoveredNodeIds) ? saved.discoveredNodeIds : [],
+      solvedStationIds: Array.isArray(saved.solvedStationIds) ? saved.solvedStationIds : [],
+      clues: Array.isArray(saved.clues) ? saved.clues : [],
+      currentNodeId: saved.currentNodeId ?? null
+    });
+  } catch (e) {
+    console.warn("Nepodařilo se načíst uložený stav", e);
+  }
 }
 
-function normalizeText(str) {
-  return (str || "")
+function saveState() {
+  const saved = {
+    currentDay: state.currentDay,
+    mode: state.mode,
+    showAllDays: state.showAllDays,
+    discoveredNodeIds: state.discoveredNodeIds,
+    solvedStationIds: state.solvedStationIds,
+    clues: state.clues,
+    currentNodeId: state.currentNodeId
+  };
+  localStorage.setItem("praha_game_state", JSON.stringify(saved));
+}
+
+function qs(...ids) {
+  for (const id of ids) {
+    const el = document.getElementById(id);
+    if (el) return el;
+  }
+  return null;
+}
+
+function bindDom() {
+  dom.title = qs("gameTitle", "title");
+  dom.day = qs("dayBadge", "dayLabel", "day");
+  dom.progress = qs("progressBadge", "progressLabel", "progress");
+  dom.clues = qs("cluesBadge", "cluesLabel", "clues");
+  dom.map = qs("map");
+  dom.btnPlayer = qs("btnPlayer");
+  dom.btnLeader = qs("btnLeader");
+  dom.btnAllDays = qs("btnAllDays");
+  dom.btnNextDay = qs("btnNextDay");
+  dom.btnHints = qs("btnHints", "btnIndicie");
+  dom.btnFinale = qs("btnFinale");
+
+  dom.btnPlayer?.addEventListener("click", () => setMode("player"));
+  dom.btnLeader?.addEventListener("click", () => setMode("leader"));
+  dom.btnAllDays?.addEventListener("click", toggleAllDays);
+  dom.btnNextDay?.addEventListener("click", nextDay);
+  dom.btnHints?.addEventListener("click", showClues);
+  dom.btnFinale?.addEventListener("click", showFinale);
+}
+
+function setMode(mode) {
+  if (mode === "leader") {
+    const pass = prompt("Zadej heslo pro režim vedoucího:");
+    if (pass !== "7421") {
+      showToast("Špatné heslo.");
+      return;
+    }
+  }
+  state.mode = mode;
+  if (mode === "player") state.showAllDays = false;
+  saveState();
+  renderAll();
+}
+
+function toggleAllDays() {
+  if (state.mode !== "leader") {
+    showToast("Všechny dny jsou jen pro vedoucího.");
+    return;
+  }
+  state.showAllDays = !state.showAllDays;
+  saveState();
+  renderAll();
+}
+
+function nextDay() {
+  const maxDay = state.data?.config?.totalDays || 5;
+  if (state.currentDay < maxDay) {
+    state.currentDay += 1;
+    saveState();
+    renderAll();
+  }
+}
+
+function showClues() {
+  const text = state.clues.length
+    ? state.clues.join("\n• ")
+    : "Zatím nemáte žádné indicie.";
+  alert(text);
+}
+
+function showFinale() {
+  const hint = state.data?.finalTreasure?.hint || "Finále zatím není připravené.";
+  const answer = prompt("Finále:\n" + hint + "\n\nNapiš název místa:");
+  if (!answer) return;
+  const normalized = normalize(answer);
+  const accepted = (state.data?.finalTreasure?.acceptedAnswers || []).map(normalize);
+  if (accepted.includes(normalized)) {
+    alert(state.data.finalTreasure.finalMessage || "Správně!");
+  } else {
+    alert("To není správné finální místo.");
+  }
+}
+
+function normalize(s) {
+  return String(s)
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9 ]/g, "")
-    .replace(/\s+/g, " ")
     .trim();
 }
 
-function findNodeById(id) {
-  return gameData.nodes.find(n => n.id === id);
+function getNodeById(id) {
+  return state.data.nodes.find(n => n.id === id) || null;
 }
 
-function isSolved(nodeId) {
-  return state.solvedIds.includes(nodeId);
-}
-
-function isLeaderMode() {
-  return state.mode === "leader";
-}
-
-function isNodeVisible(node) {
-  if (isLeaderMode() && state.showAllDays) return true;
-  return node.day == null || node.day === state.currentDay;
-}
-
-function getTodayRealStations() {
-  return gameData.nodes.filter(n => n.kind === "station" && n.day === state.currentDay);
-}
-
-function getTodaySolvedCount() {
-  return getTodayRealStations().filter(n => isSolved(n.id)).length;
-}
-
-function canAdvanceDay() {
-  const total = getTodayRealStations().length;
-  const done = getTodaySolvedCount();
-  return total > 0 && done >= total;
-}
-
-function transportColor(type) {
-  if (type === "walk") return "#2f9e44";
-  if (type === "tram") return "#d9480f";
-  if (type === "metro") return "#f1c40f";
-  if (type === "boat") return "#74c0fc";
-  if (type === "bolt") return "#111111";
-  return "#999999";
-}
-
-function transportLabel(type) {
-  if (type === "walk") return "Pěšky";
-  if (type === "tram") return "Tramvaj";
-  if (type === "metro") return "Metro";
-  if (type === "boat") return "Loď";
-  if (type === "bolt") return "Bolt";
-  return type;
-}
-
-function clearMapObjects() {
-  markers.forEach(m => map.removeLayer(m));
-  lines.forEach(l => map.removeLayer(l));
-  markers = [];
-  lines = [];
-}
-
-function renderAll() {
-  if (!gameData) return;
-  clearMapObjects();
-  drawRoutes();
-  drawNodes();
-  updateHeader();
-  updateNextDayButton();
-  renderClues();
-  applyModeUi();
-}
-
-function drawRoutes() {
-  gameData.routes.forEach(route => {
-    const fromNode = findNodeById(route.from);
-    const toNode = findNodeById(route.to);
-    if (!fromNode || !toNode) return;
-
-    const fromVisible = isNodeVisible(fromNode);
-    const toVisible = isNodeVisible(toNode);
-
-    if (!fromVisible && !toVisible) return;
-
-    const poly = L.polyline(
-      [
-        [fromNode.lat, fromNode.lng],
-        [toNode.lat, toNode.lng]
-      ],
-      {
-        color: transportColor(route.transport),
-        weight: route.transport === "metro" ? 7 : 6,
-        opacity: 0.95,
-        dashArray: route.transport === "bolt" ? "10,8" : null,
-        lineCap: "round",
-        lineJoin: "round"
-      }
-    ).addTo(map);
-
-    poly.bindPopup(`${fromNode.name} → ${toNode.name}<br>${transportLabel(route.transport)}`);
-    lines.push(poly);
+function getVisibleNodes() {
+  if (state.mode === "leader" && state.showAllDays) return state.data.nodes;
+  return state.data.nodes.filter(n => {
+    if (n.kind === "final") return state.mode === "leader";
+    if (n.day == null) return true;
+    return n.day <= state.currentDay;
   });
 }
 
-function drawNodes() {
-  gameData.nodes.forEach(node => {
-    if (!isNodeVisible(node)) return;
+function getVisibleRoutes(visibleNodeIds) {
+  return state.data.routes.filter(r => visibleNodeIds.has(r.from) && visibleNodeIds.has(r.to));
+}
 
-    let color = "#222";
-    let fill = "#555";
-    let radius = 8;
+function renderHud() {
+  if (dom.title) dom.title.textContent = state.data.config.gameTitle || "Lovci pokladu staré Prahy";
+  if (dom.day) dom.day.textContent = "Den " + state.currentDay;
 
-    if (node.kind === "transfer") {
-      color = "#111";
-      fill = "#111";
-      radius = 7;
+  const todaysStations = state.data.nodes.filter(n => n.kind === "station" && n.day === state.currentDay);
+  const solvedToday = todaysStations.filter(n => state.solvedStationIds.includes(n.id)).length;
+  if (dom.progress) dom.progress.textContent = `Splněno ${solvedToday} / ${todaysStations.length}`;
+  if (dom.clues) dom.clues.textContent = `Indicie ${state.clues.length}`;
+
+  dom.btnPlayer?.classList.toggle("active", state.mode === "player");
+  dom.btnLeader?.classList.toggle("active", state.mode === "leader");
+  dom.btnAllDays?.classList.toggle("active", !!state.showAllDays);
+}
+
+function createMap() {
+  if (state.map) return;
+
+  state.map = L.map(dom.map, { zoomControl: true }).setView([50.083, 14.42], 13);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap"
+  }).addTo(state.map);
+
+  state.routeLayer = L.layerGroup().addTo(state.map);
+  state.nodeLayer = L.layerGroup().addTo(state.map);
+}
+
+function routeStyle(transport) {
+  return TRANSPORT_STYLE[transport] || { color: "#888", weight: 5, opacity: 0.8 };
+}
+
+function renderRoutes(visibleNodes) {
+  state.routeLayer.clearLayers();
+  const visibleIds = new Set(visibleNodes.map(n => n.id));
+  const routes = getVisibleRoutes(visibleIds);
+
+  for (const route of routes) {
+    const from = getNodeById(route.from);
+    const to = getNodeById(route.to);
+    if (!from || !to) continue;
+
+    const points = Array.isArray(route.path) && route.path.length >= 2
+      ? route.path
+      : [
+          [from.lat, from.lng],
+          [to.lat, to.lng]
+        ];
+
+    const line = L.polyline(points, routeStyle(route.transport));
+    line.bindPopup(`${from.name} → ${to.name}<br>${labelTransport(route.transport)}`);
+    line.addTo(state.routeLayer);
+  }
+}
+
+function labelTransport(tr) {
+  const labels = {
+    walk: "Pěšky",
+    tram: "Tramvaj",
+    metro: "Metro",
+    boat: "Loď",
+    bolt: "Bolt"
+  };
+  return labels[tr] || tr;
+}
+
+function markerStyle(node) {
+  if (node.kind === "station") return { radius: 12, color: "#ffffff", weight: 4, fillColor: "#d4b05f", fillOpacity: 1 };
+  if (node.kind === "fake") return { radius: 11, color: "#ffffff", weight: 4, fillColor: "#b6b6b6", fillOpacity: 1 };
+  if (node.kind === "final") return { radius: 12, color: "#ffffff", weight: 4, fillColor: "#cc2e2e", fillOpacity: 1 };
+  return { radius: 8, color: "#000000", weight: 2, fillColor: "#000000", fillOpacity: 1 };
+}
+
+function renderNodes(visibleNodes) {
+  state.nodeLayer.clearLayers();
+
+  for (const node of visibleNodes) {
+    const marker = L.circleMarker([node.lat, node.lng], markerStyle(node));
+    marker.on("click", () => onNodeClick(node));
+    marker.bindTooltip(node.name, { direction: "top" });
+    marker.addTo(state.nodeLayer);
+  }
+
+  if (state.currentPosition) {
+    if (state.playerMarker) state.playerMarker.remove();
+    state.playerMarker = L.circleMarker(
+      [state.currentPosition.lat, state.currentPosition.lng],
+      { radius: 10, color: "#fff", weight: 4, fillColor: "#e53935", fillOpacity: 1 }
+    ).addTo(state.map);
+  }
+}
+
+function onNodeClick(node) {
+  state.currentNodeId = node.id;
+  saveState();
+
+  if (node.kind === "station") {
+    const answer = prompt(`${node.name}\n\n${node.question}\n\nNapiš odpověď:`);
+    if (!answer) return;
+
+    const normalized = normalize(answer);
+    const accepted = (node.acceptedAnswers || []).map(normalize);
+
+    if (accepted.includes(normalized)) {
+      if (!state.solvedStationIds.includes(node.id)) state.solvedStationIds.push(node.id);
+      if (node.clueReward && !state.clues.includes(node.clueReward)) state.clues.push(node.clueReward);
+      saveState();
+      alert("Správně!\n\n" + (node.clueReward || "Získali jste indicii."));
+      renderAll();
+    } else {
+      alert("To není správná odpověď.");
     }
-
-    if (node.kind === "station") {
-      color = "#ffffff";
-      fill = isSolved(node.id) ? "#2f9e44" : "#d8b36a";
-      radius = 11;
-    }
-
-    if (node.kind === "fake") {
-      color = "#ffffff";
-      fill = state.unlockedFakeIds.includes(node.id) ? "#c92a2a" : "#8c8c8c";
-      radius = 10;
-    }
-
-    if (node.kind === "final") {
-      color = "#ffffff";
-      fill = state.finalSolved ? "#7048e8" : "#b08900";
-      radius = 13;
-    }
-
-    const marker = L.circleMarker([node.lat, node.lng], {
-      radius: radius,
-      color: color,
-      weight: 3,
-      fillColor: fill,
-      fillOpacity: 1
-    }).addTo(map);
-
-    let popupText = `<strong>${node.name}</strong>`;
-    if (node.kind === "transfer") popupText += `<br><small>Přestupní bod</small>`;
-    if (node.kind === "station") popupText += `<br><small>Stanoviště</small>`;
-    if (node.kind === "fake") popupText += `<br><small>Neznámá stopa</small>`;
-    if (node.kind === "final") popupText += `<br><small>Finální místo</small>`;
-
-    if (isLeaderMode() && node.day) {
-      popupText += `<br><small>Den ${node.day}</small>`;
-    }
-
-    marker.bindPopup(popupText);
-    marker.on("click", () => handleNodeClick(node));
-
-    markers.push(marker);
-  });
-
-  updateGpsMarker();
-}
-
-function updateGpsMarker() {
-  if (!currentGps) return;
-
-  if (gpsMarker) {
-    map.removeLayer(gpsMarker);
-  }
-
-  gpsMarker = L.circleMarker([currentGps.lat, currentGps.lng], {
-    radius: 10,
-    color: "#ffffff",
-    weight: 3,
-    fillColor: "#7048e8",
-    fillOpacity: 1
-  }).addTo(map);
-
-  gpsMarker.bindPopup("Moje poloha");
-}
-
-function updateHeader() {
-  const total = getTodayRealStations().length;
-  const done = getTodaySolvedCount();
-
-  if (isLeaderMode() && state.showAllDays) {
-    dayBadge.innerText = "Všechny dny";
-  } else {
-    dayBadge.innerText = `Den ${state.currentDay}`;
-  }
-
-  progressBadge.innerText = `Splněno ${done} / ${total}`;
-  clueBadge.innerText = `Indicie ${state.foundClues.length}`;
-}
-
-function updateNextDayButton() {
-  if (canAdvanceDay() && state.currentDay < gameData.config.totalDays) {
-    nextDayBtn.classList.remove("hidden");
-  } else {
-    nextDayBtn.classList.add("hidden");
-  }
-
-  if (isLeaderMode()) {
-    nextDayBtn.classList.remove("hidden");
-  }
-}
-
-function renderClues() {
-  clueList.innerHTML = "";
-
-  if (!state.foundClues.length) {
-    clueList.innerHTML = `<div class="clueItem">Zatím nemáte žádné indicie.</div>`;
-    return;
-  }
-
-  state.foundClues.forEach((item, index) => {
-    const div = document.createElement("div");
-    div.className = "clueItem";
-    div.innerHTML = `<strong>Indicie ${index + 1}</strong><br>${item.text}<br><small>${item.source}</small>`;
-    clueList.appendChild(div);
-  });
-
-  if (gameData.finalTreasure) {
-    const div = document.createElement("div");
-    div.className = "clueItem";
-    div.innerHTML = `<strong>Finále</strong><br>${gameData.finalTreasure.hint}`;
-    clueList.appendChild(div);
-  }
-}
-
-function startGPS() {
-  if (!navigator.geolocation) {
-    showToast("Tento telefon nepodporuje GPS.", "bad");
-    return;
-  }
-
-  navigator.geolocation.watchPosition(
-    pos => {
-      currentGps = {
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude
-      };
-      updateGpsMarker();
-    },
-    () => {
-      if (!isLeaderMode()) {
-        showToast("Nepodařilo se načíst GPS polohu.", "bad");
-      }
-    },
-    {
-      enableHighAccuracy: true,
-      maximumAge: 3000,
-      timeout: 10000
-    }
-  );
-}
-
-function nearNode(node, meters = 45) {
-  if (isLeaderMode()) return true;
-  if (!currentGps) return false;
-  const d = map.distance([currentGps.lat, currentGps.lng], [node.lat, node.lng]);
-  return d <= meters;
-}
-
-function handleNodeClick(node) {
-  if (!testMode && !nearNode(node, gameData.config.unlockRadiusMeters || 45)) {
-    showToast("Nejdřív musíte být fyzicky na místě.", "bad");
-    return;
-  }
-
-  if (node.kind === "transfer") {
-    showToast("Tohle je jen přestupní bod.", "ok");
     return;
   }
 
   if (node.kind === "fake") {
-    if (!state.unlockedFakeIds.includes(node.id)) {
-      state.unlockedFakeIds.push(node.id);
-      saveState();
-    }
-    showToast(node.fakeMessage || "Bohužel, falešná stopa.", "bad");
-    return;
-  }
-
-  if (node.kind === "station") {
-    openTask(node);
+    alert(node.fakeMessage || "Tady poklad není.");
     return;
   }
 
   if (node.kind === "final") {
-    if (!state.finalSolved) {
-      showToast("Nejdřív uhodněte finální místo v panelu Finále.", "bad");
-    } else {
-      showToast(node.finalMessage || "Poklad nalezen!", "ok");
-    }
-  }
-}
-
-function openTask(node) {
-  if (isSolved(node.id)) {
-    showToast("Toto stanoviště už máte splněné.", "ok");
+    showFinale();
     return;
   }
 
-  activeStation = node;
-  taskTitle.innerText = node.name;
-  taskQuestion.innerText = node.question || "Zadejte odpověď.";
-  taskInput.value = "";
-  taskBox.classList.remove("hidden");
-  taskInput.focus();
+  const connected = state.data.routes.filter(r => r.from === node.id || r.to === node.id);
+  const lines = connected.map(r => {
+    const other = getNodeById(r.from === node.id ? r.to : r.from);
+    return `${other?.name || "?"} (${labelTransport(r.transport)})`;
+  });
+  alert(`${node.name}\n\nMožné směry:\n• ${lines.join("\n• ")}`);
 }
 
-function closeTask() {
-  activeStation = null;
-  taskBox.classList.add("hidden");
+function renderAll() {
+  if (!state.data) return;
+  renderHud();
+  createMap();
+
+  const visibleNodes = getVisibleNodes();
+  renderRoutes(visibleNodes);
+  renderNodes(visibleNodes);
 }
 
-function submitAnswer() {
-  if (!activeStation) return;
-
-  const typed = normalizeText(taskInput.value);
-  const answers = (activeStation.acceptedAnswers || []).map(normalizeText);
-
-  if (!typed) {
-    showToast("Napiš odpověď do pole.", "bad");
-    return;
-  }
-
-  if (answers.includes(typed)) {
-    state.solvedIds.push(activeStation.id);
-    state.solvedIds = [...new Set(state.solvedIds)];
-
-    if (activeStation.clueReward) {
-      const alreadyHas = state.foundClues.some(c => c.id === activeStation.id);
-      if (!alreadyHas) {
-        state.foundClues.push({
-          id: activeStation.id,
-          source: activeStation.name,
-          text: activeStation.clueReward
-        });
-      }
-    }
-
-    saveState();
-    closeTask();
-    renderAll();
-    showToast("Správně! Získali jste indicii.", "ok");
-  } else {
-    showToast("Tohle nesedí. Zkuste jinou odpověď.", "bad");
-  }
+function showToast(msg) {
+  alert(msg);
 }
 
-function openFinalBox() {
-  finalBox.classList.remove("hidden");
-  finalInput.value = "";
+function startGPS() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      state.currentPosition = {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude
+      };
+      renderAll();
+    },
+    () => {},
+    { enableHighAccuracy: true, timeout: 5000, maximumAge: 30000 }
+  );
 }
 
-function closeFinalBox() {
-  finalBox.classList.add("hidden");
-}
+async function init() {
+  bindDom();
+  loadState();
 
-function submitFinalAnswer() {
-  if (!gameData.finalTreasure) {
-    showToast("Finální místo není nastavené.", "bad");
-    return;
-  }
+  const res = await fetch(DATA_URL);
+  state.data = await res.json();
 
-  const typed = normalizeText(finalInput.value);
-  const answers = (gameData.finalTreasure.acceptedAnswers || []).map(normalizeText);
-
-  if (!typed) {
-    showToast("Napiš finální místo.", "bad");
-    return;
-  }
-
-  if (answers.includes(typed)) {
-    state.finalSolved = true;
-    saveState();
-    closeFinalBox();
-    renderAll();
-    showToast("Správně! Finální místo odhaleno.", "ok");
-  } else {
-    showToast("Tohle finální místo nesedí.", "bad");
-  }
-}
-
-function setMode(mode) {
-  state.mode = mode;
-  if (mode === "player") {
-    state.showAllDays = false;
-  }
-  saveState();
-  applyModeUi();
+  if (!state.currentNodeId) state.currentNodeId = state.data.config.startNodeId;
   renderAll();
+  startGPS();
 }
 
-function applyModeUi() {
-  if (!playerModeBtn || !leaderModeBtn || !showAllBtn) return;
-
-  if (state.mode === "player") {
-    playerModeBtn.classList.add("active");
-    leaderModeBtn.classList.remove("active");
-    showAllBtn.classList.add("hidden");
-  } else {
-    leaderModeBtn.classList.add("active");
-    playerModeBtn.classList.remove("active");
-    showAllBtn.classList.remove("hidden");
-    if (state.showAllDays) {
-      showAllBtn.classList.add("active");
-      showAllBtn.innerText = "Jen aktuální den";
-    } else {
-      showAllBtn.classList.remove("active");
-      showAllBtn.innerText = "Všechny dny";
-    }
-  }
-}
-
-function toggleShowAllDays() {
-  if (!isLeaderMode()) return;
-  state.showAllDays = !state.showAllDays;
-  saveState();
-  applyModeUi();
-  renderAll();
-}
-
-function toggleTest() {
-  testMode = !testMode;
-  showToast(`TEST MODE: ${testMode ? "zapnut" : "vypnut"}`, "ok");
-}
-
-function nextDay() {
-  if (!isLeaderMode()) {
-    if (!canAdvanceDay()) {
-      showToast("Nejdřív musíte splnit všechna pravá stanoviště dne.", "bad");
-      return;
-    }
-  }
-
-  state.currentDay++;
-  if (state.currentDay > gameData.config.totalDays) {
-    state.currentDay = 1;
-  }
-
-  saveState();
-  renderAll();
-  showToast(`Přepnuto na den ${state.currentDay}.`, "ok");
-}
-
-function toggleClues() {
-  cluePanel.classList.toggle("hidden");
-}
-
-function showToast(text, type = "ok") {
-  toast.innerText = text;
-  toast.className = "";
-  toast.classList.add(type === "ok" ? "toast-ok" : "toast-bad");
-  toast.style.display = "block";
-
-  setTimeout(() => {
-    toast.style.display = "none";
-  }, 2600);
-}
+document.addEventListener("DOMContentLoaded", init);
