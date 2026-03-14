@@ -1559,6 +1559,11 @@
       "transport": "walk"
     },
     {
+      "from": 1141,
+      "to": 1146,
+      "transport": "walk"
+    },
+    {
       "from": 1146,
       "to": 1145,
       "transport": "walk"
@@ -1796,6 +1801,11 @@
     {
       "from": 1127,
       "to": 2032,
+      "transport": "walk"
+    },
+    {
+      "from": 1125,
+      "to": 2035,
       "transport": "walk"
     },
     {
@@ -2109,11 +2119,6 @@
       "transport": "bolt"
     },
     {
-      "from": 1017,
-      "to": 1011,
-      "transport": "bolt"
-    },
-    {
       "from": 1145,
       "to": 9999,
       "transport": "walk"
@@ -2152,21 +2157,6 @@
       "from": 1121,
       "to": 1026,
       "transport": "tram"
-    },
-    {
-      "from": 1124,
-      "to": 1126,
-      "transport": "walk"
-    },
-    {
-      "from": 1167,
-      "to": 1030,
-      "transport": "walk"
-    },
-    {
-      "from": 2054,
-      "to": 1144,
-      "transport": "walk"
     },
     {
       "from": 2053,
