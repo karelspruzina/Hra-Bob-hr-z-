@@ -46452,5 +46452,503 @@
         ]
       ]
     }
-  ]
+  ],
+  "_routingReport": {
+    "generatedAt": "2026-03-15T19:22:33.113Z",
+    "changed": 129,
+    "skipped": 54,
+    "errors": 0,
+    "nodeWarnings": [],
+    "routeWarnings": [
+      {
+        "transport": "walk",
+        "fromName": "Můstek",
+        "toName": "Staré Město střed",
+        "directMeters": 327.097499323354,
+        "routeMeters": 4348.528128697646,
+        "ratio": 13.294287292605944
+      },
+      {
+        "transport": "walk",
+        "fromName": "Staré Město střed",
+        "toName": "Orloj",
+        "directMeters": 78.7589452366528,
+        "routeMeters": 1202.5083501344484,
+        "ratio": 15.268212982299127
+      },
+      {
+        "transport": "walk",
+        "fromName": "Staré Město střed",
+        "toName": "Staré Město východ",
+        "directMeters": 349.77130599465914,
+        "routeMeters": 2262.1589752145237,
+        "ratio": 6.467537320654502
+      },
+      {
+        "transport": "walk",
+        "fromName": "Staré Město východ",
+        "toName": "Náměstí Republiky",
+        "directMeters": 624.7338152780669,
+        "routeMeters": 2193.6746859199143,
+        "ratio": 3.5113749764666045
+      },
+      {
+        "transport": "walk",
+        "fromName": "Staré Město východ",
+        "toName": "Prašná brána",
+        "directMeters": 198.32877799092566,
+        "routeMeters": 3200.5988968726033,
+        "ratio": 16.13784408543597
+      },
+      {
+        "transport": "walk",
+        "fromName": "Karlův most východ",
+        "toName": "Karlův most",
+        "directMeters": 112.09790212760178,
+        "routeMeters": 1616.3970819271492,
+        "ratio": 14.419512330277097
+      },
+      {
+        "transport": "walk",
+        "fromName": "Karlův most východ",
+        "toName": "Karlův most západ",
+        "directMeters": 300.4787320125316,
+        "routeMeters": 1550.0506597743695,
+        "ratio": 5.158603570350942
+      },
+      {
+        "transport": "walk",
+        "fromName": "Karlův most západ",
+        "toName": "Kampa sever",
+        "directMeters": 158.52957310751185,
+        "routeMeters": 2196.4860796332987,
+        "ratio": 13.855371187706927
+      },
+      {
+        "transport": "walk",
+        "fromName": "Kampa sever",
+        "toName": "Malá Strana střed",
+        "directMeters": 177.35016268810816,
+        "routeMeters": 690.5417057819332,
+        "ratio": 3.893662657622338
+      },
+      {
+        "transport": "walk",
+        "fromName": "Malá Strana střed",
+        "toName": "Malá Strana jih",
+        "directMeters": 344.77810214329276,
+        "routeMeters": 2175.725567020228,
+        "ratio": 6.310509726386212
+      },
+      {
+        "transport": "walk",
+        "fromName": "Malá Strana jih",
+        "toName": "Újezd",
+        "directMeters": 212.35194984880428,
+        "routeMeters": 843.8107505512627,
+        "ratio": 3.9736425832306246
+      },
+      {
+        "transport": "walk",
+        "fromName": "Petřín základna",
+        "toName": "Petřín střed",
+        "directMeters": 234.90231081678746,
+        "routeMeters": 5968.014169475274,
+        "ratio": 25.406366368741423
+      },
+      {
+        "transport": "walk",
+        "fromName": "Malá Strana sever",
+        "toName": "Hrad východ",
+        "directMeters": 308.64684641735516,
+        "routeMeters": 1301.6291313838108,
+        "ratio": 4.217211827992357
+      },
+      {
+        "transport": "walk",
+        "fromName": "Hrad východ",
+        "toName": "Hrad střed",
+        "directMeters": 208.0763810203199,
+        "routeMeters": 2731.845827528798,
+        "ratio": 13.129052966670047
+      },
+      {
+        "transport": "walk",
+        "fromName": "Hrad západ",
+        "toName": "Pohořelec",
+        "directMeters": 537.0760783580752,
+        "routeMeters": 3213.1223429666125,
+        "ratio": 5.982620474904832
+      },
+      {
+        "transport": "walk",
+        "fromName": "Pohořelec",
+        "toName": "Strahov předpolí",
+        "directMeters": 295.6949267705025,
+        "routeMeters": 1506.130033872272,
+        "ratio": 5.093526799129779
+      },
+      {
+        "transport": "walk",
+        "fromName": "Náplavka sever",
+        "toName": "Národní divadlo",
+        "directMeters": 135.1401075706288,
+        "routeMeters": 455.0911593948479,
+        "ratio": 3.367550667051244
+      },
+      {
+        "transport": "walk",
+        "fromName": "Smíchov řeka",
+        "toName": "Smíchov centrum",
+        "directMeters": 181.6583087023408,
+        "routeMeters": 1099.9009929266335,
+        "ratio": 6.054779441599306
+      },
+      {
+        "transport": "walk",
+        "fromName": "Vyšehrad dolní",
+        "toName": "Vyšehrad střed",
+        "directMeters": 233.5643948249727,
+        "routeMeters": 1531.8110547707884,
+        "ratio": 6.558409966205205
+      },
+      {
+        "transport": "walk",
+        "fromName": "Vyšehrad střed",
+        "toName": "Rotunda sv Martina",
+        "directMeters": 128.54315051912945,
+        "routeMeters": 529.2236691928464,
+        "ratio": 4.117089608085253
+      },
+      {
+        "transport": "walk",
+        "fromName": "Podolí sever",
+        "toName": "Podolí střed",
+        "directMeters": 281.26787344424474,
+        "routeMeters": 1569.602009526969,
+        "ratio": 5.580452507094126
+      },
+      {
+        "transport": "walk",
+        "fromName": "Podolí střed",
+        "toName": "Podolská vodárna",
+        "directMeters": 68.22768819381385,
+        "routeMeters": 733.5468922348856,
+        "ratio": 10.751454602288515
+      },
+      {
+        "transport": "walk",
+        "fromName": "Nové Město střed",
+        "toName": "Nové Město sever",
+        "directMeters": 386.4732931616859,
+        "routeMeters": 4113.848817208698,
+        "ratio": 10.64458758211688
+      },
+      {
+        "transport": "walk",
+        "fromName": "Nové Město sever",
+        "toName": "Václavské náměstí",
+        "directMeters": 178.48329956524967,
+        "routeMeters": 1395.899271954786,
+        "ratio": 7.820895710438585
+      },
+      {
+        "transport": "walk",
+        "fromName": "Nové Město střed",
+        "toName": "Nové Město jih",
+        "directMeters": 306.22736431780925,
+        "routeMeters": 2080.9640633173385,
+        "ratio": 6.795486967512381
+      },
+      {
+        "transport": "walk",
+        "fromName": "Nové Město jih",
+        "toName": "Karlovo náměstí",
+        "directMeters": 246.5618215908255,
+        "routeMeters": 1335.00226345349,
+        "ratio": 5.4144727469971174
+      },
+      {
+        "transport": "walk",
+        "fromName": "Nové Město střed",
+        "toName": "Muzeum západ",
+        "directMeters": 330.4023242996357,
+        "routeMeters": 2551.4345046492767,
+        "ratio": 7.722205072429903
+      },
+      {
+        "transport": "walk",
+        "fromName": "Muzeum západ",
+        "toName": "Muzeum",
+        "directMeters": 200.10540092571688,
+        "routeMeters": 2100.8965924687927,
+        "ratio": 10.498949967116017
+      },
+      {
+        "transport": "walk",
+        "fromName": "Muzeum západ",
+        "toName": "Muzeum východ",
+        "directMeters": 414.01294216502345,
+        "routeMeters": 1261.491099758209,
+        "ratio": 3.0469846985010074
+      },
+      {
+        "transport": "walk",
+        "fromName": "Hlavní nádraží",
+        "toName": "Hlavní západ",
+        "directMeters": 165.60753693223498,
+        "routeMeters": 1056.4163111695207,
+        "ratio": 6.379035222302691
+      },
+      {
+        "transport": "walk",
+        "fromName": "Hlavní západ",
+        "toName": "Hlavní východ",
+        "directMeters": 352.438970476652,
+        "routeMeters": 1453.5462650882605,
+        "ratio": 4.124249549141597
+      },
+      {
+        "transport": "walk",
+        "fromName": "Náměstí Republiky",
+        "toName": "Republika západ",
+        "directMeters": 188.46442164284127,
+        "routeMeters": 778.849363605616,
+        "ratio": 4.132606869861159
+      },
+      {
+        "transport": "walk",
+        "fromName": "Republika západ",
+        "toName": "Republika východ",
+        "directMeters": 355.8833251958413,
+        "routeMeters": 1231.0891336351347,
+        "ratio": 3.4592492720968897
+      },
+      {
+        "transport": "walk",
+        "fromName": "Florenc",
+        "toName": "Florenc západ",
+        "directMeters": 199.7468271993759,
+        "routeMeters": 983.779771720138,
+        "ratio": 4.925133407692053
+      },
+      {
+        "transport": "walk",
+        "fromName": "Karlín západ",
+        "toName": "Karlínské náměstí",
+        "directMeters": 342.5989839189712,
+        "routeMeters": 1424.7743212671012,
+        "ratio": 4.158723137381159
+      },
+      {
+        "transport": "walk",
+        "fromName": "Žižkov střed",
+        "toName": "Žižkovská věž",
+        "directMeters": 24.12203167833891,
+        "routeMeters": 414.49363451478814,
+        "ratio": 17.183197503508584
+      },
+      {
+        "transport": "walk",
+        "fromName": "Letná jih",
+        "toName": "Letná střed",
+        "directMeters": 178.48298063357026,
+        "routeMeters": 2182.8194558293544,
+        "ratio": 12.229846498982074
+      },
+      {
+        "transport": "walk",
+        "fromName": "Letná střed",
+        "toName": "Letná sever",
+        "directMeters": 246.79000962080468,
+        "routeMeters": 2617.019237049317,
+        "ratio": 10.604234916439255
+      },
+      {
+        "transport": "walk",
+        "fromName": "Stromovka jih",
+        "toName": "Stromovka",
+        "directMeters": 396.3381853962906,
+        "routeMeters": 2132.9054212330434,
+        "ratio": 5.381528956389589
+      },
+      {
+        "transport": "walk",
+        "fromName": "Stromovka jih",
+        "toName": "Stromovka střed",
+        "directMeters": 360.5771782917963,
+        "routeMeters": 2132.9054212330434,
+        "ratio": 5.915253514760699
+      },
+      {
+        "transport": "walk",
+        "fromName": "Troja jih",
+        "toName": "Troja sever",
+        "directMeters": 352.31978654431117,
+        "routeMeters": 5188.547624058782,
+        "ratio": 14.726813032415992
+      },
+      {
+        "transport": "walk",
+        "fromName": "Troja most",
+        "toName": "Císařský ostrov",
+        "directMeters": 632.2513419602603,
+        "routeMeters": 7447.288543749112,
+        "ratio": 11.778999979120972
+      },
+      {
+        "transport": "walk",
+        "fromName": "Vltavská",
+        "toName": "Holešovice jih",
+        "directMeters": 416.6516015672879,
+        "routeMeters": 2221.0071539203072,
+        "ratio": 5.3306099042118325
+      },
+      {
+        "transport": "walk",
+        "fromName": "Holešovice jih",
+        "toName": "Holešovická tržnice",
+        "directMeters": 217.03695881076473,
+        "routeMeters": 1176.391181885067,
+        "ratio": 5.4202343616082755
+      },
+      {
+        "transport": "walk",
+        "fromName": "Holešovice jih",
+        "toName": "Holešovice střed",
+        "directMeters": 333.6610140525091,
+        "routeMeters": 2362.997885272828,
+        "ratio": 7.082031720076704
+      },
+      {
+        "transport": "walk",
+        "fromName": "Vyšehrad stanice",
+        "toName": "Vyšehrad horní",
+        "directMeters": 141.61760603919285,
+        "routeMeters": 967.6360652690967,
+        "ratio": 6.832738473218522
+      },
+      {
+        "transport": "walk",
+        "fromName": "Vyšehrad horní",
+        "toName": "Vyšehrad pevnost",
+        "directMeters": 142.4816878136039,
+        "routeMeters": 903.6394333695063,
+        "ratio": 6.342144364205295
+      },
+      {
+        "transport": "walk",
+        "fromName": "Vyšehrad horní",
+        "toName": "Vyšehrad střed",
+        "directMeters": 136.454267911352,
+        "routeMeters": 841.7381631468361,
+        "ratio": 6.16864665379081
+      },
+      {
+        "transport": "walk",
+        "fromName": "Vyšehrad horní",
+        "toName": "Nusle most",
+        "directMeters": 911.3273567008254,
+        "routeMeters": 3071.5728764564324,
+        "ratio": 3.37043857387986
+      },
+      {
+        "transport": "walk",
+        "fromName": "Nusle most",
+        "toName": "Nusle jih",
+        "directMeters": 325.2965088800839,
+        "routeMeters": 2292.312977428013,
+        "ratio": 7.046841619419416
+      },
+      {
+        "transport": "walk",
+        "fromName": "Josefov východ",
+        "toName": "Celetná",
+        "directMeters": 221.06298276629775,
+        "routeMeters": 902.0244501464928,
+        "ratio": 4.080395726407485
+      },
+      {
+        "transport": "walk",
+        "fromName": "Na Příkopě",
+        "toName": "Náměstí Republiky",
+        "directMeters": 334.19242625015386,
+        "routeMeters": 1935.0537970618752,
+        "ratio": 5.790238332969954
+      },
+      {
+        "transport": "walk",
+        "fromName": "Na Příkopě",
+        "toName": "Jindřišská",
+        "directMeters": 333.5847799336888,
+        "routeMeters": 1212.8630121181795,
+        "ratio": 3.635846372725029
+      },
+      {
+        "transport": "walk",
+        "fromName": "Jindřišská",
+        "toName": "Senovážné",
+        "directMeters": 435.46405919616143,
+        "routeMeters": 1440.6362662465592,
+        "ratio": 3.308278228301736
+      },
+      {
+        "transport": "walk",
+        "fromName": "Senovážné",
+        "toName": "Hlavní nádraží",
+        "directMeters": 271.50119913697995,
+        "routeMeters": 889.5709031222708,
+        "ratio": 3.2764897759197646
+      },
+      {
+        "transport": "walk",
+        "fromName": "Senovážné",
+        "toName": "Masaryčka",
+        "directMeters": 246.28785987541994,
+        "routeMeters": 1412.4872997310458,
+        "ratio": 5.735107286431113
+      },
+      {
+        "transport": "walk",
+        "fromName": "Masaryčka",
+        "toName": "Náměstí Republiky",
+        "directMeters": 327.08636258463144,
+        "routeMeters": 1523.8052592801932,
+        "ratio": 4.658724525348924
+      },
+      {
+        "transport": "walk",
+        "fromName": "Ovocný trh",
+        "toName": "Orloj",
+        "directMeters": 234.33468083316555,
+        "routeMeters": 4101.466754625617,
+        "ratio": 17.502602431885247
+      },
+      {
+        "transport": "walk",
+        "fromName": "Ovocný trh",
+        "toName": "Celetná",
+        "directMeters": 318.71748239849427,
+        "routeMeters": 3427.1482525670494,
+        "ratio": 10.752934626541968
+      },
+      {
+        "transport": "walk",
+        "fromName": "Přístaviště Císařská louka",
+        "toName": "Císařská louka",
+        "directMeters": 146.13093668312064,
+        "routeMeters": 2900.3186316894694,
+        "ratio": 19.847396434464113
+      },
+      {
+        "transport": "walk",
+        "fromName": "Podolská vodárna",
+        "toName": "Podolí střed",
+        "directMeters": 68.22768819381385,
+        "routeMeters": 1461.4814895118568,
+        "ratio": 21.420650885315624
+      }
+    ],
+    "errorsList": []
+  }
 }
