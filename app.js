@@ -1,14 +1,20 @@
-// Lovci pokladu staré Prahy
-// app.js – verze s vlastním tmavým modal oknem
+// app.js – opravená verze
+// Změny:
+// 1) hráč i vedoucí bez "Všechny dny" vidí jen aktuální den
+// 2) vedoucí + "Všechny dny" vidí vše
+// 3) body bez cest ukážou hlášku
+// 4) menší a čistší vlastní dialog místo systémového prompt/alert
+// 5) tlačítko "Další den" funguje nad aktuálním dnem
+// 6) práce s route.path z gameData.json
 
 const DATA_URL = "gameData.json?v=" + Date.now();
 
 const TRANSPORT_STYLE = {
-  walk:  { color: "#32a852", weight: 6, opacity: 0.9 },
-  tram:  { color: "#e85d0c", weight: 6, opacity: 0.9 },
-  metro: { color: "#e3c21b", weight: 6, opacity: 0.9 },
-  boat:  { color: "#66b7ff", weight: 6, opacity: 0.9 },
-  bolt:  { color: "#111111", weight: 6, opacity: 0.9, dashArray: "12 10" }
+  walk:  { color: "#32a852", weight: 5, opacity: 0.9 },
+  tram:  { color: "#e85d0c", weight: 5, opacity: 0.9 },
+  metro: { color: "#e3c21b", weight: 5, opacity: 0.9 },
+  boat:  { color: "#66b7ff", weight: 5, opacity: 0.9 },
+  bolt:  { color: "#111111", weight: 5, opacity: 0.9, dashArray: "12 10" }
 };
 
 const state = {
@@ -39,7 +45,7 @@ const dom = {
   btnNextDay: null,
   btnHints: null,
   btnFinale: null,
-  modalOverlay: null,
+  modal: null,
   modalTitle: null,
   modalText: null,
   modalInputWrap: null,
@@ -48,11 +54,15 @@ const dom = {
   modalOk: null
 };
 
+let modalResolve = null;
+let modalMode = null; // "alert" | "prompt"
+
 function loadState() {
   try {
     const raw = localStorage.getItem("praha_game_state");
     if (!raw) return;
     const saved = JSON.parse(raw);
+
     Object.assign(state, {
       currentDay: saved.currentDay ?? state.currentDay,
       mode: saved.mode ?? state.mode,
@@ -94,6 +104,7 @@ function bindDom() {
   dom.progress = qs("progressBadge", "progressLabel", "progress");
   dom.clues = qs("cluesBadge", "cluesLabel", "clues");
   dom.map = qs("map");
+
   dom.btnPlayer = qs("btnPlayer");
   dom.btnLeader = qs("btnLeader");
   dom.btnAllDays = qs("btnAllDays");
@@ -108,187 +119,198 @@ function bindDom() {
   dom.btnHints?.addEventListener("click", showClues);
   dom.btnFinale?.addEventListener("click", showFinale);
 
-  createModal();
+  ensureModal();
 }
 
-function createModal() {
+function ensureModal() {
+  const existing = document.getElementById("gameModal");
+  if (existing) {
+    dom.modal = existing;
+    dom.modalTitle = existing.querySelector("[data-role='title']");
+    dom.modalText = existing.querySelector("[data-role='text']");
+    dom.modalInputWrap = existing.querySelector("[data-role='input-wrap']");
+    dom.modalInput = existing.querySelector("[data-role='input']");
+    dom.modalCancel = existing.querySelector("[data-role='cancel']");
+    dom.modalOk = existing.querySelector("[data-role='ok']");
+    bindModalEvents();
+    return;
+  }
+
   const style = document.createElement("style");
   style.textContent = `
     .game-modal-overlay{
       position:fixed;
       inset:0;
-      background:rgba(0,0,0,.72);
+      background:rgba(0,0,0,.62);
       display:none;
       align-items:center;
       justify-content:center;
-      z-index:99999;
+      z-index:9999;
       padding:18px;
     }
-    .game-modal-overlay.show{
-      display:flex;
-    }
+    .game-modal-overlay.show{display:flex;}
     .game-modal{
-      width:min(92vw,520px);
-      background:linear-gradient(180deg,#1a1610 0%, #231c13 100%);
-      color:#f4ead7;
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:22px;
-      box-shadow:0 25px 60px rgba(0,0,0,.45);
-      padding:22px 18px 18px;
+      width:min(92vw, 520px);
+      background:linear-gradient(180deg,#1c1510 0%, #241b14 100%);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      box-shadow:0 20px 60px rgba(0,0,0,.45);
+      color:#f5ead8;
+      padding:22px 20px 18px;
     }
-    .game-modal-title{
-      font-size:28px;
-      font-weight:700;
-      margin-bottom:14px;
-      line-height:1.1;
-      color:#f1d28b;
+    .game-modal h3{
+      margin:0 0 14px;
+      font-size:22px;
+      line-height:1.15;
+      color:#f0d99f;
     }
-    .game-modal-text{
-      font-size:20px;
-      line-height:1.45;
-      white-space:pre-line;
-      margin-bottom:16px;
+    .game-modal .text{
+      font-size:16px;
+      line-height:1.5;
+      white-space:pre-wrap;
+      color:#f5ead8;
+      margin-bottom:18px;
     }
-    .game-modal-input-wrap{
-      margin-bottom:16px;
+    .game-modal .input-wrap{
       display:none;
+      margin-bottom:18px;
     }
-    .game-modal-input{
+    .game-modal input{
       width:100%;
-      box-sizing:border-box;
-      border:none;
-      outline:none;
-      border-radius:16px;
-      padding:14px 16px;
-      background:#2f271b;
-      color:#fff3dd;
-      font-size:20px;
+      background:#2d2219;
+      color:#f5ead8;
       border:1px solid rgba(255,255,255,.12);
+      border-radius:18px;
+      padding:14px 16px;
+      font-size:18px;
+      outline:none;
     }
-    .game-modal-actions{
+    .game-modal .actions{
       display:flex;
-      gap:12px;
       justify-content:flex-end;
-      margin-top:8px;
+      gap:12px;
+      flex-wrap:wrap;
     }
-    .game-modal-btn{
+    .game-modal button{
       border:none;
-      border-radius:16px;
-      padding:13px 20px;
-      font-size:20px;
+      border-radius:18px;
+      padding:12px 22px;
+      font-size:17px;
       font-weight:700;
       cursor:pointer;
     }
-    .game-modal-btn-cancel{
-      background:#3a3125;
-      color:#f4ead7;
+    .game-modal .cancel{
+      background:#3a2e23;
+      color:#fff4de;
     }
-    .game-modal-btn-ok{
-      background:#d7b56a;
-      color:#17120d;
+    .game-modal .ok{
+      background:#d9b86d;
+      color:#1b140d;
     }
   `;
   document.head.appendChild(style);
 
   const overlay = document.createElement("div");
+  overlay.id = "gameModal";
   overlay.className = "game-modal-overlay";
   overlay.innerHTML = `
     <div class="game-modal">
-      <div class="game-modal-title"></div>
-      <div class="game-modal-text"></div>
-      <div class="game-modal-input-wrap">
-        <input class="game-modal-input" type="text" autocomplete="off" />
+      <h3 data-role="title">Okno</h3>
+      <div class="text" data-role="text"></div>
+      <div class="input-wrap" data-role="input-wrap">
+        <input type="text" data-role="input" autocomplete="off" />
       </div>
-      <div class="game-modal-actions">
-        <button class="game-modal-btn game-modal-btn-cancel">Zrušit</button>
-        <button class="game-modal-btn game-modal-btn-ok">OK</button>
+      <div class="actions">
+        <button class="cancel" data-role="cancel">Zrušit</button>
+        <button class="ok" data-role="ok">Potvrdit</button>
       </div>
     </div>
   `;
   document.body.appendChild(overlay);
 
-  dom.modalOverlay = overlay;
-  dom.modalTitle = overlay.querySelector(".game-modal-title");
-  dom.modalText = overlay.querySelector(".game-modal-text");
-  dom.modalInputWrap = overlay.querySelector(".game-modal-input-wrap");
-  dom.modalInput = overlay.querySelector(".game-modal-input");
-  dom.modalCancel = overlay.querySelector(".game-modal-btn-cancel");
-  dom.modalOk = overlay.querySelector(".game-modal-btn-ok");
+  dom.modal = overlay;
+  dom.modalTitle = overlay.querySelector("[data-role='title']");
+  dom.modalText = overlay.querySelector("[data-role='text']");
+  dom.modalInputWrap = overlay.querySelector("[data-role='input-wrap']");
+  dom.modalInput = overlay.querySelector("[data-role='input']");
+  dom.modalCancel = overlay.querySelector("[data-role='cancel']");
+  dom.modalOk = overlay.querySelector("[data-role='ok']");
 
-  overlay.addEventListener("click", (e) => {
-    if (e.target === overlay) closeModal(null);
+  bindModalEvents();
+}
+
+function bindModalEvents() {
+  dom.modalCancel?.addEventListener("click", () => closeModal(null));
+  dom.modalOk?.addEventListener("click", () => {
+    if (modalMode === "prompt") {
+      closeModal(dom.modalInput.value);
+    } else {
+      closeModal(true);
+    }
+  });
+
+  dom.modal?.addEventListener("click", (e) => {
+    if (e.target === dom.modal) closeModal(null);
+  });
+
+  dom.modalInput?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      closeModal(dom.modalInput.value);
+    }
   });
 
   document.addEventListener("keydown", (e) => {
-    if (!dom.modalOverlay.classList.contains("show")) return;
-    if (e.key === "Escape") closeModal(null);
-    if (e.key === "Enter") {
-      if (dom.modalInputWrap.style.display === "none") {
-        closeModal(true);
-      } else {
-        closeModal(dom.modalInput.value);
-      }
+    if (e.key === "Escape" && dom.modal?.classList.contains("show")) {
+      closeModal(null);
     }
   });
 }
 
-let modalResolver = null;
-
-function openModal({ title = "", text = "", input = false, okText = "OK", cancelText = "Zrušit", defaultValue = "" }) {
+function openAlert(title, text, okText = "OK") {
   return new Promise((resolve) => {
-    modalResolver = resolve;
-
-    dom.modalTitle.textContent = title;
-    dom.modalText.textContent = text;
+    modalResolve = resolve;
+    modalMode = "alert";
+    dom.modalTitle.textContent = title || "Informace";
+    dom.modalText.textContent = text || "";
+    dom.modalInputWrap.style.display = "none";
+    dom.modalInput.value = "";
+    dom.modalCancel.style.display = "none";
     dom.modalOk.textContent = okText;
+    dom.modal.classList.add("show");
+  });
+}
+
+function openPrompt(title, text, value = "", okText = "Potvrdit", cancelText = "Zrušit") {
+  return new Promise((resolve) => {
+    modalResolve = resolve;
+    modalMode = "prompt";
+    dom.modalTitle.textContent = title || "Odpověď";
+    dom.modalText.textContent = text || "";
+    dom.modalInputWrap.style.display = "block";
+    dom.modalInput.value = value;
+    dom.modalCancel.style.display = "inline-block";
     dom.modalCancel.textContent = cancelText;
-
-    if (input) {
-      dom.modalInputWrap.style.display = "block";
-      dom.modalInput.value = defaultValue;
-      setTimeout(() => dom.modalInput.focus(), 30);
-    } else {
-      dom.modalInputWrap.style.display = "none";
-      dom.modalInput.value = "";
-    }
-
-    dom.modalCancel.style.display = cancelText ? "inline-block" : "none";
-
-    dom.modalCancel.onclick = () => closeModal(null);
-    dom.modalOk.onclick = () => {
-      if (input) {
-        closeModal(dom.modalInput.value);
-      } else {
-        closeModal(true);
-      }
-    };
-
-    dom.modalOverlay.classList.add("show");
+    dom.modalOk.textContent = okText;
+    dom.modal.classList.add("show");
+    setTimeout(() => dom.modalInput.focus(), 20);
   });
 }
 
 function closeModal(value) {
-  dom.modalOverlay.classList.remove("show");
-  if (modalResolver) {
-    const resolve = modalResolver;
-    modalResolver = null;
-    resolve(value);
-  }
+  if (!dom.modal?.classList.contains("show")) return;
+  dom.modal.classList.remove("show");
+  const resolve = modalResolve;
+  modalResolve = null;
+  modalMode = null;
+  if (resolve) resolve(value);
 }
 
 async function setMode(mode) {
   if (mode === "leader") {
-    const pass = await openModal({
-      title: "Režim vedoucího",
-      text: "Zadej heslo pro režim vedoucího:",
-      input: true,
-      okText: "Vstoupit",
-      cancelText: "Zrušit"
-    });
-
-    if (pass === null) return;
+    const pass = await openPrompt("Režim vedoucího", "Zadej heslo pro režim vedoucího:");
     if (pass !== "7421") {
-      showToast("Špatné heslo.");
+      await showToast("Špatné heslo.");
       return;
     }
   }
@@ -301,7 +323,7 @@ async function setMode(mode) {
 
 async function toggleAllDays() {
   if (state.mode !== "leader") {
-    showToast("Všechny dny jsou jen pro vedoucího.");
+    await showToast("Všechny dny jsou jen pro vedoucího.");
     return;
   }
   state.showAllDays = !state.showAllDays;
@@ -320,48 +342,23 @@ function nextDay() {
 
 async function showClues() {
   const text = state.clues.length
-    ? "Získané indicie:\n\n• " + state.clues.join("\n• ")
+    ? "• " + state.clues.join("\n• ")
     : "Zatím nemáte žádné indicie.";
-  await openModal({
-    title: "Indicie",
-    text,
-    input: false,
-    okText: "Zavřít",
-    cancelText: ""
-  });
+  await openAlert("Indicie", text);
 }
 
 async function showFinale() {
   const hint = state.data?.finalTreasure?.hint || "Finále zatím není připravené.";
-  const answer = await openModal({
-    title: "Finále",
-    text: `${hint}\n\nNapiš název místa:`,
-    input: true,
-    okText: "Potvrdit",
-    cancelText: "Zrušit"
-  });
-
-  if (answer === null || !String(answer).trim()) return;
+  const answer = await openPrompt("Finále", `${hint}\n\nNapiš název místa:`);
+  if (!answer) return;
 
   const normalized = normalize(answer);
   const accepted = (state.data?.finalTreasure?.acceptedAnswers || []).map(normalize);
 
   if (accepted.includes(normalized)) {
-    await openModal({
-      title: "Správně",
-      text: state.data.finalTreasure.finalMessage || "Správně!",
-      input: false,
-      okText: "Super",
-      cancelText: ""
-    });
+    await openAlert("Finále", state.data.finalTreasure.finalMessage || "Správně!");
   } else {
-    await openModal({
-      title: "Špatná odpověď",
-      text: "To není správné finální místo.",
-      input: false,
-      okText: "Zkusit znovu",
-      cancelText: ""
-    });
+    await openAlert("Finále", "To není správné finální místo.");
   }
 }
 
@@ -378,31 +375,63 @@ function getNodeById(id) {
 }
 
 function getVisibleNodes() {
-  if (state.mode === "leader" && state.showAllDays) return state.data.nodes;
+  if (state.mode === "leader" && state.showAllDays) {
+    return state.data.nodes;
+  }
+
   return state.data.nodes.filter(n => {
-    if (n.kind === "final") return state.mode === "leader";
-    if (n.day == null) return true;
-    return n.day <= state.currentDay;
+    if (n.kind === "final") {
+      return state.mode === "leader";
+    }
+
+    // přestupní uzly bez dne nech viditelné vždy
+    if (n.day == null) {
+      return true;
+    }
+
+    // pouze aktuální den
+    return n.day === state.currentDay;
   });
 }
 
 function getVisibleRoutes(visibleNodeIds) {
-  return state.data.routes.filter(r => visibleNodeIds.has(r.from) && visibleNodeIds.has(r.to));
+  return state.data.routes.filter(r =>
+    visibleNodeIds.has(r.from) && visibleNodeIds.has(r.to)
+  );
 }
 
 function renderHud() {
-  if (dom.title) dom.title.textContent = state.data.config.gameTitle || "Lovci pokladu staré Prahy";
-  if (dom.day) dom.day.textContent = "Den " + state.currentDay;
+  if (dom.title) {
+    dom.title.textContent = state.data.config.gameTitle || "Lovci pokladu staré Prahy";
+  }
+
+  if (dom.day) {
+    dom.day.textContent = "Den " + state.currentDay;
+  }
 
   const todaysStations = state.data.nodes.filter(n => n.kind === "station" && n.day === state.currentDay);
   const solvedToday = todaysStations.filter(n => state.solvedStationIds.includes(n.id)).length;
 
-  if (dom.progress) dom.progress.textContent = `Splněno ${solvedToday} / ${todaysStations.length}`;
-  if (dom.clues) dom.clues.textContent = `Indicie ${state.clues.length}`;
+  if (dom.progress) {
+    dom.progress.textContent = `Splněno ${solvedToday} / ${todaysStations.length}`;
+  }
+
+  if (dom.clues) {
+    dom.clues.textContent = `Indicie ${state.clues.length}`;
+  }
 
   dom.btnPlayer?.classList.toggle("active", state.mode === "player");
   dom.btnLeader?.classList.toggle("active", state.mode === "leader");
   dom.btnAllDays?.classList.toggle("active", !!state.showAllDays);
+
+  if (dom.btnAllDays) {
+    dom.btnAllDays.style.display = state.mode === "leader" ? "" : "none";
+  }
+
+  if (dom.btnNextDay) {
+    const maxDay = state.data?.config?.totalDays || 5;
+    dom.btnNextDay.disabled = state.currentDay >= maxDay;
+  }
 }
 
 function createMap() {
@@ -425,6 +454,7 @@ function routeStyle(transport) {
 
 function renderRoutes(visibleNodes) {
   state.routeLayer.clearLayers();
+
   const visibleIds = new Set(visibleNodes.map(n => n.id));
   const routes = getVisibleRoutes(visibleIds);
 
@@ -458,10 +488,16 @@ function labelTransport(tr) {
 }
 
 function markerStyle(node) {
-  if (node.kind === "station") return { radius: 12, color: "#ffffff", weight: 4, fillColor: "#d4b05f", fillOpacity: 1 };
-  if (node.kind === "fake") return { radius: 11, color: "#ffffff", weight: 4, fillColor: "#b6b6b6", fillOpacity: 1 };
-  if (node.kind === "final") return { radius: 12, color: "#ffffff", weight: 4, fillColor: "#cc2e2e", fillOpacity: 1 };
-  return { radius: 8, color: "#000000", weight: 2, fillColor: "#000000", fillOpacity: 1 };
+  if (node.kind === "station") {
+    return { radius: 11, color: "#ffffff", weight: 4, fillColor: "#d4b05f", fillOpacity: 1 };
+  }
+  if (node.kind === "fake") {
+    return { radius: 10, color: "#ffffff", weight: 4, fillColor: "#b6b6b6", fillOpacity: 1 };
+  }
+  if (node.kind === "final") {
+    return { radius: 12, color: "#ffffff", weight: 4, fillColor: "#cc2e2e", fillOpacity: 1 };
+  }
+  return { radius: 7, color: "#000000", weight: 2, fillColor: "#000000", fillOpacity: 1 };
 }
 
 function renderNodes(visibleNodes) {
@@ -488,78 +524,51 @@ async function onNodeClick(node) {
   saveState();
 
   if (node.kind === "station") {
-    const answer = await openModal({
-      title: node.name,
-      text: `${node.question}\n\nNapiš odpověď:`,
-      input: true,
-      okText: "Potvrdit",
-      cancelText: "Zrušit"
-    });
-
-    if (answer === null || !String(answer).trim()) return;
+    const answer = await openPrompt(node.name, node.question || "Napiš odpověď:");
+    if (!answer) return;
 
     const normalized = normalize(answer);
     const accepted = (node.acceptedAnswers || []).map(normalize);
 
     if (accepted.includes(normalized)) {
-      if (!state.solvedStationIds.includes(node.id)) state.solvedStationIds.push(node.id);
-      if (node.clueReward && !state.clues.includes(node.clueReward)) state.clues.push(node.clueReward);
+      if (!state.solvedStationIds.includes(node.id)) {
+        state.solvedStationIds.push(node.id);
+      }
+      if (node.clueReward && !state.clues.includes(node.clueReward)) {
+        state.clues.push(node.clueReward);
+      }
       saveState();
-
-      await openModal({
-        title: "Správně",
-        text: node.clueReward || "Získali jste indicii.",
-        input: false,
-        okText: "Pokračovat",
-        cancelText: ""
-      });
-
+      await openAlert("Správně", node.clueReward || "Získali jste indicii.");
       renderAll();
     } else {
-      await openModal({
-        title: "Špatná odpověď",
-        text: "To není správná odpověď.",
-        input: false,
-        okText: "Zkusit znovu",
-        cancelText: ""
-      });
+      await openAlert("Špatná odpověď", "To není správná odpověď.");
     }
     return;
   }
 
   if (node.kind === "fake") {
-    await openModal({
-      title: node.name,
-      text: node.fakeMessage || "Tady poklad není.",
-      input: false,
-      okText: "Rozumím",
-      cancelText: ""
-    });
+    await openAlert(node.name, node.fakeMessage || "Tady poklad není.");
     return;
   }
 
   if (node.kind === "final") {
-    showFinale();
+    await showFinale();
     return;
   }
 
   const connected = state.data.routes.filter(r => r.from === node.id || r.to === node.id);
+
+  if (!connected.length) {
+    await openAlert(node.name, "Z tohoto bodu zatím není nadefinovaná žádná cesta.");
+    return;
+  }
+
   const lines = connected.map(r => {
     const other = getNodeById(r.from === node.id ? r.to : r.from);
     return `${other?.name || "?"} (${labelTransport(r.transport)})`;
   });
 
-  const text = lines.length
-    ? "Možné směry:\n\n• " + lines.join("\n• ")
-    : "Z tohoto bodu teď není připravená žádná cesta.";
-
-  await openModal({
-    title: node.name,
-    text,
-    input: false,
-    okText: "Zavřít",
-    cancelText: ""
-  });
+  await openAlert(node.name, "Možné směry:\n• " + lines.join("\n• "));
 }
 
 function renderAll() {
@@ -573,17 +582,12 @@ function renderAll() {
 }
 
 async function showToast(msg) {
-  await openModal({
-    title: "Informace",
-    text: msg,
-    input: false,
-    okText: "OK",
-    cancelText: ""
-  });
+  await openAlert("Informace", msg);
 }
 
 function startGPS() {
   if (!navigator.geolocation) return;
+
   navigator.geolocation.getCurrentPosition(
     pos => {
       state.currentPosition = {
@@ -592,7 +596,9 @@ function startGPS() {
       };
       renderAll();
     },
-    () => {},
+    () => {
+      // bez hlášky, jen tiše
+    },
     { enableHighAccuracy: true, timeout: 5000, maximumAge: 30000 }
   );
 }
@@ -604,7 +610,15 @@ async function init() {
   const res = await fetch(DATA_URL);
   state.data = await res.json();
 
-  if (!state.currentNodeId) state.currentNodeId = state.data.config.startNodeId;
+  if (!state.currentNodeId) {
+    state.currentNodeId = state.data.config.startNodeId;
+  }
+
+  // korekce dne do rozsahu
+  const maxDay = state.data?.config?.totalDays || 5;
+  if (state.currentDay < 1) state.currentDay = 1;
+  if (state.currentDay > maxDay) state.currentDay = maxDay;
+
   renderAll();
   startGPS();
 }
