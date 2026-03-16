@@ -1,12 +1,5 @@
-// app.js – opravená verze
-// Změny:
-// 1) hráč i vedoucí bez "Všechny dny" vidí jen aktuální den
-// 2) vedoucí + "Všechny dny" vidí vše
-// 3) body bez cest ukážou hlášku
-// 4) menší a čistší vlastní dialog místo systémového prompt/alert
-// 5) tlačítko "Další den" funguje nad aktuálním dnem
-// 6) práce s route.path z gameData.json
-
+const APP_VERSION = "v3";
+const STATE_KEY = "praha_game_state_" + APP_VERSION;
 const DATA_URL = "gameData.json?v=" + Date.now();
 
 const TRANSPORT_STYLE = {
@@ -55,40 +48,7 @@ const dom = {
 };
 
 let modalResolve = null;
-let modalMode = null; // "alert" | "prompt"
-
-function loadState() {
-  try {
-    const raw = localStorage.getItem("praha_game_state");
-    if (!raw) return;
-    const saved = JSON.parse(raw);
-
-    Object.assign(state, {
-      currentDay: saved.currentDay ?? state.currentDay,
-      mode: saved.mode ?? state.mode,
-      showAllDays: saved.showAllDays ?? state.showAllDays,
-      discoveredNodeIds: Array.isArray(saved.discoveredNodeIds) ? saved.discoveredNodeIds : [],
-      solvedStationIds: Array.isArray(saved.solvedStationIds) ? saved.solvedStationIds : [],
-      clues: Array.isArray(saved.clues) ? saved.clues : [],
-      currentNodeId: saved.currentNodeId ?? null
-    });
-  } catch (e) {
-    console.warn("Nepodařilo se načíst uložený stav", e);
-  }
-}
-
-function saveState() {
-  const saved = {
-    currentDay: state.currentDay,
-    mode: state.mode,
-    showAllDays: state.showAllDays,
-    discoveredNodeIds: state.discoveredNodeIds,
-    solvedStationIds: state.solvedStationIds,
-    clues: state.clues,
-    currentNodeId: state.currentNodeId
-  };
-  localStorage.setItem("praha_game_state", JSON.stringify(saved));
-}
+let modalMode = null;
 
 function qs(...ids) {
   for (const id of ids) {
@@ -96,6 +56,48 @@ function qs(...ids) {
     if (el) return el;
   }
   return null;
+}
+
+function normalize(text) {
+  return String(text || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STATE_KEY);
+    if (!raw) return;
+
+    const saved = JSON.parse(raw);
+
+    state.currentDay = Number(saved.currentDay ?? 1) || 1;
+    state.mode = saved.mode === "leader" ? "leader" : "player";
+    state.showAllDays = !!saved.showAllDays;
+    state.discoveredNodeIds = Array.isArray(saved.discoveredNodeIds) ? saved.discoveredNodeIds : [];
+    state.solvedStationIds = Array.isArray(saved.solvedStationIds) ? saved.solvedStationIds : [];
+    state.clues = Array.isArray(saved.clues) ? saved.clues : [];
+    state.currentNodeId = saved.currentNodeId ?? null;
+  } catch (err) {
+    console.warn("Nepodařilo se načíst stav:", err);
+  }
+}
+
+function saveState() {
+  localStorage.setItem(
+    STATE_KEY,
+    JSON.stringify({
+      currentDay: state.currentDay,
+      mode: state.mode,
+      showAllDays: state.showAllDays,
+      discoveredNodeIds: state.discoveredNodeIds,
+      solvedStationIds: state.solvedStationIds,
+      clues: state.clues,
+      currentNodeId: state.currentNodeId
+    })
+  );
 }
 
 function bindDom() {
@@ -136,93 +138,19 @@ function ensureModal() {
     return;
   }
 
-  const style = document.createElement("style");
-  style.textContent = `
-    .game-modal-overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.62);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:9999;
-      padding:18px;
-    }
-    .game-modal-overlay.show{display:flex;}
-    .game-modal{
-      width:min(92vw, 520px);
-      background:linear-gradient(180deg,#1c1510 0%, #241b14 100%);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:24px;
-      box-shadow:0 20px 60px rgba(0,0,0,.45);
-      color:#f5ead8;
-      padding:22px 20px 18px;
-    }
-    .game-modal h3{
-      margin:0 0 14px;
-      font-size:22px;
-      line-height:1.15;
-      color:#f0d99f;
-    }
-    .game-modal .text{
-      font-size:16px;
-      line-height:1.5;
-      white-space:pre-wrap;
-      color:#f5ead8;
-      margin-bottom:18px;
-    }
-    .game-modal .input-wrap{
-      display:none;
-      margin-bottom:18px;
-    }
-    .game-modal input{
-      width:100%;
-      background:#2d2219;
-      color:#f5ead8;
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:18px;
-      padding:14px 16px;
-      font-size:18px;
-      outline:none;
-    }
-    .game-modal .actions{
-      display:flex;
-      justify-content:flex-end;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .game-modal button{
-      border:none;
-      border-radius:18px;
-      padding:12px 22px;
-      font-size:17px;
-      font-weight:700;
-      cursor:pointer;
-    }
-    .game-modal .cancel{
-      background:#3a2e23;
-      color:#fff4de;
-    }
-    .game-modal .ok{
-      background:#d9b86d;
-      color:#1b140d;
-    }
-  `;
-  document.head.appendChild(style);
-
   const overlay = document.createElement("div");
   overlay.id = "gameModal";
   overlay.className = "game-modal-overlay";
   overlay.innerHTML = `
-    <div class="game-modal">
-      <h3 data-role="title">Okno</h3>
-      <div class="text" data-role="text"></div>
-      <div class="input-wrap" data-role="input-wrap">
-        <input type="text" data-role="input" autocomplete="off" />
+    <div class="game-modal-window">
+      <div class="game-modal-title" data-role="title">Okno</div>
+      <div class="game-modal-text" data-role="text"></div>
+      <div class="game-modal-input-wrap" data-role="input-wrap">
+        <input class="game-modal-input" type="text" data-role="input" autocomplete="off" />
       </div>
-      <div class="actions">
-        <button class="cancel" data-role="cancel">Zrušit</button>
-        <button class="ok" data-role="ok">Potvrdit</button>
+      <div class="game-modal-actions">
+        <button class="game-btn ghost" data-role="cancel">Zrušit</button>
+        <button class="game-btn gold" data-role="ok">Potvrdit</button>
       </div>
     </div>
   `;
@@ -289,21 +217,25 @@ function openPrompt(title, text, value = "", okText = "Potvrdit", cancelText = "
     dom.modalText.textContent = text || "";
     dom.modalInputWrap.style.display = "block";
     dom.modalInput.value = value;
-    dom.modalCancel.style.display = "inline-block";
+    dom.modalCancel.style.display = "inline-flex";
     dom.modalCancel.textContent = cancelText;
     dom.modalOk.textContent = okText;
     dom.modal.classList.add("show");
-    setTimeout(() => dom.modalInput.focus(), 20);
+    setTimeout(() => dom.modalInput.focus(), 30);
   });
 }
 
 function closeModal(value) {
   if (!dom.modal?.classList.contains("show")) return;
   dom.modal.classList.remove("show");
-  const resolve = modalResolve;
+  const resolver = modalResolve;
   modalResolve = null;
   modalMode = null;
-  if (resolve) resolve(value);
+  if (resolver) resolver(value);
+}
+
+async function showToast(message) {
+  await openAlert("Informace", message);
 }
 
 async function setMode(mode) {
@@ -316,7 +248,9 @@ async function setMode(mode) {
   }
 
   state.mode = mode;
-  if (mode === "player") state.showAllDays = false;
+  if (mode === "player") {
+    state.showAllDays = false;
+  }
   saveState();
   renderAll();
 }
@@ -362,118 +296,35 @@ async function showFinale() {
   }
 }
 
-function normalize(s) {
-  return String(s)
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
-}
-
 function getNodeById(id) {
-  return state.data.nodes.find(n => n.id === id) || null;
+  return state.data?.nodes?.find(n => n.id === id) || null;
 }
 
 function getVisibleNodes() {
+  if (!state.data?.nodes) return [];
+
   if (state.mode === "leader" && state.showAllDays) {
     return state.data.nodes;
   }
 
-  return state.data.nodes.filter(n => {
+  return state.data.nodes.filter((n) => {
     if (n.kind === "final") {
       return state.mode === "leader";
     }
 
-    // přestupní uzly bez dne nech viditelné vždy
     if (n.day == null) {
       return true;
     }
 
-    // pouze aktuální den
-    return n.day === state.currentDay;
+    return Number(n.day) === Number(state.currentDay);
   });
 }
 
 function getVisibleRoutes(visibleNodeIds) {
+  if (!state.data?.routes) return [];
   return state.data.routes.filter(r =>
     visibleNodeIds.has(r.from) && visibleNodeIds.has(r.to)
   );
-}
-
-function renderHud() {
-  if (dom.title) {
-    dom.title.textContent = state.data.config.gameTitle || "Lovci pokladu staré Prahy";
-  }
-
-  if (dom.day) {
-    dom.day.textContent = "Den " + state.currentDay;
-  }
-
-  const todaysStations = state.data.nodes.filter(n => n.kind === "station" && n.day === state.currentDay);
-  const solvedToday = todaysStations.filter(n => state.solvedStationIds.includes(n.id)).length;
-
-  if (dom.progress) {
-    dom.progress.textContent = `Splněno ${solvedToday} / ${todaysStations.length}`;
-  }
-
-  if (dom.clues) {
-    dom.clues.textContent = `Indicie ${state.clues.length}`;
-  }
-
-  dom.btnPlayer?.classList.toggle("active", state.mode === "player");
-  dom.btnLeader?.classList.toggle("active", state.mode === "leader");
-  dom.btnAllDays?.classList.toggle("active", !!state.showAllDays);
-
-  if (dom.btnAllDays) {
-    dom.btnAllDays.style.display = state.mode === "leader" ? "" : "none";
-  }
-
-  if (dom.btnNextDay) {
-    const maxDay = state.data?.config?.totalDays || 5;
-    dom.btnNextDay.disabled = state.currentDay >= maxDay;
-  }
-}
-
-function createMap() {
-  if (state.map) return;
-
-  state.map = L.map(dom.map, { zoomControl: true }).setView([50.083, 14.42], 13);
-
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution: "&copy; OpenStreetMap"
-  }).addTo(state.map);
-
-  state.routeLayer = L.layerGroup().addTo(state.map);
-  state.nodeLayer = L.layerGroup().addTo(state.map);
-}
-
-function routeStyle(transport) {
-  return TRANSPORT_STYLE[transport] || { color: "#888", weight: 5, opacity: 0.8 };
-}
-
-function renderRoutes(visibleNodes) {
-  state.routeLayer.clearLayers();
-
-  const visibleIds = new Set(visibleNodes.map(n => n.id));
-  const routes = getVisibleRoutes(visibleIds);
-
-  for (const route of routes) {
-    const from = getNodeById(route.from);
-    const to = getNodeById(route.to);
-    if (!from || !to) continue;
-
-    const points = Array.isArray(route.path) && route.path.length >= 2
-      ? route.path
-      : [
-          [from.lat, from.lng],
-          [to.lat, to.lng]
-        ];
-
-    const line = L.polyline(points, routeStyle(route.transport));
-    line.bindPopup(`${from.name} → ${to.name}<br>${labelTransport(route.transport)}`);
-    line.addTo(state.routeLayer);
-  }
 }
 
 function labelTransport(tr) {
@@ -485,6 +336,10 @@ function labelTransport(tr) {
     bolt: "Bolt"
   };
   return labels[tr] || tr;
+}
+
+function routeStyle(transport) {
+  return TRANSPORT_STYLE[transport] || { color: "#888", weight: 5, opacity: 0.8 };
 }
 
 function markerStyle(node) {
@@ -500,7 +355,82 @@ function markerStyle(node) {
   return { radius: 7, color: "#000000", weight: 2, fillColor: "#000000", fillOpacity: 1 };
 }
 
+function renderHud() {
+  if (!state.data) return;
+
+  if (dom.title) {
+    dom.title.textContent = state.data.config?.gameTitle || "Lovci pokladu staré Prahy";
+  }
+
+  if (dom.day) {
+    dom.day.textContent = "Den " + state.currentDay;
+  }
+
+  const todaysStations = state.data.nodes.filter(
+    n => n.kind === "station" && Number(n.day) === Number(state.currentDay)
+  );
+  const solvedToday = todaysStations.filter(n => state.solvedStationIds.includes(n.id)).length;
+
+  if (dom.progress) {
+    dom.progress.textContent = `Splněno ${solvedToday} / ${todaysStations.length}`;
+  }
+
+  if (dom.clues) {
+    dom.clues.textContent = `Indicie ${state.clues.length}`;
+  }
+
+  dom.btnPlayer?.classList.toggle("active", state.mode === "player");
+  dom.btnLeader?.classList.toggle("active", state.mode === "leader");
+  dom.btnAllDays?.classList.toggle("active", !!state.showAllDays);
+
+  if (dom.btnAllDays) {
+    dom.btnAllDays.style.display = state.mode === "leader" ? "inline-flex" : "none";
+  }
+
+  if (dom.btnNextDay) {
+    const maxDay = state.data?.config?.totalDays || 5;
+    dom.btnNextDay.disabled = state.currentDay >= maxDay;
+  }
+}
+
+function createMap() {
+  if (state.map || !dom.map) return;
+
+  state.map = L.map(dom.map, { zoomControl: true }).setView([50.083, 14.42], 13);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap"
+  }).addTo(state.map);
+
+  state.routeLayer = L.layerGroup().addTo(state.map);
+  state.nodeLayer = L.layerGroup().addTo(state.map);
+}
+
+function renderRoutes(visibleNodes) {
+  if (!state.routeLayer) return;
+  state.routeLayer.clearLayers();
+
+  const visibleIds = new Set(visibleNodes.map(n => n.id));
+  const routes = getVisibleRoutes(visibleIds);
+
+  for (const route of routes) {
+    const from = getNodeById(route.from);
+    const to = getNodeById(route.to);
+    if (!from || !to) continue;
+
+    const points = Array.isArray(route.path) && route.path.length >= 2
+      ? route.path
+      : [[from.lat, from.lng], [to.lat, to.lng]];
+
+    const line = L.polyline(points, routeStyle(route.transport));
+    line.bindPopup(`${from.name} → ${to.name}<br>${labelTransport(route.transport)}`);
+    line.addTo(state.routeLayer);
+  }
+}
+
 function renderNodes(visibleNodes) {
+  if (!state.nodeLayer) return;
   state.nodeLayer.clearLayers();
 
   for (const node of visibleNodes) {
@@ -511,7 +441,9 @@ function renderNodes(visibleNodes) {
   }
 
   if (state.currentPosition) {
-    if (state.playerMarker) state.playerMarker.remove();
+    if (state.playerMarker) {
+      state.playerMarker.remove();
+    }
     state.playerMarker = L.circleMarker(
       [state.currentPosition.lat, state.currentPosition.lng],
       { radius: 10, color: "#fff", weight: 4, fillColor: "#e53935", fillOpacity: 1 }
@@ -573,6 +505,7 @@ async function onNodeClick(node) {
 
 function renderAll() {
   if (!state.data) return;
+
   renderHud();
   createMap();
 
@@ -581,15 +514,11 @@ function renderAll() {
   renderNodes(visibleNodes);
 }
 
-async function showToast(msg) {
-  await openAlert("Informace", msg);
-}
-
 function startGPS() {
   if (!navigator.geolocation) return;
 
   navigator.geolocation.getCurrentPosition(
-    pos => {
+    (pos) => {
       state.currentPosition = {
         lat: pos.coords.latitude,
         lng: pos.coords.longitude
@@ -597,9 +526,13 @@ function startGPS() {
       renderAll();
     },
     () => {
-      // bez hlášky, jen tiše
+      // tiše bez hlášky
     },
-    { enableHighAccuracy: true, timeout: 5000, maximumAge: 30000 }
+    {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 30000
+    }
   );
 }
 
@@ -610,15 +543,20 @@ async function init() {
   const res = await fetch(DATA_URL);
   state.data = await res.json();
 
+  const maxDay = state.data?.config?.totalDays || 5;
+
   if (!state.currentNodeId) {
-    state.currentNodeId = state.data.config.startNodeId;
+    state.currentNodeId = state.data?.config?.startNodeId ?? null;
   }
 
-  // korekce dne do rozsahu
-  const maxDay = state.data?.config?.totalDays || 5;
   if (state.currentDay < 1) state.currentDay = 1;
   if (state.currentDay > maxDay) state.currentDay = maxDay;
 
+  if (state.mode === "player") {
+    state.showAllDays = false;
+  }
+
+  saveState();
   renderAll();
   startGPS();
 }
