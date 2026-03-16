@@ -31,155 +31,116 @@ body {
   font-size: 16px;
 }
 
-/* celkový horní panel */
-.top-panel,
-.header,
-.game-header,
-.controls,
-.hud {
-  padding: 12px 16px 12px 16px;
+.top-panel {
+  padding: 10px 12px 12px;
   background: linear-gradient(180deg, #130f0b 0%, #18110c 100%);
 }
 
-/* nadpis */
-#gameTitle,
-#title {
-  font-size: 20px;
+#gameTitle {
+  font-size: 18px;
   line-height: 1.08;
   font-weight: 800;
   margin: 0 0 10px 0;
   color: #f6eddc;
 }
 
-/* badge */
-#dayBadge, #progressBadge, #cluesBadge,
-#dayLabel, #progressLabel, #cluesLabel,
-#day, #progress, #clues {
-  border: 1px solid rgba(255,255,255,.10);
-  border-radius: 18px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  vertical-align: middle;
-  text-decoration: none;
-  box-shadow: none;
-  background: rgba(255,255,255,.04);
-  color: #f4ead7;
-  padding: 7px 12px;
-  font-size: 13px;
-  min-height: 38px;
-  margin: 0 8px 8px 0;
+.hud-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
-/* přepínače režimů */
-#btnPlayer, #btnLeader, #btnAllDays {
+#dayBadge,
+#progressBadge,
+#cluesBadge {
   border: 1px solid rgba(255,255,255,.10);
   border-radius: 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  vertical-align: middle;
-  text-decoration: none;
-  box-shadow: none;
+  background: rgba(255,255,255,.04);
+  color: #f4ead7;
+  padding: 6px 12px;
+  font-size: 13px;
+  min-height: 36px;
+}
+
+.mode-btn {
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: rgba(255,255,255,.04);
   color: #f4ead7;
   padding: 8px 16px;
   font-size: 14px;
-  min-height: 42px;
+  min-height: 40px;
   cursor: pointer;
-  margin: 0 8px 8px 0;
 }
 
-#btnPlayer.active,
-#btnLeader.active,
-#btnAllDays.active {
+.mode-btn.active {
   background: var(--gold);
   color: #1a130d;
   font-weight: 700;
 }
 
-/* legenda doprav */
-.transport-item,
-.legend-item,
-#legendWalk,
-#legendTram,
-#legendMetro,
-#legendBoat,
-#legendBolt {
+.legend-item {
   border: 1px solid rgba(255,255,255,.10);
-  border-radius: 20px;
+  border-radius: 18px;
   background: rgba(255,255,255,.04);
   color: #f4ead7;
   display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
   gap: 10px;
-  padding: 8px 16px;
-  font-size: 14px;
-  min-height: 42px;
-  margin: 0 8px 8px 0;
+  padding: 8px 14px;
+  font-size: 13px;
+  min-height: 40px;
 }
 
-.transport-line,
 .legend-line {
-  width: 38px;
-  height: 8px;
+  width: 30px;
+  height: 7px;
   border-radius: 999px;
   display: inline-block;
 }
 
-.transport-line.walk,
 .legend-line.walk { background: var(--green); }
-
-.transport-line.tram,
 .legend-line.tram { background: var(--orange); }
-
-.transport-line.metro,
 .legend-line.metro { background: var(--yellow); }
-
-.transport-line.boat,
 .legend-line.boat { background: var(--blue); }
 
-.transport-line.bolt,
 .legend-line.bolt {
-  height: 6px;
+  height: 5px;
   background:
     linear-gradient(to right, var(--black) 0 40%, transparent 40% 60%, var(--black) 60% 100%);
 }
 
-/* hlavní tlačítka */
-#btnNextDay, #btnHints, #btnIndicie, #btnFinale {
+.action-btn {
   border: 1px solid rgba(255,255,255,.10);
   border-radius: 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  vertical-align: middle;
-  text-decoration: none;
-  box-shadow: none;
   background: var(--gold);
   color: #1a130d;
-  padding: 10px 18px;
-  font-size: 15px;
+  padding: 10px 16px;
+  font-size: 14px;
   font-weight: 800;
-  min-height: 56px;
-  min-width: 128px;
+  min-height: 50px;
+  min-width: 118px;
   cursor: pointer;
-  margin: 0 10px 10px 0;
 }
 
-#btnNextDay:disabled,
-#btnHints:disabled,
-#btnIndicie:disabled,
-#btnFinale:disabled {
+.action-btn:disabled {
   opacity: .55;
   cursor: not-allowed;
 }
 
-/* mapa */
 #map {
   width: 100%;
-  height: 56vh;
+  height: 58vh;
   min-height: 340px;
   border-top: 1px solid rgba(255,255,255,.06);
 }
@@ -272,105 +233,44 @@ body {
   color: #1b140d;
 }
 
-/* obecně tlačítka */
 button {
   font-family: inherit;
 }
 
-/* mobil */
-@media (max-width: 640px) {
-  .top-panel,
-  .header,
-  .game-header,
-  .controls,
-  .hud {
-    padding: 10px 12px 10px 12px;
+@media (min-width: 768px) {
+  .top-panel {
+    padding: 14px 18px 14px;
   }
 
-  #gameTitle,
-  #title {
-    font-size: 18px;
-    margin-bottom: 8px;
+  #gameTitle {
+    font-size: 24px;
+    margin-bottom: 12px;
   }
 
-  #dayBadge, #progressBadge, #cluesBadge,
-  #dayLabel, #progressLabel, #cluesLabel,
-  #day, #progress, #clues {
-    padding: 6px 10px;
-    font-size: 12px;
-    min-height: 34px;
-    margin-right: 6px;
-    margin-bottom: 6px;
-  }
-
-  #btnPlayer, #btnLeader, #btnAllDays {
-    padding: 7px 14px;
-    font-size: 13px;
-    min-height: 38px;
-    margin-right: 6px;
-    margin-bottom: 6px;
-  }
-
-  .transport-item,
-  .legend-item,
-  #legendWalk,
-  #legendTram,
-  #legendMetro,
-  #legendBoat,
-  #legendBolt {
-    padding: 7px 14px;
-    font-size: 13px;
-    min-height: 38px;
-    margin-right: 6px;
-    margin-bottom: 6px;
-  }
-
-  .transport-line,
-  .legend-line {
-    width: 30px;
-    height: 7px;
-  }
-
-  .transport-line.bolt,
-  .legend-line.bolt {
-    height: 5px;
-  }
-
-  #btnNextDay, #btnHints, #btnIndicie, #btnFinale {
+  #dayBadge,
+  #progressBadge,
+  #cluesBadge {
     padding: 8px 14px;
     font-size: 14px;
-    min-height: 48px;
-    min-width: 112px;
-    margin-right: 8px;
-    margin-bottom: 8px;
+    min-height: 40px;
   }
 
-  #map {
-    height: 52vh;
-    min-height: 300px;
-  }
-
-  .game-modal-window {
-    width: min(94vw, 520px);
-    padding: 18px 16px 16px;
-    border-radius: 20px;
-  }
-
-  .game-modal-title {
-    font-size: 20px;
-  }
-
-  .game-modal-text {
+  .mode-btn {
+    padding: 10px 18px;
     font-size: 15px;
+    min-height: 42px;
   }
 
-  .game-modal-input {
-    font-size: 17px;
-    padding: 12px 14px;
+  .legend-item {
+    padding: 9px 15px;
+    font-size: 14px;
+    min-height: 42px;
   }
 
-  .game-btn {
+  .action-btn {
+    padding: 12px 20px;
     font-size: 16px;
-    padding: 11px 18px;
+    min-height: 54px;
+    min-width: 132px;
   }
 }
