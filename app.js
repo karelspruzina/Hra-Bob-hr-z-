@@ -1,4 +1,4 @@
-const APP_VERSION = "v4";
+const APP_VERSION = "v5";
 const STATE_KEY = "praha_game_state_" + APP_VERSION;
 const DATA_URL = "gameData.json?v=" + Date.now();
 
@@ -81,7 +81,7 @@ function loadState() {
     state.clues = Array.isArray(saved.clues) ? saved.clues : [];
     state.currentNodeId = saved.currentNodeId ?? null;
   } catch (err) {
-    console.warn("Nepodařilo se načíst uložený stav:", err);
+    console.warn("Nepodařilo se načíst stav:", err);
   }
 }
 
@@ -101,17 +101,17 @@ function saveState() {
 }
 
 function bindDom() {
-  dom.title = qs("gameTitle", "title");
-  dom.day = qs("dayBadge", "dayLabel", "day");
-  dom.progress = qs("progressBadge", "progressLabel", "progress");
-  dom.clues = qs("cluesBadge", "cluesLabel", "clues");
+  dom.title = qs("gameTitle");
+  dom.day = qs("dayBadge");
+  dom.progress = qs("progressBadge");
+  dom.clues = qs("cluesBadge");
   dom.map = qs("map");
 
   dom.btnPlayer = qs("btnPlayer");
   dom.btnLeader = qs("btnLeader");
   dom.btnAllDays = qs("btnAllDays");
   dom.btnNextDay = qs("btnNextDay");
-  dom.btnHints = qs("btnHints", "btnIndicie");
+  dom.btnHints = qs("btnHints");
   dom.btnFinale = qs("btnFinale");
 
   dom.btnPlayer?.addEventListener("click", () => setMode("player"));
@@ -179,9 +179,7 @@ function bindModalEvents() {
   });
 
   dom.modal?.addEventListener("click", (e) => {
-    if (e.target === dom.modal) {
-      closeModal(null);
-    }
+    if (e.target === dom.modal) closeModal(null);
   });
 
   dom.modalInput?.addEventListener("keydown", (e) => {
@@ -190,26 +188,18 @@ function bindModalEvents() {
       closeModal(dom.modalInput.value);
     }
   });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && dom.modal?.classList.contains("show")) {
-      closeModal(null);
-    }
-  });
 }
 
 function openAlert(title, text, okText = "OK") {
   return new Promise((resolve) => {
     modalResolve = resolve;
     modalMode = "alert";
-
     dom.modalTitle.textContent = title || "Informace";
     dom.modalText.textContent = text || "";
     dom.modalInputWrap.style.display = "none";
     dom.modalInput.value = "";
     dom.modalCancel.style.display = "none";
     dom.modalOk.textContent = okText;
-
     dom.modal.classList.add("show");
   });
 }
@@ -218,7 +208,6 @@ function openPrompt(title, text, value = "", okText = "Potvrdit", cancelText = "
   return new Promise((resolve) => {
     modalResolve = resolve;
     modalMode = "prompt";
-
     dom.modalTitle.textContent = title || "Odpověď";
     dom.modalText.textContent = text || "";
     dom.modalInputWrap.style.display = "block";
@@ -226,7 +215,6 @@ function openPrompt(title, text, value = "", okText = "Potvrdit", cancelText = "
     dom.modalCancel.style.display = "inline-flex";
     dom.modalCancel.textContent = cancelText;
     dom.modalOk.textContent = okText;
-
     dom.modal.classList.add("show");
     setTimeout(() => dom.modalInput.focus(), 40);
   });
@@ -234,16 +222,11 @@ function openPrompt(title, text, value = "", okText = "Potvrdit", cancelText = "
 
 function closeModal(value) {
   if (!dom.modal?.classList.contains("show")) return;
-
   dom.modal.classList.remove("show");
-
   const resolver = modalResolve;
   modalResolve = null;
   modalMode = null;
-
-  if (resolver) {
-    resolver(value);
-  }
+  if (resolver) resolver(value);
 }
 
 async function showToast(message) {
@@ -551,9 +534,7 @@ function startGPS() {
       };
       renderAll();
     },
-    () => {
-      // bez systémové hlášky
-    },
+    () => {},
     {
       enableHighAccuracy: true,
       timeout: 5000,
