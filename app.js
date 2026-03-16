@@ -1,4 +1,4 @@
-const APP_VERSION = "v3";
+const APP_VERSION = "v4";
 const STATE_KEY = "praha_game_state_" + APP_VERSION;
 const DATA_URL = "gameData.json?v=" + Date.now();
 
@@ -81,7 +81,7 @@ function loadState() {
     state.clues = Array.isArray(saved.clues) ? saved.clues : [];
     state.currentNodeId = saved.currentNodeId ?? null;
   } catch (err) {
-    console.warn("Nepodařilo se načíst stav:", err);
+    console.warn("Nepodařilo se načíst uložený stav:", err);
   }
 }
 
@@ -143,7 +143,7 @@ function ensureModal() {
   overlay.className = "game-modal-overlay";
   overlay.innerHTML = `
     <div class="game-modal-window">
-      <div class="game-modal-title" data-role="title">Okno</div>
+      <div class="game-modal-title" data-role="title">Otázka</div>
       <div class="game-modal-text" data-role="text"></div>
       <div class="game-modal-input-wrap" data-role="input-wrap">
         <input class="game-modal-input" type="text" data-role="input" autocomplete="off" />
@@ -169,6 +169,7 @@ function ensureModal() {
 
 function bindModalEvents() {
   dom.modalCancel?.addEventListener("click", () => closeModal(null));
+
   dom.modalOk?.addEventListener("click", () => {
     if (modalMode === "prompt") {
       closeModal(dom.modalInput.value);
@@ -178,7 +179,9 @@ function bindModalEvents() {
   });
 
   dom.modal?.addEventListener("click", (e) => {
-    if (e.target === dom.modal) closeModal(null);
+    if (e.target === dom.modal) {
+      closeModal(null);
+    }
   });
 
   dom.modalInput?.addEventListener("keydown", (e) => {
@@ -199,12 +202,14 @@ function openAlert(title, text, okText = "OK") {
   return new Promise((resolve) => {
     modalResolve = resolve;
     modalMode = "alert";
+
     dom.modalTitle.textContent = title || "Informace";
     dom.modalText.textContent = text || "";
     dom.modalInputWrap.style.display = "none";
     dom.modalInput.value = "";
     dom.modalCancel.style.display = "none";
     dom.modalOk.textContent = okText;
+
     dom.modal.classList.add("show");
   });
 }
@@ -213,6 +218,7 @@ function openPrompt(title, text, value = "", okText = "Potvrdit", cancelText = "
   return new Promise((resolve) => {
     modalResolve = resolve;
     modalMode = "prompt";
+
     dom.modalTitle.textContent = title || "Odpověď";
     dom.modalText.textContent = text || "";
     dom.modalInputWrap.style.display = "block";
@@ -220,18 +226,24 @@ function openPrompt(title, text, value = "", okText = "Potvrdit", cancelText = "
     dom.modalCancel.style.display = "inline-flex";
     dom.modalCancel.textContent = cancelText;
     dom.modalOk.textContent = okText;
+
     dom.modal.classList.add("show");
-    setTimeout(() => dom.modalInput.focus(), 30);
+    setTimeout(() => dom.modalInput.focus(), 40);
   });
 }
 
 function closeModal(value) {
   if (!dom.modal?.classList.contains("show")) return;
+
   dom.modal.classList.remove("show");
+
   const resolver = modalResolve;
   modalResolve = null;
   modalMode = null;
-  if (resolver) resolver(value);
+
+  if (resolver) {
+    resolver(value);
+  }
 }
 
 async function showToast(message) {
@@ -248,9 +260,11 @@ async function setMode(mode) {
   }
 
   state.mode = mode;
+
   if (mode === "player") {
     state.showAllDays = false;
   }
+
   saveState();
   renderAll();
 }
@@ -260,6 +274,7 @@ async function toggleAllDays() {
     await showToast("Všechny dny jsou jen pro vedoucího.");
     return;
   }
+
   state.showAllDays = !state.showAllDays;
   saveState();
   renderAll();
@@ -297,7 +312,7 @@ async function showFinale() {
 }
 
 function getNodeById(id) {
-  return state.data?.nodes?.find(n => n.id === id) || null;
+  return state.data?.nodes?.find((n) => n.id === id) || null;
 }
 
 function getVisibleNodes() {
@@ -322,9 +337,10 @@ function getVisibleNodes() {
 
 function getVisibleRoutes(visibleNodeIds) {
   if (!state.data?.routes) return [];
-  return state.data.routes.filter(r =>
-    visibleNodeIds.has(r.from) && visibleNodeIds.has(r.to)
-  );
+
+  return state.data.routes.filter((r) => {
+    return visibleNodeIds.has(r.from) && visibleNodeIds.has(r.to);
+  });
 }
 
 function labelTransport(tr) {
@@ -366,10 +382,11 @@ function renderHud() {
     dom.day.textContent = "Den " + state.currentDay;
   }
 
-  const todaysStations = state.data.nodes.filter(
-    n => n.kind === "station" && Number(n.day) === Number(state.currentDay)
-  );
-  const solvedToday = todaysStations.filter(n => state.solvedStationIds.includes(n.id)).length;
+  const todaysStations = state.data.nodes.filter((n) => {
+    return n.kind === "station" && Number(n.day) === Number(state.currentDay);
+  });
+
+  const solvedToday = todaysStations.filter((n) => state.solvedStationIds.includes(n.id)).length;
 
   if (dom.progress) {
     dom.progress.textContent = `Splněno ${solvedToday} / ${todaysStations.length}`;
@@ -411,7 +428,7 @@ function renderRoutes(visibleNodes) {
   if (!state.routeLayer) return;
   state.routeLayer.clearLayers();
 
-  const visibleIds = new Set(visibleNodes.map(n => n.id));
+  const visibleIds = new Set(visibleNodes.map((n) => n.id));
   const routes = getVisibleRoutes(visibleIds);
 
   for (const route of routes) {
@@ -444,9 +461,16 @@ function renderNodes(visibleNodes) {
     if (state.playerMarker) {
       state.playerMarker.remove();
     }
+
     state.playerMarker = L.circleMarker(
       [state.currentPosition.lat, state.currentPosition.lng],
-      { radius: 10, color: "#fff", weight: 4, fillColor: "#e53935", fillOpacity: 1 }
+      {
+        radius: 10,
+        color: "#ffffff",
+        weight: 4,
+        fillColor: "#e53935",
+        fillOpacity: 1
+      }
     ).addTo(state.map);
   }
 }
@@ -466,9 +490,11 @@ async function onNodeClick(node) {
       if (!state.solvedStationIds.includes(node.id)) {
         state.solvedStationIds.push(node.id);
       }
+
       if (node.clueReward && !state.clues.includes(node.clueReward)) {
         state.clues.push(node.clueReward);
       }
+
       saveState();
       await openAlert("Správně", node.clueReward || "Získali jste indicii.");
       renderAll();
@@ -488,14 +514,14 @@ async function onNodeClick(node) {
     return;
   }
 
-  const connected = state.data.routes.filter(r => r.from === node.id || r.to === node.id);
+  const connected = state.data.routes.filter((r) => r.from === node.id || r.to === node.id);
 
   if (!connected.length) {
     await openAlert(node.name, "Z tohoto bodu zatím není nadefinovaná žádná cesta.");
     return;
   }
 
-  const lines = connected.map(r => {
+  const lines = connected.map((r) => {
     const other = getNodeById(r.from === node.id ? r.to : r.from);
     return `${other?.name || "?"} (${labelTransport(r.transport)})`;
   });
@@ -526,7 +552,7 @@ function startGPS() {
       renderAll();
     },
     () => {
-      // tiše bez hlášky
+      // bez systémové hlášky
     },
     {
       enableHighAccuracy: true,
