@@ -1,6 +1,4 @@
-// ===== APP.JS v6 (opravené dny + GPS + návrat zpět) =====
-
-const APP_VERSION = "v6";
+const APP_VERSION = "v7";
 const STATE_KEY = "praha_game_state_" + APP_VERSION;
 const DATA_URL = "gameData.json?v=" + Date.now();
 
@@ -36,6 +34,7 @@ const dom = {
   btnPlayer: null,
   btnLeader: null,
   btnAllDays: null,
+  btnPrevDay: null,
   btnNextDay: null,
   btnHints: null,
   btnFinale: null,
@@ -141,6 +140,7 @@ function bindDom() {
   dom.btnPlayer = qs("btnPlayer");
   dom.btnLeader = qs("btnLeader");
   dom.btnAllDays = qs("btnAllDays");
+  dom.btnPrevDay = qs("btnPrevDay");
   dom.btnNextDay = qs("btnNextDay");
   dom.btnHints = qs("btnHints", "btnIndicie");
   dom.btnFinale = qs("btnFinale");
@@ -148,15 +148,10 @@ function bindDom() {
   dom.btnPlayer?.addEventListener("click", () => setMode("player"));
   dom.btnLeader?.addEventListener("click", () => setMode("leader"));
   dom.btnAllDays?.addEventListener("click", toggleAllDays);
+  dom.btnPrevDay?.addEventListener("click", prevDay);
   dom.btnNextDay?.addEventListener("click", nextDay);
   dom.btnHints?.addEventListener("click", showClues);
   dom.btnFinale?.addEventListener("click", showFinale);
-
-  dom.day?.addEventListener("click", () => {
-    if (state.mode === "leader") {
-      prevDay();
-    }
-  });
 
   ensureModal();
 }
@@ -206,6 +201,7 @@ function ensureModal() {
 
 function bindModalEvents() {
   dom.modalCancel?.addEventListener("click", () => closeModal(null));
+
   dom.modalOk?.addEventListener("click", () => {
     if (modalMode === "prompt") {
       closeModal(dom.modalInput.value);
@@ -285,6 +281,7 @@ async function setMode(mode) {
   }
 
   state.mode = mode;
+
   if (mode === "player") {
     state.showAllDays = false;
   }
@@ -298,6 +295,7 @@ async function toggleAllDays() {
     await showToast("Všechny dny jsou jen pro vedoucího.");
     return;
   }
+
   state.showAllDays = !state.showAllDays;
   saveState();
   renderAll();
@@ -313,6 +311,8 @@ function nextDay() {
 }
 
 function prevDay() {
+  if (!isLeader()) return;
+
   if (state.currentDay > 1) {
     state.currentDay -= 1;
     saveState();
@@ -329,8 +329,8 @@ async function showClues() {
 
 async function showFinale() {
   const hint = state.data?.finalTreasure?.hint || "Finále zatím není připravené.";
-  const finalNode = state.data?.nodes?.find(n => n.kind === "final") || state.data?.finalTreasure;
 
+  const finalNode = state.data?.nodes?.find(n => n.kind === "final") || state.data?.finalTreasure;
   if (!isNearNode(finalNode)) {
     await openAlert(
       "Finále",
@@ -418,15 +418,7 @@ function renderHud() {
   }
 
   if (dom.day) {
-    if (isLeader()) {
-      dom.day.textContent = "Den " + state.currentDay + " ⟲";
-      dom.day.title = "Klikni pro krok zpět o den";
-      dom.day.style.cursor = "pointer";
-    } else {
-      dom.day.textContent = "Den " + state.currentDay;
-      dom.day.title = "";
-      dom.day.style.cursor = "default";
-    }
+    dom.day.textContent = "Den " + state.currentDay;
   }
 
   const todaysStations = state.data.nodes.filter((n) => n.kind === "station" && Number(n.day) === Number(state.currentDay));
@@ -448,8 +440,14 @@ function renderHud() {
     dom.btnAllDays.style.display = isLeader() ? "inline-flex" : "none";
   }
 
+  if (dom.btnPrevDay) {
+    dom.btnPrevDay.style.display = isLeader() ? "inline-flex" : "none";
+    dom.btnPrevDay.disabled = state.currentDay <= 1;
+  }
+
   if (dom.btnNextDay) {
     const maxDay = state.data?.config?.totalDays || 5;
+    dom.btnNextDay.style.display = isLeader() ? "inline-flex" : "none";
     dom.btnNextDay.disabled = state.currentDay >= maxDay;
   }
 }
@@ -523,7 +521,10 @@ async function ensureNearby(node) {
   if (isNearNode(node)) return true;
 
   if (!state.currentPosition) {
-    await openAlert(node.name, "Nemám tvoji GPS polohu.\n\nPovol poloze přístup a zkus to znovu přímo na místě.");
+    await openAlert(
+      node.name,
+      "Nemám tvoji GPS polohu.\n\nPovol poloze přístup a zkus to znovu přímo na místě."
+    );
     return false;
   }
 
