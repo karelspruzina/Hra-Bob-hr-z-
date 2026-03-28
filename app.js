@@ -1,4 +1,6 @@
-const APP_VERSION = "v5";
+// ===== APP.JS v6 (opravené dny + GPS + návrat zpět) =====
+
+const APP_VERSION = "v6";
 const STATE_KEY = "praha_game_state_" + APP_VERSION;
 const DATA_URL = "gameData.json?v=" + Date.now();
 
@@ -19,7 +21,6 @@ const state = {
   currentDay: 1,
   mode: "player",
   showAllDays: false,
-  discoveredNodeIds: [],
   solvedStationIds: [],
   clues: [],
   currentPosition: null,
@@ -66,17 +67,48 @@ function normalize(text) {
     .trim();
 }
 
+function haversineMeters(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const toRad = x => x * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+
+function getUnlockRadius() {
+  return Number(state.data?.config?.unlockRadiusMeters ?? 45);
+}
+
+function isLeader() {
+  return state.mode === "leader";
+}
+
+function isNearNode(node) {
+  if (isLeader()) return true;
+  if (!state.currentPosition || !node) return false;
+
+  const d = haversineMeters(
+    state.currentPosition.lat,
+    state.currentPosition.lng,
+    Number(node.lat),
+    Number(node.lng)
+  );
+
+  return d <= getUnlockRadius();
+}
+
 function loadState() {
   try {
     const raw = localStorage.getItem(STATE_KEY);
     if (!raw) return;
 
     const saved = JSON.parse(raw);
-
     state.currentDay = Number(saved.currentDay ?? 1) || 1;
     state.mode = saved.mode === "leader" ? "leader" : "player";
     state.showAllDays = !!saved.showAllDays;
-    state.discoveredNodeIds = Array.isArray(saved.discoveredNodeIds) ? saved.discoveredNodeIds : [];
     state.solvedStationIds = Array.isArray(saved.solvedStationIds) ? saved.solvedStationIds : [];
     state.clues = Array.isArray(saved.clues) ? saved.clues : [];
     state.currentNodeId = saved.currentNodeId ?? null;
@@ -92,7 +124,6 @@ function saveState() {
       currentDay: state.currentDay,
       mode: state.mode,
       showAllDays: state.showAllDays,
-      discoveredNodeIds: state.discoveredNodeIds,
       solvedStationIds: state.solvedStationIds,
       clues: state.clues,
       currentNodeId: state.currentNodeId
@@ -111,7 +142,7 @@ function bindDom() {
   dom.btnLeader = qs("btnLeader");
   dom.btnAllDays = qs("btnAllDays");
   dom.btnNextDay = qs("btnNextDay");
-  dom.btnHints = qs("btnHints");
+  dom.btnHints = qs("btnHints", "btnIndicie");
   dom.btnFinale = qs("btnFinale");
 
   dom.btnPlayer?.addEventListener("click", () => setMode("player"));
@@ -120,6 +151,12 @@ function bindDom() {
   dom.btnNextDay?.addEventListener("click", nextDay);
   dom.btnHints?.addEventListener("click", showClues);
   dom.btnFinale?.addEventListener("click", showFinale);
+
+  dom.day?.addEventListener("click", () => {
+    if (state.mode === "leader") {
+      prevDay();
+    }
+  });
 
   ensureModal();
 }
@@ -169,7 +206,6 @@ function ensureModal() {
 
 function bindModalEvents() {
   dom.modalCancel?.addEventListener("click", () => closeModal(null));
-
   dom.modalOk?.addEventListener("click", () => {
     if (modalMode === "prompt") {
       closeModal(dom.modalInput.value);
@@ -186,6 +222,12 @@ function bindModalEvents() {
     if (e.key === "Enter") {
       e.preventDefault();
       closeModal(dom.modalInput.value);
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && dom.modal?.classList.contains("show")) {
+      closeModal(null);
     }
   });
 }
@@ -243,7 +285,6 @@ async function setMode(mode) {
   }
 
   state.mode = mode;
-
   if (mode === "player") {
     state.showAllDays = false;
   }
@@ -253,11 +294,10 @@ async function setMode(mode) {
 }
 
 async function toggleAllDays() {
-  if (state.mode !== "leader") {
+  if (!isLeader()) {
     await showToast("Všechny dny jsou jen pro vedoucího.");
     return;
   }
-
   state.showAllDays = !state.showAllDays;
   saveState();
   renderAll();
@@ -272,6 +312,14 @@ function nextDay() {
   }
 }
 
+function prevDay() {
+  if (state.currentDay > 1) {
+    state.currentDay -= 1;
+    saveState();
+    renderAll();
+  }
+}
+
 async function showClues() {
   const text = state.clues.length
     ? "• " + state.clues.join("\n• ")
@@ -281,6 +329,16 @@ async function showClues() {
 
 async function showFinale() {
   const hint = state.data?.finalTreasure?.hint || "Finále zatím není připravené.";
+  const finalNode = state.data?.nodes?.find(n => n.kind === "final") || state.data?.finalTreasure;
+
+  if (!isNearNode(finalNode)) {
+    await openAlert(
+      "Finále",
+      `K finálnímu místu musíš nejdřív dojít.\n\nPřibliž se na cca ${getUnlockRadius()} metrů.`
+    );
+    return;
+  }
+
   const answer = await openPrompt("Finále", `${hint}\n\nNapiš název místa:`);
   if (!answer) return;
 
@@ -298,32 +356,30 @@ function getNodeById(id) {
   return state.data?.nodes?.find((n) => n.id === id) || null;
 }
 
-function getVisibleNodes() {
-  if (!state.data?.nodes) return [];
-
-  if (state.mode === "leader" && state.showAllDays) {
-    return state.data.nodes;
+function isNodeVisibleForCurrentDay(node) {
+  if (node.kind === "final") {
+    return isLeader();
   }
 
-  return state.data.nodes.filter((n) => {
-    if (n.kind === "final") {
-      return state.mode === "leader";
-    }
+  if (state.mode === "leader" && state.showAllDays) {
+    return true;
+  }
 
-    if (n.day == null) {
-      return true;
-    }
+  if (node.day == null) {
+    return true;
+  }
 
-    return Number(n.day) === Number(state.currentDay);
-  });
+  return Number(node.day) === Number(state.currentDay);
+}
+
+function getVisibleNodes() {
+  if (!state.data?.nodes) return [];
+  return state.data.nodes.filter(isNodeVisibleForCurrentDay);
 }
 
 function getVisibleRoutes(visibleNodeIds) {
   if (!state.data?.routes) return [];
-
-  return state.data.routes.filter((r) => {
-    return visibleNodeIds.has(r.from) && visibleNodeIds.has(r.to);
-  });
+  return state.data.routes.filter((r) => visibleNodeIds.has(r.from) && visibleNodeIds.has(r.to));
 }
 
 function labelTransport(tr) {
@@ -362,13 +418,18 @@ function renderHud() {
   }
 
   if (dom.day) {
-    dom.day.textContent = "Den " + state.currentDay;
+    if (isLeader()) {
+      dom.day.textContent = "Den " + state.currentDay + " ⟲";
+      dom.day.title = "Klikni pro krok zpět o den";
+      dom.day.style.cursor = "pointer";
+    } else {
+      dom.day.textContent = "Den " + state.currentDay;
+      dom.day.title = "";
+      dom.day.style.cursor = "default";
+    }
   }
 
-  const todaysStations = state.data.nodes.filter((n) => {
-    return n.kind === "station" && Number(n.day) === Number(state.currentDay);
-  });
-
+  const todaysStations = state.data.nodes.filter((n) => n.kind === "station" && Number(n.day) === Number(state.currentDay));
   const solvedToday = todaysStations.filter((n) => state.solvedStationIds.includes(n.id)).length;
 
   if (dom.progress) {
@@ -384,7 +445,7 @@ function renderHud() {
   dom.btnAllDays?.classList.toggle("active", !!state.showAllDays);
 
   if (dom.btnAllDays) {
-    dom.btnAllDays.style.display = state.mode === "leader" ? "inline-flex" : "none";
+    dom.btnAllDays.style.display = isLeader() ? "inline-flex" : "none";
   }
 
   if (dom.btnNextDay) {
@@ -458,11 +519,37 @@ function renderNodes(visibleNodes) {
   }
 }
 
+async function ensureNearby(node) {
+  if (isNearNode(node)) return true;
+
+  if (!state.currentPosition) {
+    await openAlert(node.name, "Nemám tvoji GPS polohu.\n\nPovol poloze přístup a zkus to znovu přímo na místě.");
+    return false;
+  }
+
+  const d = Math.round(
+    haversineMeters(
+      state.currentPosition.lat,
+      state.currentPosition.lng,
+      Number(node.lat),
+      Number(node.lng)
+    )
+  );
+
+  await openAlert(
+    node.name,
+    `Jako hráč musíš dojít na místo.\n\nTeď jsi asi ${d} m daleko.\nOdemčení je do ${getUnlockRadius()} m.`
+  );
+  return false;
+}
+
 async function onNodeClick(node) {
   state.currentNodeId = node.id;
   saveState();
 
   if (node.kind === "station") {
+    if (!(await ensureNearby(node))) return;
+
     const answer = await openPrompt(node.name, node.question || "Napiš odpověď:");
     if (!answer) return;
 
@@ -488,6 +575,7 @@ async function onNodeClick(node) {
   }
 
   if (node.kind === "fake") {
+    if (!(await ensureNearby(node))) return;
     await openAlert(node.name, node.fakeMessage || "Tady poklad není.");
     return;
   }
@@ -498,13 +586,18 @@ async function onNodeClick(node) {
   }
 
   const connected = state.data.routes.filter((r) => r.from === node.id || r.to === node.id);
+  const visibleConnected = connected.filter((r) => {
+    const otherId = r.from === node.id ? r.to : r.from;
+    const other = getNodeById(otherId);
+    return other && isNodeVisibleForCurrentDay(other);
+  });
 
-  if (!connected.length) {
-    await openAlert(node.name, "Z tohoto bodu zatím není nadefinovaná žádná cesta.");
+  if (!visibleConnected.length) {
+    await openAlert(node.name, "Z tohoto bodu zatím není nadefinovaná žádná viditelná cesta.");
     return;
   }
 
-  const lines = connected.map((r) => {
+  const lines = visibleConnected.map((r) => {
     const other = getNodeById(r.from === node.id ? r.to : r.from);
     return `${other?.name || "?"} (${labelTransport(r.transport)})`;
   });
@@ -526,7 +619,7 @@ function renderAll() {
 function startGPS() {
   if (!navigator.geolocation) return;
 
-  navigator.geolocation.getCurrentPosition(
+  navigator.geolocation.watchPosition(
     (pos) => {
       state.currentPosition = {
         lat: pos.coords.latitude,
@@ -537,8 +630,8 @@ function startGPS() {
     () => {},
     {
       enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 30000
+      timeout: 8000,
+      maximumAge: 10000
     }
   );
 }
@@ -551,7 +644,6 @@ async function init() {
   state.data = await res.json();
 
   const maxDay = state.data?.config?.totalDays || 5;
-
   if (!state.currentNodeId) {
     state.currentNodeId = state.data?.config?.startNodeId ?? null;
   }
