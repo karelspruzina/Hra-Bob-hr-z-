@@ -302,6 +302,8 @@ async function toggleAllDays() {
 }
 
 function nextDay() {
+  if (!isLeader()) return;
+
   const maxDay = state.data?.config?.totalDays || 5;
   if (state.currentDay < maxDay) {
     state.currentDay += 1;
@@ -421,8 +423,12 @@ function renderHud() {
     dom.day.textContent = "Den " + state.currentDay;
   }
 
-  const todaysStations = state.data.nodes.filter((n) => n.kind === "station" && Number(n.day) === Number(state.currentDay));
-  const solvedToday = todaysStations.filter((n) => state.solvedStationIds.includes(n.id)).length;
+  const todaysStations = state.data.nodes.filter(
+    (n) => n.kind === "station" && Number(n.day) === Number(state.currentDay)
+  );
+  const solvedToday = todaysStations.filter((n) =>
+    state.solvedStationIds.includes(n.id)
+  ).length;
 
   if (dom.progress) {
     dom.progress.textContent = `Splněno ${solvedToday} / ${todaysStations.length}`;
@@ -449,6 +455,14 @@ function renderHud() {
     const maxDay = state.data?.config?.totalDays || 5;
     dom.btnNextDay.style.display = isLeader() ? "inline-flex" : "none";
     dom.btnNextDay.disabled = state.currentDay >= maxDay;
+  }
+
+  if (dom.btnHints) {
+    dom.btnHints.style.display = "inline-flex";
+  }
+
+  if (dom.btnFinale) {
+    dom.btnFinale.style.display = "inline-flex";
   }
 }
 
